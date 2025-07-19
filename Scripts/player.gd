@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@onready var internal_collider_check: ShapeCast2D = $"Internal Collider Check"
+
 const JUMP_VELOCITY = -330
 const SPEED = 100
 
@@ -17,6 +19,13 @@ func rotate_char(gravity_change) -> void:
 		rotate.tween_property($".", "rotation_degrees", 0, 0.4) # Rotate to 180 degrees in 1 second
 
 func _physics_process(delta: float) -> void:
+	# Do not process physics when inside of an object
+	if internal_collider_check.is_colliding():
+		position.y -= 5
+		
+		velocity = Vector2(0, 0)
+		return
+	
 	# Gravity mechanic
 	
 	if Input.is_action_just_pressed("gravity_change") and gravity_sector:
