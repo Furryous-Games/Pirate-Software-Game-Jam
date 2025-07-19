@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://benq0bfympyo7"]
+
+[ext_resource type="Texture2D" uid="uid://duly0lrfn20lw" path="res://Assets/buildingTileset.png" id="1_gmp8q"]
+[ext_resource type="Script" uid="uid://b5dwum4xvj204" path="res://Scenes/timing_mechanism_platform.gd" id="1_vv262"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vv262"]
+atlas = ExtResource("1_gmp8q")
+region = Rect2(280, 60, 20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4qhh3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vv262")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fh06n"]
+
+[node name="Timing Mechanism Platform" type="AnimatableBody2D"]
+script = ExtResource("1_vv262")
+
+[node name="Platform Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_4qhh3")
+
+[node name="Platform Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fh06n")

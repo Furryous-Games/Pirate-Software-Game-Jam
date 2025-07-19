@@ -9,11 +9,11 @@ var direction
 
 func _physics_process(delta: float) -> void:
 	# Do not process physics when inside of an object
-	if internal_collider_check.is_colliding():
-		position.y -= 5
-		
-		velocity = Vector2(0, 0)
-		return
+	#if internal_collider_check.is_colliding():
+		#position.y -= 5
+		#
+		#velocity = Vector2(0, 0)
+		#return
 	
 	# Gravity mechanic
 	if not is_on_floor():
