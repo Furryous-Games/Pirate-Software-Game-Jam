@@ -15,15 +15,12 @@ func _physics_process(delta: float) -> void:
 	
 	# Jump action
 	if Input.is_action_just_pressed("jump") or (is_on_floor() and not jump_buffer.is_stopped()):
-		if not jump_buffer.is_stopped():
-			print(jump_buffer.time_left)
 		if is_on_floor():
 			velocity.y = JUMP_VELOCITY
 			jump_buffer.stop()
 		else:
 			jump_buffer.start()
 
-	
 	velocity.x = SPEED * direction.x
 	
 	move_and_slide()
