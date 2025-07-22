@@ -19,6 +19,7 @@ var can_dash := false
 var current_terminals: Array = []
 var last_checked_position: Vector2
 var currently_selected_terminal
+var gravity_change: int = 1
 
 func _input(event: InputEvent) -> void:
 	# Ignore events that arent currently pressed
@@ -61,9 +62,9 @@ func _physics_process(delta: float) -> void:
 				# x:
 				RUN_SPEED * direction.x * int(not climbing),
 				# y:
-				0.0 if is_on_floor()
-				else CLIMB_SPEED * -direction.y if climbing
-				else velocity.y + get_gravity().y * delta
+				#0.0 if is_on_floor()
+				CLIMB_SPEED * -direction.y * gravity_change if climbing
+				else velocity.y + get_gravity().y * delta * gravity_change
 		)
 		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
 		
@@ -74,8 +75,8 @@ func _physics_process(delta: float) -> void:
 			Input.is_action_just_pressed("jump")
 			or is_on_floor() and not jump_buffer.is_stopped()
 	):
-		if is_on_floor() or not coyote_time.is_stopped():
-			velocity.y = JUMP_VELOCITY
+		if is_on_floor() or is_on_ceiling() or not coyote_time.is_stopped():
+			velocity.y = JUMP_VELOCITY * gravity_change
 			jump_buffer.stop()
 		else:
 			jump_buffer.start()
@@ -93,7 +94,19 @@ func _physics_process(delta: float) -> void:
 		velocity = round(Vector2.from_angle(direction.angle()) * DASH_VELOCITY) # Corrects diagonal dashing
 		dash_time.start()
 		can_dash = false
-
+	
+	#invert gravity action, Life Support only 
+	if (
+		#current_sector == Sector.LIFE_SUPPORT
+		Input.is_action_just_pressed("invert_gravity")
+	):
+		gravity_change *= -1
+		var rotate = create_tween()
+		if gravity_change == 1:
+			rotate.tween_property($".", "rotation_degrees", 0, 0.3) # Rotate sprite upsidedown 
+		else:
+			rotate.tween_property($".", "rotation_degrees", 180, 0.3) # Rotate sprite rightsideup
+	
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
 		set_collision_mask_value(2, false)
