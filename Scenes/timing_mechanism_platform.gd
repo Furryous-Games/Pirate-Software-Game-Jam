@@ -1,8 +1,10 @@
 extends AnimatableBody2D
 
 @export var max_distance: Vector2i
-@export var step_size: int
+@export var start_distance: Vector2i
 
+@export var initial_direction: Vector2i = Vector2i(1, 1)
+@export var step_size: int
 @export var platform_size: Vector2i
 
 @export var instant_return: bool
@@ -27,12 +29,29 @@ func _ready() -> void:
 	if max_distance.y == 0:
 		curr_direction.y = 0
 	
-	# Set the step size
+	# Set the step size and initial direction
 	curr_direction *= step_size
+	curr_direction *= initial_direction
 	
 	# Expand the platform to its set size
 	expand_platform(platform_size)
-
+	
+	# Move the position to its starting distance
+	if start_distance != Vector2i(0, 0):
+		warp_to_position(start_distance, 0)
+	
+	# If the platform is set to instant return, add padding to its max distances
+	if instant_return:
+		if max_distance.x < 0:
+			max_distance.x -= step_size
+		if max_distance.x > 0:
+			max_distance.x += step_size
+		if max_distance.y < 0:
+			max_distance.y -= step_size
+		if max_distance.y > 0:
+			max_distance.y += step_size
+		
+		print(curr_distance)
 
 func expand_platform(new_size: Vector2i) -> void:
 	for x in range(platform_size.x):
@@ -43,35 +62,50 @@ func expand_platform(new_size: Vector2i) -> void:
 	platform_collider.position = (platform_size - Vector2i.ONE) * 10
 
 
+func warp_to_position(new_pos: Vector2i, time_to_move: float, disable_collider: bool = true) -> void:
+	# Reset the sprite's distance
+	curr_distance = new_pos
+	
+	# If disable collider is true, then move the platform with no collider
+	if disable_collider:
+		# Makes the mechanism temporarily not collide with anything
+		platform_collider.disabled = true
+		
+		# Delays the reenabling of the collider
+		get_tree().create_timer(time_to_move + 0.1).timeout.connect(enable_collider)
+	
+	# Move the sprite
+	var tween = create_tween()
+	tween.tween_property($".", "position", Vector2(original_position.x + (20 * curr_distance.x), original_position.y + (20 * curr_distance.y)), time_to_move)
+
+
 func _on_timing_mechanism_tick() -> void:
-	# Sets the default tween speed
-	var tween_speed = 0.15
+	var move_platform = true
 	
 	# If the platform has hit either edge of its rail on the horizontal axis, then flip its direction
 	if curr_distance.x + curr_direction.x < min(0, max_distance.x) or curr_distance.x + curr_direction.x > max(0, max_distance.x):
 		# Handles instant return
-		if instant_return and curr_distance.x == max_distance.x:
-			# Reset the sprite's distance
-			curr_distance.x = 0
-			
-			# Make the sprite instantly return
-			tween_speed = 0
-			
-			# Makes the mechanism temporarily not collide with anything
-			platform_collider.disabled = true
-			
-			# Delays the reenabling of the collider
-			get_tree().create_timer(0.05).timeout.connect(enable_collider)
+		if instant_return and curr_distance.x != 0:
+			# Warp the platform to the new position
+			warp_to_position(Vector2i(0, curr_distance.y), 0)
+			move_platform = false
 		else:
 			curr_direction.x *= -1
 	
 	# If the platform has hit either edge of its rail on the vertical axis, then flip its direction
 	if curr_distance.y + curr_direction.y < min(0, max_distance.y) or curr_distance.y + curr_direction.y > max(0, max_distance.y):
-		curr_direction.y *= -1
+		# Handles instant return
+		if instant_return and curr_distance.y != 0:
+			# Warp the platform to the new position
+			warp_to_position(Vector2i(curr_distance.x, 0), 0)
+			move_platform = false
+		else:
+			curr_direction.y *= -1
 	
 	# Move the sprite
-	var tween = create_tween()
-	tween.tween_property($".", "position", Vector2(original_position.x + (20 * curr_distance.x), original_position.y + (20 * curr_distance.y)), tween_speed)
+	if move_platform:
+		var tween = create_tween()
+		tween.tween_property($".", "position", Vector2(original_position.x + (20 * curr_distance.x), original_position.y + (20 * curr_distance.y)), 0.15)
 	
 	# Update the current horizontal distance
 	curr_distance += curr_direction

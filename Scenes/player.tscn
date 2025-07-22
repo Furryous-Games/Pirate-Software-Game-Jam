@@ -32,6 +32,7 @@ size = Vector2(7, 15)
 size = Vector2(6, 14)
 
 [node name="Player" type="CharacterBody2D"]
+collision_mask = 3
 script = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
