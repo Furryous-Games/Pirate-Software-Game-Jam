@@ -35,10 +35,18 @@ script = ExtResource("1_cvnsp")
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_vgqql")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_fkybt")
 
 [node name="JumpBuffer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.1
+one_shot = true
+
+[node name="CoyoteTime" type="Timer" parent="."]
+wait_time = 0.08
+one_shot = true
+
+[node name="DashTime" type="Timer" parent="."]
+wait_time = 0.05
 one_shot = true

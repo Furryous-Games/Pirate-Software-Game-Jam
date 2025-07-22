@@ -7,7 +7,7 @@ enum Sector {
 	ENGINEERING,
 	ADMINISTRATIVE,
 }
-@export var active_sector: Sector
+@export var current_sector: Sector
 
 var current_room = Vector2i(0, 0)
 
