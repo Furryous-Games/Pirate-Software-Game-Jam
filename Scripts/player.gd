@@ -95,6 +95,12 @@ func _physics_process(delta: float) -> void:
 		dash_time.start()
 		can_dash = false
 
+	# Handles movement actions
+	if Input.is_action_just_pressed("move_down"):
+		set_collision_mask_value(2, false)
+	if Input.is_action_just_released("move_down"):
+		set_collision_mask_value(2, true)
+
 	move_and_slide()
 	
 	enable_closest_terminal()
