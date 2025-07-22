@@ -31,7 +31,7 @@ size = Vector2(11, 15)
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_cvnsp")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_vgqql")
 
@@ -48,5 +48,5 @@ wait_time = 0.08
 one_shot = true
 
 [node name="DashTime" type="Timer" parent="."]
-wait_time = 0.05
+wait_time = 0.08
 one_shot = true
