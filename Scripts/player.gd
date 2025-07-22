@@ -6,7 +6,6 @@ const ACCELERATION = 1000
 const DECELERATION = 1500
 const DASH_VELOCITY = 380
 const JUMP_VELOCITY = -420
-const GRAVITY = 1440 # get_gravity().y * 1.6
 
 var can_dash := false
 
@@ -17,7 +16,7 @@ var can_dash := false
 @onready var Sector = $"../".Sector
 @onready var current_sector = $"../".current_sector
 
-var current_terminals = []
+var current_terminals: Array = []
 var last_checked_position
 var currently_selected_terminal
 
@@ -64,7 +63,7 @@ func _physics_process(delta: float) -> void:
 				# y:
 				0.0 if is_on_floor()
 				else CLIMB_SPEED * -direction.y if climbing
-				else velocity.y + GRAVITY * delta
+				else velocity.y + get_gravity().y * delta
 		)
 		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
 		
@@ -84,7 +83,7 @@ func _physics_process(delta: float) -> void:
 			if is_on_wall():
 				velocity.y = JUMP_VELOCITY
 				velocity.x = RUN_SPEED * get_wall_normal().x
-        
+		
 	# Dash action, Logistics only
 	if (
 			current_sector == Sector.LOGISTICS
@@ -127,7 +126,7 @@ func enable_closest_terminal() -> void:
 			currently_selected_terminal = current_terminals[0]
 	# Otherwise, find the closest terminal to the player
 	else:
-		var closest_terminal
+		var closest_terminal = null
 		
 		# Loop through all terminals within range
 		for terminal in current_terminals:

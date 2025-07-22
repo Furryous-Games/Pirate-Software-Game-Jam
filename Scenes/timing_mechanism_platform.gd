@@ -54,12 +54,12 @@ func _ready() -> void:
 		print(curr_distance)
 
 func expand_platform(new_size: Vector2i) -> void:
-	for x in range(platform_size.x):
-		for y in range(platform_size.y):
+	for x in range(new_size.x):
+		for y in range(new_size.y):
 			platform_sprite.set_cell(Vector2i(x, y), 1, Vector2i(14, 3))
 	
-	platform_collider.shape.size = platform_size * 20
-	platform_collider.position = (platform_size - Vector2i.ONE) * 10
+	platform_collider.shape.size = new_size * 20
+	platform_collider.position = (new_size - Vector2i.ONE) * 10
 
 
 func warp_to_position(new_pos: Vector2i, time_to_move: float, disable_collider: bool = true) -> void:
