@@ -13,7 +13,7 @@ script = ExtResource("1_jv6wh")
 position = Vector2(3210, -60)
 scale = Vector2(2, 2)
 
-[node name="Tilemaps" parent="." instance=ExtResource("3_iacmt")]
+[node name="Engineering Tilemaps" parent="." instance=ExtResource("3_iacmt")]
 
 [node name="Timing Mechanism Platforms" type="Node2D" parent="."]
 position = Vector2(1320, -60)
