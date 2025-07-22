@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://ke8ne88ddqf1"]
+[gd_scene load_steps=7 format=3 uid="uid://ke8ne88ddqf1"]
 
-[ext_resource type="Script" uid="uid://dtkmogktxrytf" path="res://Scripts/player.gd" id="1_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://ci1bd47fxc567" path="res://Assets/CharacterModels.png" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://dtkmogktxrytf" path="res://scripts/player.gd" id="1_cvnsp"]
+[ext_resource type="Texture2D" uid="uid://ci1bd47fxc567" path="res://assets/sprites/CharacterModels.png" id="1_v0iea"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
 atlas = ExtResource("1_v0iea")
@@ -28,22 +28,25 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fkybt"]
 size = Vector2(11, 15)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
-size = Vector2(10, 14)
-
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_cvnsp")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_vgqql")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_fkybt")
 
-[node name="Internal Collider Check" type="ShapeCast2D" parent="."]
-position = Vector2(0, -7)
-shape = SubResource("RectangleShape2D_cvnsp")
-target_position = Vector2(0, 0)
-max_results = 2
+[node name="JumpBuffer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="CoyoteTime" type="Timer" parent="."]
+wait_time = 0.08
+one_shot = true
+
+[node name="DashTime" type="Timer" parent="."]
+wait_time = 0.08
+one_shot = true
