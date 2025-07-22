@@ -17,7 +17,7 @@ var can_dash := false
 @onready var current_sector = $"../".current_sector
 
 var current_terminals: Array = []
-var last_checked_position
+var last_checked_position: Vector2
 var currently_selected_terminal
 
 func _input(event: InputEvent) -> void:

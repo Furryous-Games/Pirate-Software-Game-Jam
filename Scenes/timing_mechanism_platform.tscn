@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://benq0bfympyo7"]
 
 [ext_resource type="Script" uid="uid://b5dwum4xvj204" path="res://Scenes/timing_mechanism_platform.gd" id="1_vv262"]
-[ext_resource type="TileSet" uid="uid://cpgc1nd78502i" path="res://Scenes/test_tileset.tres" id="2_vv262"]
+[ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://Scenes/test_tileset.tres" id="2_vv262"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fh06n"]
 resource_local_to_scene = true

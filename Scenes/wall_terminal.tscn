@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://5p3nb0s7xyta"]
 
-[ext_resource type="Script" path="res://Scripts/wall_terminal.gd" id="1_mhamb"]
-[ext_resource type="Texture2D" uid="uid://duly0lrfn20lw" path="res://assets/sprites/buildingTileset.png" id="2_s02ai"]
-[ext_resource type="FontFile" uid="uid://r5wnp43srg1" path="res://assets/fonts/PixelOperator8.ttf" id="3_s02ai"]
+[ext_resource type="Script" uid="uid://coblrw8vgppis" path="res://Scripts/wall_terminal.gd" id="1_mhamb"]
+[ext_resource type="Texture2D" uid="uid://duly0lrfn20lw" path="res://Assets/sprites/buildingTileset.png" id="2_s02ai"]
+[ext_resource type="FontFile" uid="uid://r5wnp43srg1" path="res://Assets/Fonts/PixelOperator8.ttf" id="3_s02ai"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_44g47"]
 atlas = ExtResource("2_s02ai")
