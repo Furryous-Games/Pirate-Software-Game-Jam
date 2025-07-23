@@ -1,11 +1,13 @@
 extends CharacterBody2D
 
-const RUN_SPEED = 160
+const RUN_SPEED = 120
 const CLIMB_SPEED = -120
 const ACCELERATION = 1000
 const DECELERATION = 1500
 const DASH_VELOCITY = 380
 const JUMP_VELOCITY = -420
+
+const WALL_SLIDE_VELOCITY_CAP = 100
 
 var can_dash := false
 
@@ -15,6 +17,8 @@ var can_dash := false
 
 @onready var Sector = $"../".Sector
 @onready var current_sector = $"../".current_sector
+
+@onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
 
 var current_terminals: Array = []
 var last_checked_position: Vector2
@@ -36,7 +40,6 @@ func _physics_process(delta: float) -> void:
 			Input.get_axis("move_left", "move_right"), 
 			Input.get_axis("move_up", "move_down")
 	)
-	var climbing: bool = Input.is_action_pressed("climb") and is_on_wall() 
 	# NOTE: To climb, you must hold direction.x
 	
 	# Reset dash, Logistics only
@@ -60,12 +63,15 @@ func _physics_process(delta: float) -> void:
 	if dash_time.is_stopped(): # Prevents velocity change while dashing
 		var desired_velocity := Vector2(
 				# x:
-				RUN_SPEED * direction.x * int(not climbing),
+				RUN_SPEED * direction.x,
 				# y:
 				#0.0 if is_on_floor()
-				CLIMB_SPEED * -direction.y * gravity_change if climbing
-				else velocity.y + get_gravity().y * delta * gravity_change
+				velocity.y + get_gravity().y * delta * gravity_change
 		)
+		# Cap the vertical velocity if sliding down the wall
+		if is_on_wall():
+			desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP)
+		
 		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
 		
 		velocity = Vector2(move_toward(velocity.x, desired_velocity.x, velocity_acceleration * delta), desired_velocity.y)
@@ -117,6 +123,9 @@ func _physics_process(delta: float) -> void:
 	
 	enable_closest_terminal()
 
+func _process(delta: float) -> void:
+	if internal_player_collider.is_colliding():
+		print("DEATH")
 
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing
