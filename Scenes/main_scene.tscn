@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cyddofgvf7ot2"]
 
 [ext_resource type="PackedScene" uid="uid://ke8ne88ddqf1" path="res://Scenes/player.tscn" id="1_6l7je"]
-[ext_resource type="Script" uid="uid://c1uh0ur1dwxgn" path="res://Scripts/main_script.gd" id="1_jv6wh"]
-[ext_resource type="PackedScene" uid="uid://d0o5qpml1wgkl" path="res://Scenes/engineering_sector.tscn" id="3_jv6wh"]
+[ext_resource type="Script" uid="uid://c1uh0ur1dwxgn" path="res://scripts/main_script.gd" id="1_jv6wh"]
+[ext_resource type="PackedScene" uid="uid://d0o5qpml1wgkl" path="res://scenes/engineering_sector.tscn" id="3_jv6wh"]
 
 [node name="Game Jam - Only One" type="Node2D"]
 script = ExtResource("1_jv6wh")
