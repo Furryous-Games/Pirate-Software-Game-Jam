@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal player_dash
+
 const RUN_SPEED = 120
 const ACCELERATION = 1000
 const DECELERATION = 1500
@@ -41,9 +43,9 @@ func _physics_process(delta: float) -> void:
 			Input.get_axis("move_up", "move_down")
 	)
 	
-	# Reset dash, Logistics only
+	# Reset dash, Reactor only
 	if (
-			current_sector == Sector.LOGISTICS
+			current_sector == Sector.REACTOR
 			and is_on_floor()
 			and not can_dash
 			and dash_time.is_stopped()
@@ -84,13 +86,14 @@ func _physics_process(delta: float) -> void:
 				velocity.y = JUMP_VELOCITY
 				velocity.x = RUN_SPEED * get_wall_normal().x
 		
-	# Dash action, Logistics only
+	# Dash action, Reactor only
 	if (
-			current_sector == Sector.LOGISTICS
+			current_sector == Sector.REACTOR
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
 		velocity = round(Vector2.from_angle(direction.angle()) * DASH_VELOCITY) # Corrects diagonal dashing
+		player_dash.emit()
 		dash_time.start()
 		can_dash = false
 	
@@ -100,7 +103,7 @@ func _physics_process(delta: float) -> void:
 			Input.is_action_just_pressed("invert_gravity")
 	):
 		gravity_change *= -1
-		var rotate_player = create_tween()
+		var rotate_player: Tween = create_tween()
 		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
 	
 	# Handles movement actions
