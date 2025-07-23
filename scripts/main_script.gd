@@ -15,7 +15,7 @@ var current_room = Vector2i(0, 0)
 @onready var camera: Camera2D = $Camera
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Player moves to the room to the left
 	if camera.to_local(player.position).x < 0:
 		current_room.x -= 1

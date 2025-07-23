@@ -1,7 +1,6 @@
 extends CharacterBody2D
 
 const RUN_SPEED = 120
-const CLIMB_SPEED = -120
 const ACCELERATION = 1000
 const DECELERATION = 1500
 const DASH_VELOCITY = 380
@@ -11,12 +10,12 @@ const WALL_SLIDE_VELOCITY_CAP = 100
 
 var can_dash := false
 
+@onready var Sector = $"../".Sector
+@onready var current_sector = $"../".current_sector
+
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
-
-@onready var Sector = $"../".Sector
-@onready var current_sector = $"../".current_sector
 
 @onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
 
@@ -40,7 +39,6 @@ func _physics_process(delta: float) -> void:
 			Input.get_axis("move_left", "move_right"), 
 			Input.get_axis("move_up", "move_down")
 	)
-	# NOTE: To climb, you must hold direction.x
 	
 	# Reset dash, Logistics only
 	if (
@@ -61,13 +59,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Update velocity
 	if dash_time.is_stopped(): # Prevents velocity change while dashing
-		var desired_velocity := Vector2(
-				# x:
-				RUN_SPEED * direction.x,
-				# y:
-				#0.0 if is_on_floor()
-				velocity.y + get_gravity().y * delta * gravity_change
-		)
+		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
 		# Cap the vertical velocity if sliding down the wall
 		if is_on_wall():
 			desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP)
@@ -107,11 +99,8 @@ func _physics_process(delta: float) -> void:
 		Input.is_action_just_pressed("invert_gravity")
 	):
 		gravity_change *= -1
-		var rotate = create_tween()
-		if gravity_change == 1:
-			rotate.tween_property($".", "rotation_degrees", 0, 0.3) # Rotate sprite upsidedown 
-		else:
-			rotate.tween_property($".", "rotation_degrees", 180, 0.3) # Rotate sprite rightsideup
+		var rotate_player = create_tween()
+		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
 	
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
@@ -123,7 +112,7 @@ func _physics_process(delta: float) -> void:
 	
 	enable_closest_terminal()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
 		print("DEATH")
 

@@ -42,16 +42,19 @@ func _ready() -> void:
 	
 	# If the platform is set to instant return, add padding to its max distances
 	if instant_return:
-		if max_distance.x < 0:
-			max_distance.x -= step_size
-		if max_distance.x > 0:
-			max_distance.x += step_size
-		if max_distance.y < 0:
-			max_distance.y -= step_size
-		if max_distance.y > 0:
-			max_distance.y += step_size
+		max_distance.x += step_size * sign(max_distance.x)
+		max_distance.y += step_size * sign(max_distance.y)
 		
-		print(curr_distance)
+		#if max_distance.x < 0:
+			#max_distance.x -= step_size
+		#if max_distance.x > 0:
+			#max_distance.x += step_size
+		#if max_distance.y < 0:
+			#max_distance.y -= step_size
+		#if max_distance.y > 0:
+			#max_distance.y += step_size
+		#
+		#print(curr_distance)
 
 func expand_platform(new_size: Vector2i) -> void:
 	for x in range(new_size.x):

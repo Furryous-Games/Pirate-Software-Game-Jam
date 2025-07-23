@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ke8ne88ddqf1" path="res://scenes/player.tscn" id="2_pu3yx"]
 [ext_resource type="PackedScene" uid="uid://d0o5qpml1wgkl" path="res://scenes/engineering_sector.tscn" id="3_gubc5"]
 
-[node name="Game Jam - Only One" type="Node2D"]
+[node name="Game Jam - Only One2" type="Node2D"]
 script = ExtResource("1_7ykc4")
 current_sector = 3
 
