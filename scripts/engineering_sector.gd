@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var main_script: Node2D = $"../../"
+
 @onready var timing_mechanism_tick_1: TileMapLayer = $"Tilemaps/Mechanism Tick 1"
 @onready var timing_mechanism_tick_2: TileMapLayer = $"Tilemaps/Mechanism Tick 2"
 @onready var timing_mechanism_tick_3: TileMapLayer = $"Tilemaps/Mechanism Tick 3"
@@ -31,6 +33,8 @@ func _ready() -> void:
 		]
 	
 	_on_timing_mechanism_tick()
+	
+	print(main_script)
 
 
 func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
@@ -53,3 +57,10 @@ func _on_timing_mechanism_tick() -> void:
 	for mechanical_room in timing_mechanism_platforms.get_children():
 		for timing_platform in mechanical_room.get_children():
 			timing_platform._on_timing_mechanism_tick()
+
+
+func _enable_timer(initial_value: int):
+	main_script.toggle_timer(true, initial_value, Color.WHITE, my_print)
+
+func my_print():
+	print("HELLO")
