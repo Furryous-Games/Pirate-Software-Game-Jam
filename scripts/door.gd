@@ -77,8 +77,9 @@ func toggle_door(toggle_state = null):
 		# Toggle the door to its opposite state
 		closed = not closed
 	
-	# Make note that the door has been interacted with
-	has_interacted = true
+	# Make note that the door has been interacted with if single interact is on
+	if single_interact:
+		has_interacted = true
 	
 	# Update the position of the door
 	update_door_position()

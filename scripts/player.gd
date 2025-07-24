@@ -6,7 +6,7 @@ const RUN_SPEED = 120
 const ACCELERATION = 1000
 const DECELERATION = 1500
 const DASH_VELOCITY = 450
-const JUMP_VELOCITY = -400
+const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 
 var room_spawn
@@ -140,7 +140,8 @@ func death():
 	if gravity_change == -1:
 		gravity_invert()
 	
-	position = room_spawn[main_script.current_room]
+	if room_spawn.has(main_script.current_room):
+		position = room_spawn[main_script.current_room]
 	
 	if main_script.current_sector == main_script.Sector.REACTOR:
 		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
