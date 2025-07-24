@@ -5,8 +5,8 @@ signal player_dash
 const RUN_SPEED = 120
 const ACCELERATION = 1000
 const DECELERATION = 1500
-const DASH_VELOCITY = 380
-const JUMP_VELOCITY = -420
+const DASH_VELOCITY = 450
+const JUMP_VELOCITY = -400
 const WALL_SLIDE_VELOCITY_CAP = 100
 
 var room_spawn
@@ -95,7 +95,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Jump action
 	if (
-			Input.is_action_just_pressed("move_up")
+			Input.is_action_just_pressed("jump")
 			or is_on_floor() and not jump_buffer.is_stopped()
 	):
 		if is_on_floor() or is_on_ceiling() or not coyote_time.is_stopped():
@@ -141,10 +141,18 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
-		if gravity_change == -1:
-			gravity_invert()
-		print(main_script.current_room)
-		position = room_spawn[main_script.current_room]
+		#print(main_script.current_room)
+		death()
+
+
+func death():
+	if gravity_change == -1:
+		gravity_invert()
+	
+	position = room_spawn[main_script.current_room]
+	
+	if main_script.current_sector == main_script.Sector.REACTOR:
+		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
 
 
 func gravity_invert() -> void:
@@ -155,6 +163,11 @@ func gravity_invert() -> void:
 	
 	return 
 	
+
+func recharge_dash():
+	print("recharge")
+	can_dash = true
+
 	
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing

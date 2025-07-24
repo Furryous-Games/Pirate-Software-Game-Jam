@@ -4,7 +4,7 @@
 [ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://scenes/test_tileset.tres" id="1_h2t8x"]
 [ext_resource type="PackedScene" uid="uid://benq0bfympyo7" path="res://scenes/timing_mechanism_platform.tscn" id="2_4rmap"]
 [ext_resource type="PackedScene" uid="uid://5p3nb0s7xyta" path="res://scenes/wall_terminal.tscn" id="3_obb4h"]
-[ext_resource type="Script" uid="uid://4iglvxy2ienw" path="res://scripts/terminal_script_calls.gd" id="4_w6xl5"]
+[ext_resource type="Script" path="res://scripts/terminal_script_calls.gd" id="4_w6xl5"]
 
 [node name="Engineering Sector" type="Node2D"]
 script = ExtResource("1_4rmap")

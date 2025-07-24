@@ -34,7 +34,7 @@ func _ready() -> void:
 	
 	_on_timing_mechanism_tick()
 	
-	print(main_script)
+	#print(main_script)
 
 
 func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):

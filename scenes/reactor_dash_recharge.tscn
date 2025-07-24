@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctk6pmac3c1up"]
+
+[ext_resource type="Script" uid="uid://bt2kwlv0sl0rg" path="res://scripts/reactor_dash_recharge.gd" id="1_gcnda"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_i1d33"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uuj0q"]
+
+[node name="DashRecharge" type="Area2D"]
+script = ExtResource("1_gcnda")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(20, 20)
+texture = SubResource("PlaceholderTexture2D_i1d33")
+
+[node name="DetectionBox" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_uuj0q")
