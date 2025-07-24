@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://0orqr3lipgfq"
-path="res://.godot/imported/prstartk.ttf-f3b3b6de4f621fd474c85eaccebcfd8d.fontdata"
+path="res://.godot/imported/prstartk.ttf-a302eaca35bbc794d7c6502468789961.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/prstartk.ttf"
-dest_files=["res://.godot/imported/prstartk.ttf-f3b3b6de4f621fd474c85eaccebcfd8d.fontdata"]
+source_file="res://Assets/Fonts/prstartk.ttf"
+dest_files=["res://.godot/imported/prstartk.ttf-a302eaca35bbc794d7c6502468789961.fontdata"]
 
 [params]
 
