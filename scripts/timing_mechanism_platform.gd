@@ -44,7 +44,17 @@ func _ready() -> void:
 	if instant_return:
 		max_distance.x += step_size * sign(max_distance.x)
 		max_distance.y += step_size * sign(max_distance.y)
-
+		
+		#if max_distance.x < 0:
+			#max_distance.x -= step_size
+		#if max_distance.x > 0:
+			#max_distance.x += step_size
+		#if max_distance.y < 0:
+			#max_distance.y -= step_size
+		#if max_distance.y > 0:
+			#max_distance.y += step_size
+		#
+		#print(curr_distance)
 
 func expand_platform(new_size: Vector2i) -> void:
 	for x in range(new_size.x):
