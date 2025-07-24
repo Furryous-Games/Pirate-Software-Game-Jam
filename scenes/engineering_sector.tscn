@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://4iglvxy2ienw" path="res://scripts/terminal_script_calls.gd" id="4_w6xl5"]
 [ext_resource type="PackedScene" uid="uid://d3jpuujkyi2tt" path="res://scenes/door.tscn" id="6_crwm4"]
 
+
 [node name="Engineering Sector" type="Node2D"]
 script = ExtResource("1_4rmap")
 

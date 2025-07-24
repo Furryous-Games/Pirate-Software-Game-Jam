@@ -5,8 +5,8 @@ signal player_dash
 const RUN_SPEED = 120
 const ACCELERATION = 1000
 const DECELERATION = 1500
-const DASH_VELOCITY = 380
-const JUMP_VELOCITY = -420
+const DASH_VELOCITY = 450
+const JUMP_VELOCITY = -400
 const WALL_SLIDE_VELOCITY_CAP = 100
 
 var room_spawn
@@ -42,6 +42,7 @@ func _input(event: InputEvent) -> void:
 func set_room_spawn(points) -> void:
 	room_spawn = points
 
+
 func _physics_process(delta: float) -> void:
 	var direction := Vector2(
 			Input.get_axis("move_left", "move_right"), 
@@ -71,23 +72,27 @@ func _physics_process(delta: float) -> void:
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
 		
 		# Reduce velocity when in water by 15%
-		if (
-			water_collider.is_colliding()
-		):
+		if water_collider.is_colliding():
 			desired_velocity.x *= 0.85
 			desired_velocity.y *= 0.85
 		
 		# Cap the vertical velocity if sliding down the wall
-		if (
-			is_on_wall()
-			and gravity_change == 1
-		):
-			desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
-		elif (
-			is_on_wall()
-			and gravity_change == -1
-		):
-			desired_velocity.y = max(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
+		if is_on_wall():
+			if gravity_change == 1:
+				desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
+			elif gravity_change == -1:
+				desired_velocity.y = max(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
+		
+		#if (
+				#is_on_wall()
+				#and gravity_change == 1
+		#):
+			#desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
+		#elif (
+				#is_on_wall()
+				#and gravity_change == -1
+		#):
+			#desired_velocity.y = max(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
 		
 		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
 		
@@ -95,7 +100,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Jump action
 	if (
-			Input.is_action_just_pressed("move_up")
+			Input.is_action_just_pressed("jump")
 			or is_on_floor() and not jump_buffer.is_stopped()
 	):
 		if is_on_floor() or is_on_ceiling() or not coyote_time.is_stopped():
@@ -121,13 +126,11 @@ func _physics_process(delta: float) -> void:
 	
 	# Invert gravity action, Life Support only 
 	if (
-
 			main_script.current_sector == main_script.Sector.LIFE_SUPPORT
 			and Input.is_action_just_pressed("invert_gravity")
-		):
-			gravity_invert()
+	):
+		gravity_invert()
 
-	
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
 		set_collision_mask_value(2, false)
@@ -141,10 +144,17 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
-		if gravity_change == -1:
-			gravity_invert()
-		print(main_script.current_room)
-		position = room_spawn[main_script.current_room]
+		death()
+
+
+func death():
+	if gravity_change == -1:
+		gravity_invert()
+	
+	position = room_spawn[main_script.current_room]
+	
+	if main_script.current_sector == main_script.Sector.REACTOR:
+		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
 
 
 func gravity_invert() -> void:
@@ -155,6 +165,10 @@ func gravity_invert() -> void:
 	
 	return 
 	
+
+func recharge_dash():
+	can_dash = true
+
 	
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing
