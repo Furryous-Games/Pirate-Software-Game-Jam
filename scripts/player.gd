@@ -73,7 +73,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Jump action
 	if (
-			Input.is_action_just_pressed("jump")
+			Input.is_action_just_pressed("move_up")
 			or is_on_floor() and not jump_buffer.is_stopped()
 	):
 		if is_on_floor() or is_on_ceiling() or not coyote_time.is_stopped():
