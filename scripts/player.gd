@@ -63,7 +63,7 @@ func _physics_process(delta: float) -> void:
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
 		# Cap the vertical velocity if sliding down the wall
 		if is_on_wall():
-			desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP)
+			desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
 		
 		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
 		
@@ -81,7 +81,7 @@ func _physics_process(delta: float) -> void:
 			jump_buffer.start()
 			# Wall jump
 			if is_on_wall():
-				velocity.y = JUMP_VELOCITY
+				velocity.y = JUMP_VELOCITY * gravity_change
 				velocity.x = RUN_SPEED * get_wall_normal().x
 		
 	# Dash action, Logistics only
@@ -96,12 +96,12 @@ func _physics_process(delta: float) -> void:
 	
 	# Invert gravity action, Life Support only 
 	if (
-			#current_sector == Sector.LIFE_SUPPORT
-			Input.is_action_just_pressed("invert_gravity")
-	):
-		gravity_change *= -1
-		var rotate_player = create_tween()
-		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
+			current_sector == Sector.LIFE_SUPPORT
+			and Input.is_action_just_pressed("invert_gravity")
+		):
+			gravity_change *= -1
+			var rotate_player = create_tween()
+			rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
 	
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):

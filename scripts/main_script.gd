@@ -34,9 +34,9 @@ var current_room = Vector2i(0, 0)
 
 
 func _ready() -> void:
-	load_sector(current_sector)
-
-
+	load_sector(current_sector) 
+	
+	
 func load_sector(get_sector: Sector) -> void:
 	# unload other sectors
 	if sector_maps.get_child_count() > 1:
