@@ -6,7 +6,9 @@ enum Sector {
 	#TUTORIAL,
 	ENGINEERING,
 	LIFE_SUPPORT,
+
 	REACTOR,
+
 	#ADMINISTRATIVE,
 }
 @export var current_sector: Sector
@@ -14,14 +16,18 @@ enum Sector {
 #const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
+
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector.tscn")
+
 #const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
 	Sector.ENGINEERING: {"player_position": Vector2i(100, 139),},
 	Sector.LIFE_SUPPORT: {"player_position": Vector2i(300, 300),},
+
 	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
+
 	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
 }
 # INFO: {"sector_map_offset": Vector2i(0, 0)} may be used to offset the sector's position to stand after the transition room betwixt it and the sector lobby
@@ -35,6 +41,30 @@ var is_mirage_shader_active := false
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
 @onready var camera: Camera2D = $Camera
+@onready var sector_maps: Node2D = $SectorMaps
+
+
+func _ready() -> void:
+	load_sector(current_sector)
+
+
+func load_sector(get_sector: Sector) -> void:
+	# unload other sectors
+	if sector_maps.get_child_count() > 1:
+		sector_maps.get_child(-1).free()
+	
+	# Load sector and add it to scene tree as child of SectorMaps
+	var sector: Node2D
+	match get_sector:
+		#Sector.TUTORIAL: load_sector = TUTORIA_SECTOR.instantiate()
+		Sector.ENGINEERING: sector = ENGINEERING_SECTOR.instantiate()
+		Sector.LIFE_SUPPORT: sector = LIFE_SUPPORT_SECTOR.instantiate()
+		Sector.LOGISTICS: sector = LOGISTICS_SECTOR.instantiate()
+		#Sector.ADMINISTRATIVE: load_sector = ADMINISTRATIVE_SECTOR.instantiate()
+	sector_maps.add_child(sector)
+	current_sector = get_sector
+	
+	player.position = SECTOR_DATA[get_sector].player_position
 
 @onready var minute_bar: ProgressBar = $UI/MinuteBar
 @onready var minute_display: Label = $UI/MinuteDisplay
