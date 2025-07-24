@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c1uh0ur1dwxgn" path="res://scripts/main_script.gd" id="1_7ykc4"]
 [ext_resource type="PackedScene" uid="uid://ke8ne88ddqf1" path="res://scenes/player.tscn" id="2_pu3yx"]
 [ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://scenes/test_tileset.tres" id="3_7ykc4"]
-[ext_resource type="FontFile" uid="uid://0orqr3lipgfq" path="res://assets/fonts/prstartk.ttf" id="4_gubc5"]
+[ext_resource type="FontFile" uid="uid://cntkvst75qnxe" path="res://assets/fonts/prstartk.ttf" id="4_gubc5"]
 [ext_resource type="Shader" uid="uid://cuahv7mnr5q7i" path="res://scripts/mirage.gdshader" id="4_pu3yx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gubc5"]
@@ -37,7 +37,6 @@ shader_parameter/is_active = 0.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_7ykc4")
-current_sector = 1
 
 [node name="SectorMaps" type="Node2D" parent="."]
 

@@ -15,6 +15,15 @@ extends Node2D
 @onready var timing_mechanism_platforms: Node2D = $"Timing Mechanism Platforms"
 
 
+const ROOM_SPAWN_DATA = {
+		Vector2i(0,0): Vector2i(0,300),
+		Vector2i(1,0): Vector2i(580, 300),
+		Vector2i(2,0): Vector2i(1240, 200),
+		Vector2i(2,1): Vector2i(1240, 200),
+		Vector2i(2,-1): Vector2i(1240, 200),
+}
+
+
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
 
@@ -57,10 +66,3 @@ func _on_timing_mechanism_tick() -> void:
 	for mechanical_room in timing_mechanism_platforms.get_children():
 		for timing_platform in mechanical_room.get_children():
 			timing_platform._on_timing_mechanism_tick()
-
-
-func _enable_timer(initial_value: int):
-	main_script.toggle_timer(true, initial_value, Color.WHITE, my_print)
-
-func my_print():
-	print("HELLO")
