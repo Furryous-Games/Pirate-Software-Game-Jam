@@ -14,6 +14,7 @@ var tween_position: Tween
 
 
 func _ready() -> void:
+	# Set initial and final positions
 	platform_positions.initial = (position / TILE_SIZE) as Vector2
 	platform_positions.final = platform_positions.initial + (platform_data.velocity_magnitude * platform_data.velocity_direction as Vector2)
 	
@@ -30,6 +31,7 @@ func set_size(get_size: Vector2i) -> void:
 
 
 func move(to_final: bool) -> void:
+	# override (cancel) active tweens
 	if tween_position and tween_position.is_running():
 		tween_position.kill()
 	

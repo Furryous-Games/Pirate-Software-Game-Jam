@@ -71,12 +71,15 @@ func load_sector(get_sector: Sector) -> void:
 		#Sector.ADMINISTRATIVE: 
 			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
 	
+	# Add sector scene as child of SectorMaps
 	sector_maps.add_child(sector)
 	current_sector = get_sector
 	
+	# Set room spawn data
 	room_spawn = sector_maps.get_child(-1).ROOM_SPAWN_DATA
 	player.set_room_spawn(room_spawn)
 	
+	# Spawn player at designated position
 	player.position = SECTOR_DATA[get_sector].player_position
 
 
@@ -112,6 +115,7 @@ func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on
 	else:
 		minute_display.text = "--.--"
 		change_timer_color(Color.AQUA)
+		# refill the bar
 		var tween_minute_bar: Tween = create_tween()
 		tween_minute_bar.tween_property(minute_bar, "value", 60, 0.4)
 		is_timer_active = false
