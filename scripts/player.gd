@@ -9,6 +9,8 @@ const DASH_VELOCITY = 380
 const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 
+var room_spawn
+
 var can_dash := false
 var gravity_change: int = 1
 
@@ -16,10 +18,10 @@ var current_terminals: Array = []
 var last_checked_position: Vector2
 var currently_selected_terminal
 
-@onready var Sector = $"../".Sector
-@onready var current_sector = $"../".current_sector
+@onready var main_script = $"../"
 
 @onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
+@onready var water_collider: ShapeCast2D = $"Water Collider"
 
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
@@ -37,6 +39,9 @@ func _input(event: InputEvent) -> void:
 			currently_selected_terminal.interact_with_terminal()
 
 
+func set_room_spawn(points) -> void:
+	room_spawn = points
+
 func _physics_process(delta: float) -> void:
 	var direction := Vector2(
 			Input.get_axis("move_left", "move_right"), 
@@ -45,7 +50,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Reset dash, Reactor only
 	if (
-			current_sector == Sector.REACTOR
+			main_script.current_sector == main_script.Sector.REACTOR
 			and is_on_floor()
 			and not can_dash
 			and dash_time.is_stopped()
@@ -62,10 +67,27 @@ func _physics_process(delta: float) -> void:
 	
 	# Update velocity
 	if dash_time.is_stopped(): # Prevents velocity change while dashing
+		
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
+		
+		# Reduce velocity when in water by 15%
+		if (
+			water_collider.is_colliding()
+		):
+			desired_velocity.x *= 0.85
+			desired_velocity.y *= 0.85
+		
 		# Cap the vertical velocity if sliding down the wall
-		if is_on_wall():
+		if (
+			is_on_wall()
+			and gravity_change == 1
+		):
 			desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
+		elif (
+			is_on_wall()
+			and gravity_change == -1
+		):
+			desired_velocity.y = max(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
 		
 		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
 		
@@ -88,7 +110,7 @@ func _physics_process(delta: float) -> void:
 		
 	# Dash action, Reactor only
 	if (
-			current_sector == Sector.REACTOR
+			main_script.current_sector == main_script.Sector.REACTOR
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
@@ -100,12 +122,10 @@ func _physics_process(delta: float) -> void:
 	# Invert gravity action, Life Support only 
 	if (
 
-			current_sector == Sector.LIFE_SUPPORT
+			main_script.current_sector == main_script.Sector.LIFE_SUPPORT
 			and Input.is_action_just_pressed("invert_gravity")
 		):
-			gravity_change *= -1
-			var rotate_player = create_tween()
-			rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
+			gravity_invert()
 
 	
 	# Handles movement actions
@@ -121,9 +141,21 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
-		print("DEATH")
+		if gravity_change == -1:
+			gravity_invert()
+		print(main_script.current_room)
+		position = room_spawn[main_script.current_room]
 
 
+func gravity_invert() -> void:
+
+	gravity_change *= -1
+	var rotate_player = create_tween()
+	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
+	
+	return 
+	
+	
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing
 	if current_terminals.is_empty():
