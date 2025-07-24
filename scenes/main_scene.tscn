@@ -81,4 +81,6 @@ material = SubResource("ShaderMaterial_gubc5")
 offset_right = 1160.0
 offset_bottom = 680.0
 
+
 [connection signal="timeout" from="UI/MinuteTimer" to="." method="_on_minute_timer_timeout"]
+

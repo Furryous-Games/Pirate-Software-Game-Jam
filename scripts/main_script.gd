@@ -6,7 +6,9 @@ enum Sector {
 	#TUTORIAL,
 	ENGINEERING,
 	LIFE_SUPPORT,
+
 	REACTOR,
+
 	#ADMINISTRATIVE,
 }
 @export var current_sector: Sector
@@ -15,13 +17,16 @@ enum Sector {
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector.tscn")
+
 #const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
+
 	Sector.ENGINEERING: {"player_position": Vector2i(2700, 280),}, # 100, 139
 	Sector.LIFE_SUPPORT: {"player_position": Vector2i(300, 300),},
 	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
+
 	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
 }
 # INFO: {"sector_map_offset": Vector2i(0, 0)} may be used to offset the sector's position to stand after the transition room betwixt it and the sector lobby
@@ -35,6 +40,88 @@ var is_mirage_shader_active := false
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
 @onready var camera: Camera2D = $Camera
+@onready var sector_maps: Node2D = $SectorMaps
+
+
+func _ready() -> void:
+	load_sector(current_sector)
+
+
+func load_sector(get_sector: Sector) -> void:
+	# unload other sectors
+	if sector_maps.get_child_count() > 1:
+		sector_maps.get_child(-1).free()
+	
+	# Load sector and add it to scene tree as child of SectorMaps
+	var sector: Node2D
+	match get_sector:
+		#Sector.TUTORIAL: load_sector = TUTORIA_SECTOR.instantiate()
+		Sector.ENGINEERING: sector = ENGINEERING_SECTOR.instantiate()
+		Sector.LIFE_SUPPORT: sector = LIFE_SUPPORT_SECTOR.instantiate()
+		Sector.LOGISTICS: sector = LOGISTICS_SECTOR.instantiate()
+		#Sector.ADMINISTRATIVE: load_sector = ADMINISTRATIVE_SECTOR.instantiate()
+	sector_maps.add_child(sector)
+	current_sector = get_sector
+	
+	player.position = SECTOR_DATA[get_sector].player_position
+
+@onready var minute_bar: ProgressBar = $UI/MinuteBar
+@onready var minute_display: Label = $UI/MinuteDisplay
+@onready var minute_timer: Timer = $UI/MinuteTimer
+@onready var minute_bar_bg_color: StyleBoxFlat = minute_bar.get_theme_stylebox("fill")
+
+@onready var mirage: ColorRect = $ScreenShaders/Mirage
+
+
+
+func _ready() -> void:
+	load_sector(current_sector)
+
+
+func load_sector(get_sector: Sector) -> void:
+	# unload other sectors
+	if sector_maps.get_child_count() > 1:
+		sector_maps.get_child(-1).free()
+	
+	# Load sector and add it to scene tree as child of SectorMaps
+	var sector: Node2D
+	match get_sector:
+		#Sector.TUTORIAL: load_sector = TUTORIA_SECTOR.instantiate()
+		Sector.ENGINEERING: 
+			sector = ENGINEERING_SECTOR.instantiate()
+		Sector.LIFE_SUPPORT: 
+			sector = LIFE_SUPPORT_SECTOR.instantiate()
+		Sector.REACTOR: 
+			sector = REACTOR_SECTOR.instantiate()
+			toggle_mirage_shader()
+			toggle_timer(true)
+		#Sector.ADMINISTRATIVE: load_sector = ADMINISTRATIVE_SECTOR.instantiate()
+	sector_maps.add_child(sector)
+	current_sector = get_sector
+	
+	player.position = SECTOR_DATA[get_sector].player_position
+
+
+func toggle_mirage_shader() -> void:
+	is_mirage_shader_active = not is_mirage_shader_active
+	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
+
+
+func toggle_timer(on: bool) -> void:
+	match on:
+		true:
+			minute_display.modulate = Color.RED
+			minute_bar_bg_color.bg_color = Color.RED
+			minute_timer.start()
+			is_timer_active = true
+			
+		false:
+			minute_display.text = "--.--"
+			minute_display.modulate = Color.AQUA
+			minute_bar_bg_color.bg_color = Color.AQUA
+			var tween_minute_bar: Tween = create_tween()
+			tween_minute_bar.tween_property(minute_bar, "value", 60, 0.3)
+			is_timer_active = false
 
 @onready var minute_bar: ProgressBar = $UI/MinuteBar
 @onready var minute_display: Label = $UI/MinuteDisplay
@@ -142,6 +229,8 @@ func _process(_delta: float) -> void:
 			toggle_timer(false)
 
 
+
 func _on_minute_timer_timeout() -> void:
 	print("TEST")
 	pass # Replace with function body.
+
