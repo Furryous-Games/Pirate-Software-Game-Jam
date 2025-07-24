@@ -118,14 +118,15 @@ func _physics_process(delta: float) -> void:
 			main_script.current_sector == main_script.Sector.LIFE_SUPPORT
 			and Input.is_action_just_pressed("invert_gravity")
 	):
-		gravity_invert()
+		gravity_invert(true)
 
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
 		set_collision_mask_value(2, false)
 	if Input.is_action_just_released("move_down"):
 		set_collision_mask_value(2, true)
-
+		
+	
 	move_and_slide()
 	
 	enable_closest_terminal()
@@ -135,10 +136,10 @@ func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
 		death()
 
-
+#handles palyer death, resetting gravity of applicible and respawning the player at the begining of the room.
 func death():
 	if gravity_change == -1:
-		gravity_invert()
+		gravity_invert(false)
 	
 	position = room_spawn[main_script.current_room]
 	
@@ -146,11 +147,15 @@ func death():
 		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
 
 
-func gravity_invert() -> void:
+#inverts gravity for the player, flag denotes if the player roatates with a smooth (true) or abrupt (false) transition
+func gravity_invert(flag) -> void:
 
 	gravity_change *= -1
 	var rotate_player = create_tween()
-	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
+	if flag:
+		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
+	else:
+		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0)
 	
 	return 
 	
