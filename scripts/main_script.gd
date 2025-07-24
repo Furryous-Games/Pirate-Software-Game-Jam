@@ -6,7 +6,9 @@ enum Sector {
 	#TUTORIAL,
 	ENGINEERING,
 	LIFE_SUPPORT,
+
 	REACTOR,
+
 	#ADMINISTRATIVE,
 }
 @export var current_sector: Sector
@@ -15,30 +17,32 @@ enum Sector {
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector.tscn")
+
 #const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
 
 	Sector.ENGINEERING: {"player_position": Vector2i(160, 120),}, # 100, 139
-
 	Sector.LIFE_SUPPORT: {"player_position": Vector2i(0, 300),},
 	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
+
 	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
 }
+
 # INFO: {"sector_map_offset": Vector2i(0, 0)} may be used to offset the sector's position to stand after the transition room betwixt it and the sector lobby
 
-var current_room = Vector2i(0, 0)
+@export var current_room = Vector2i(0, 0)
 var is_timer_active := false
-var tween_mirage: Tween
+var tween_mirage: Tween = create_tween()
 var is_mirage_shader_active := false
+#var minute_bar_bg_color: StyleBoxFlat
 
-var room_spawn: Dictionary
+@export var room_spawn: Dictionary
 
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
 @onready var camera: Camera2D = $Camera
-
 @onready var minute_bar: ProgressBar = $UI/MinuteBar
 @onready var minute_display: Label = $UI/MinuteDisplay
 @onready var minute_timer: Timer = $UI/MinuteTimer
@@ -60,8 +64,7 @@ func load_sector(get_sector: Sector) -> void:
 	# Load sector and add it to scene tree as child of SectorMaps
 	var sector: Node2D
 	match get_sector:
-		#Sector.TUTORIAL: 
-			#load_sector = TUTORIA_SECTOR.instantiate()
+		#Sector.TUTORIAL: load_sector = TUTORIA_SECTOR.instantiate()
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
 		Sector.LIFE_SUPPORT: 
@@ -69,26 +72,20 @@ func load_sector(get_sector: Sector) -> void:
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			toggle_mirage_shader()
-			toggle_timer(true, 60, Color.RED, reactor_timer_timout)
-		#Sector.ADMINISTRATIVE: 
-			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
-	
-	# Add sector scene as child of SectorMaps
+			toggle_timer(true)
+		#Sector.ADMINISTRATIVE: load_sector = ADMINISTRATIVE_SECTOR.instantiate()
 	sector_maps.add_child(sector)
 	current_sector = get_sector
 	
-	# Set room spawn data
 	room_spawn = sector_maps.get_child(-1).ROOM_SPAWN_DATA
 	player.set_room_spawn(room_spawn)
 	
-	# Spawn player at designated position
 	player.position = SECTOR_DATA[get_sector].player_position
 
 
 func toggle_mirage_shader() -> void:
 	is_mirage_shader_active = not is_mirage_shader_active
-	tween_mirage = create_tween()
-	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 10)
+	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
 
 
 func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on_timeout = null) -> void:
@@ -117,20 +114,14 @@ func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on
 	else:
 		minute_display.text = "--.--"
 		change_timer_color(Color.AQUA)
-		# refill the bar
 		var tween_minute_bar: Tween = create_tween()
-		tween_minute_bar.tween_property(minute_bar, "value", 60, 0.4)
+		tween_minute_bar.tween_property(minute_bar, "value", 60, 0.3)
 		is_timer_active = false
 
 
 func change_timer_color(new_color: Color) -> void:
 	minute_display.label_settings.font_color = new_color
 	minute_bar_bg_color.bg_color = new_color
-
-
-func reactor_timer_timout() -> void:
-	player.death()
-	toggle_timer(true, 60, Color.RED, reactor_timer_timout)
 
 
 func _process(_delta: float) -> void:
@@ -156,3 +147,12 @@ func _process(_delta: float) -> void:
 		var time_left: float = snappedf(minute_timer.time_left, 0.01)
 		minute_display.text = ("0" if time_left < 10.00 else "") + str(time_left)
 		minute_bar.value = time_left
+		
+		if minute_timer.is_stopped():
+			toggle_timer(false)
+
+
+
+func _on_minute_timer_timeout() -> void:
+	print("TEST")
+	pass # Replace with function body.
