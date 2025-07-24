@@ -5,24 +5,24 @@ const ACCELERATION = 1000
 const DECELERATION = 1500
 const DASH_VELOCITY = 380
 const JUMP_VELOCITY = -420
-
 const WALL_SLIDE_VELOCITY_CAP = 100
 
 var can_dash := false
+var gravity_change: int = 1
+
+var current_terminals: Array = []
+var last_checked_position: Vector2
+var currently_selected_terminal
 
 @onready var Sector = $"../".Sector
 @onready var current_sector = $"../".current_sector
+
+@onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
 
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
 
-@onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
-
-var current_terminals: Array = []
-var last_checked_position: Vector2
-var currently_selected_terminal
-var gravity_change: int = 1
 
 func _input(event: InputEvent) -> void:
 	# Ignore events that arent currently pressed
@@ -33,6 +33,7 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):
 		if currently_selected_terminal:
 			currently_selected_terminal.interact_with_terminal()
+
 
 func _physics_process(delta: float) -> void:
 	var direction := Vector2(
@@ -93,10 +94,10 @@ func _physics_process(delta: float) -> void:
 		dash_time.start()
 		can_dash = false
 	
-	#invert gravity action, Life Support only 
+	# Invert gravity action, Life Support only 
 	if (
-		#current_sector == Sector.LIFE_SUPPORT
-		Input.is_action_just_pressed("invert_gravity")
+			#current_sector == Sector.LIFE_SUPPORT
+			Input.is_action_just_pressed("invert_gravity")
 	):
 		gravity_change *= -1
 		var rotate_player = create_tween()
@@ -112,9 +113,11 @@ func _physics_process(delta: float) -> void:
 	
 	enable_closest_terminal()
 
+
 func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
 		print("DEATH")
+
 
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing
