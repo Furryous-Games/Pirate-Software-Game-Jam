@@ -19,7 +19,7 @@ const REACTOR_SECTOR = preload("res://scenes/reactor_sector.tscn")
 
 const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
-	Sector.ENGINEERING: {"player_position": Vector2i(100, 139),},
+	Sector.ENGINEERING: {"player_position": Vector2i(2700, 280),}, # 100, 139
 	Sector.LIFE_SUPPORT: {"player_position": Vector2i(300, 300),},
 	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
 	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
@@ -78,21 +78,40 @@ func toggle_mirage_shader() -> void:
 	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
 
 
-func toggle_timer(on: bool) -> void:
-	match on:
-		true:
-			minute_display.modulate = Color.RED
-			minute_bar_bg_color.bg_color = Color.RED
-			minute_timer.start()
-			is_timer_active = true
+func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on_timeout = null) -> void:
+	if on:
+		# Set the color for the timer
+		change_timer_color(set_color)
+		
+		# Set the time for the timer and bar
+		minute_timer.wait_time = set_time
+		minute_bar.max_value = set_time
+		
+		# Remove all current connections for timeout on the timer
+		for connection in minute_timer.get_signal_connection_list("timeout"):
+			connection.signal.disconnect(connection.callable)
+		
+		# Set the function connection to the timer
+		if on_timeout != null:
+			minute_timer.connect("timeout", on_timeout)
+		
+		# TODO: Connect the timeout for the minute timer to disable the timer
+		
+		# Start the timer
+		minute_timer.start()
+		is_timer_active = true
 			
-		false:
-			minute_display.text = "--.--"
-			minute_display.modulate = Color.AQUA
-			minute_bar_bg_color.bg_color = Color.AQUA
-			var tween_minute_bar: Tween = create_tween()
-			tween_minute_bar.tween_property(minute_bar, "value", 60, 0.3)
-			is_timer_active = false
+	else:
+		minute_display.text = "--.--"
+		change_timer_color(Color.AQUA)
+		var tween_minute_bar: Tween = create_tween()
+		tween_minute_bar.tween_property(minute_bar, "value", 60, 0.3)
+		is_timer_active = false
+
+
+func change_timer_color(new_color: Color) -> void:
+	minute_display.label_settings.font_color = new_color
+	minute_bar_bg_color.bg_color = new_color
 
 
 func _process(_delta: float) -> void:
@@ -121,3 +140,8 @@ func _process(_delta: float) -> void:
 		
 		if minute_timer.is_stopped():
 			toggle_timer(false)
+
+
+func _on_minute_timer_timeout() -> void:
+	print("TEST")
+	pass # Replace with function body.

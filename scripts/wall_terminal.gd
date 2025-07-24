@@ -1,10 +1,17 @@
 extends Area2D
 
+@export var enabled_call: String
+@export var disabled_call: String
+
 @onready var key_prompt: Label = $"Key Prompt"
+
+signal terminal_interacted
 
 
 func interact_with_terminal() -> void:
 	print("INTERACT")
+	# Emit a signal to notify that the terminal was interacted with
+	emit_signal("terminal_interacted")
 	
 
 func enable_terminal() -> void:
