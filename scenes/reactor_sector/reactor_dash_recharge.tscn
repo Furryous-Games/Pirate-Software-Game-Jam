@@ -17,3 +17,4 @@ texture = SubResource("PlaceholderTexture2D_i1d33")
 shape = SubResource("RectangleShape2D_uuj0q")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+

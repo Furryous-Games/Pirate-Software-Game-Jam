@@ -2,7 +2,9 @@ shader_type canvas_item;
 // mirage shader, Reactor only
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+
 uniform float frequency = 60.0;
+
 uniform float depth = 0.005;
 uniform float is_active : hint_range(0.0, 1.0) = 0.0;
 

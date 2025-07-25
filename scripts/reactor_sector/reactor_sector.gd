@@ -1,5 +1,6 @@
 extends Node2D
 
+
 signal recharge_dash
 
 const ROOM_SPAWN_DATA := {
@@ -26,6 +27,7 @@ var is_section_overheating = {
 	"Tutorial2": true,
 	"Puzzle1": true,
 	"Puzzle2": true,
+
 	"Boss": true,
 }
 
@@ -37,6 +39,7 @@ var is_section_overheating = {
 func _ready() -> void:
 	# connects to signal emitted from player dash 
 	main_script.player.player_dash.connect(func(): signal_dash())
+
 	# connects recharge_dash signal to player
 	self.recharge_dash.connect(main_script.player.recharge_dash)
 	get_new_room_data()
@@ -44,15 +47,19 @@ func _ready() -> void:
 
 func signal_dash() -> void:
 	# Main (0, 0) has no dash platforms
+
 	if main_script.current_room == Vector2i.ZERO:
 		return
 	
 	# get current room to activate their dash platforms
+
 	active_section_mechanisms = current_section_data.mechanisms
 	# extend dash platforms
 	for platform in dash_platforms.get_child(active_section_mechanisms).get_children():
+
 		platform.move(true)
 	return_timer.start()
+
 
 
 func get_new_room_data():
@@ -75,7 +82,10 @@ func reactivate_cooling() -> void:
 	main_script.toggle_mirage_shader()
 
 
+
 func _on_return_timer_timeout() -> void:
 	# return dash platforms to their initial position
+
 	for platform in dash_platforms.get_child(active_section_mechanisms).get_children():
+
 		platform.move(false)
