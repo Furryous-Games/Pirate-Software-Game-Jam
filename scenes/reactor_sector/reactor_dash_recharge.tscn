@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c3cqhbb84sclu"]
 
-[ext_resource type="Script" uid="uid://bt2kwlv0sl0rg" path="res://scripts/reactor_dash_recharge.gd" id="1_gcnda"]
+[ext_resource type="Script" uid="uid://bt2kwlv0sl0rg" path="res://scripts/reactor_sector/reactor_dash_recharge.gd" id="1_gcnda"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_i1d33"]
 
