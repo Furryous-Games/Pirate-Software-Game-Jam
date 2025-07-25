@@ -1,5 +1,7 @@
 extends Node2D
 
+signal room_change
+
 ## CAUTION: The TUTORIAL and ADMINISTRATIVE sectors have their code written, but are disabled as they do not yet actually exist
 
 enum Sector {
@@ -14,11 +16,12 @@ enum Sector {
 #const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
-const REACTOR_SECTOR = preload("res://scenes/reactor_sector.tscn")
+const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
 #const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
+
 	Sector.ENGINEERING: {"player_position": Vector2i(3850, 139),}, # 100, 139
 	Sector.LIFE_SUPPORT: {"player_position": Vector2i(0, 300),},
 	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
@@ -66,6 +69,7 @@ func load_sector(get_sector: Sector) -> void:
 			sector = LIFE_SUPPORT_SECTOR.instantiate()
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
+			self.room_change.connect(sector.get_new_room_data)
 			toggle_mirage_shader()
 			toggle_timer(true, 60, Color.RED, reactor_timer_timout)
 		#Sector.ADMINISTRATIVE: 
@@ -86,7 +90,7 @@ func load_sector(get_sector: Sector) -> void:
 func toggle_mirage_shader() -> void:
 	is_mirage_shader_active = not is_mirage_shader_active
 	tween_mirage = create_tween()
-	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 10)
+	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
 
 
 func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on_timeout = null) -> void:
@@ -127,7 +131,7 @@ func change_timer_color(new_color: Color) -> void:
 
 
 func reactor_timer_timout() -> void:
-	player.death()
+	player.death(true)
 	toggle_timer(true, 60, Color.RED, reactor_timer_timout)
 
 
@@ -136,18 +140,22 @@ func _process(_delta: float) -> void:
 	if camera.to_local(player.position).x < 0:
 		current_room.x -= 1
 		camera.position.x -= get_viewport().get_visible_rect().size.x
+		room_change.emit()
 	# Player moves to the room to the right
 	elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
 		current_room.x += 1
 		camera.position.x += get_viewport().get_visible_rect().size.x
+		room_change.emit()
 	# Player moves to the room to the top
 	if camera.to_local(player.position).y < 0:
 		current_room.y -= 1
 		camera.position.y -= get_viewport().get_visible_rect().size.y
+		room_change.emit()
 	# Player moves to the room to the bottom
 	elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
 		current_room.y += 1
 		camera.position.y += get_viewport().get_visible_rect().size.y
+		room_change.emit()
 	
 	# Updates the timer display
 	if is_timer_active:
