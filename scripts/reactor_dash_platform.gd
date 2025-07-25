@@ -1,10 +1,9 @@
 extends AnimatableBody2D
 
-@export var platform_data := {"size": Vector2.ZERO, "velocity_magnitude": Vector2.ZERO, "velocity_direction": Vector2.ZERO}
+@export var platform_data := {"size": Vector2.ONE, "velocity_magnitude": Vector2.ZERO, "velocity_direction": Vector2.ZERO}
 @export var platform_atlas_tile := Vector2i(8, 3)
 
-const TILE_SIZE = 20
-const TILE_OFFSET = 10
+const TILE_SIZE: int = 20
 
 var platform_positions := {"initial": Vector2.ZERO, "final": Vector2.ZERO}
 var tween_position: Tween

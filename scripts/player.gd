@@ -6,7 +6,7 @@ const RUN_SPEED = 120
 const ACCELERATION = 1000
 const DECELERATION = 1500
 const DASH_VELOCITY = 450
-const JUMP_VELOCITY = -400
+const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 
 var room_spawn
@@ -136,14 +136,21 @@ func _process(_delta: float) -> void:
 		death()
 
 
-func death():
+func death(from_timer_timeout: bool = false) -> void:
 	if gravity_change == -1:
 		gravity_invert()
 	
-	position = room_spawn[main_script.current_room]
+	var respawn_position: Vector2i
 	
-	if main_script.current_sector == main_script.Sector.REACTOR:
+	# If death was caused by the minute timer's timeout, spawn the player at the section checkpoint
+	if from_timer_timeout and main_script.current_sector == main_script.Sector.REACTOR:
 		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
+		respawn_position = main_script.sector_maps.get_child(-1).current_section_data.spawn_point
+		
+	else: # spawn the player at the beginning of the room
+		respawn_position = room_spawn[main_script.current_room]
+	
+	position = respawn_position
 
 
 func gravity_invert() -> void:
@@ -155,7 +162,7 @@ func gravity_invert() -> void:
 	return 
 	
 
-func recharge_dash():
+func recharge_dash() -> void:
 	can_dash = true
 
 	

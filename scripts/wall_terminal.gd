@@ -9,7 +9,7 @@ signal terminal_interacted
 
 
 func interact_with_terminal() -> void:
-	print("INTERACT")
+	#print("INTERACT")
 	# Emit a signal to notify that the terminal was interacted with
 	emit_signal("terminal_interacted")
 	
