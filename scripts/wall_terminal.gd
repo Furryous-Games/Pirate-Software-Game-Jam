@@ -1,8 +1,14 @@
 extends Area2D
 
+@export var player_prompt: String = "Interact"
+
 @onready var key_prompt: Label = $"Key Prompt"
 
 signal terminal_interacted
+
+
+func _ready() -> void:
+	key_prompt.text = player_prompt
 
 
 func interact_with_terminal() -> void:
