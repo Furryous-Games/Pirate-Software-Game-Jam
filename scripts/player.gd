@@ -8,6 +8,7 @@ const DECELERATION = 1500
 const DASH_VELOCITY = 450
 const JUMP_VELOCITY = -400
 const WALL_SLIDE_VELOCITY_CAP = 100
+const TERMINAL_VELOCITY = 400
 
 var room_spawn
 
@@ -26,7 +27,6 @@ var currently_selected_terminal
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
-
 
 func _input(event: InputEvent) -> void:
 	# Ignore events that arent currently pressed
@@ -70,6 +70,9 @@ func _physics_process(delta: float) -> void:
 	if dash_time.is_stopped(): # Prevents velocity change while dashing
 		
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
+		
+		# enforce terminal y velocity for gravity and inverse gravity
+		desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY, TERMINAL_VELOCITY) 
 		
 		# Reduce velocity when in water by 15%
 		if water_collider.is_colliding():
