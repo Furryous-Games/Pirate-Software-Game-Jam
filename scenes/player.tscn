@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ke8ne88ddqf1"]
+[gd_scene load_steps=9 format=3 uid="uid://ke8ne88ddqf1"]
 
 [ext_resource type="Script" uid="uid://dtkmogktxrytf" path="res://scripts/player.gd" id="1_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://cyxpu55ypvp4s" path="res://assets/sprites/CharacterModels.png" id="1_v0iea"]
+
+[ext_resource type="Texture2D" uid="uid://cilb2m3v0ab17" path="res://assets/sprites/CharacterModels.png" id="1_v0iea"]
+
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
 atlas = ExtResource("1_v0iea")
@@ -31,6 +33,9 @@ size = Vector2(7, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(6, 14)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
+size = Vector2(9, 15)
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 3
 script = ExtResource("1_cvnsp")
@@ -56,6 +61,12 @@ shape = SubResource("RectangleShape2D_g2els")
 target_position = Vector2(0, 0)
 max_results = 2
 collision_mask = 8
+
+[node name="WallCollider" type="ShapeCast2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_qhqgy")
+target_position = Vector2(0, 0)
+max_results = 2
 
 [node name="JumpBuffer" type="Timer" parent="."]
 wait_time = 0.1

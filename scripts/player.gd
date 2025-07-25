@@ -8,9 +8,12 @@ const DECELERATION = 1500
 const DASH_VELOCITY = 450
 const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
+const TERMINAL_VELOCITY = 400
 
-var room_spawn
+var room_spawn: Dictionary
 
+var is_coyote_time_active := false
+var is_jump_canceled := false
 var can_dash := false
 var gravity_change: int = 1
 
@@ -22,13 +25,19 @@ var currently_selected_terminal
 
 @onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
 @onready var water_collider: ShapeCast2D = $"Water Collider"
+@onready var wall_collider: ShapeCast2D = $WallCollider
 
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
 
-
 func _input(event: InputEvent) -> void:
+	# Reduce jump height if input is released early
+	if Input.is_action_just_released("jump") and not is_jump_canceled:
+		velocity.y *= 0.50
+		is_jump_canceled = true
+		return
+	
 	# Ignore events that arent currently pressed
 	if not event.is_pressed():
 		return
@@ -44,12 +53,10 @@ func set_room_spawn(points) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var direction := Vector2(
-			Input.get_axis("move_left", "move_right"), 
-			Input.get_axis("move_up", "move_down")
-	)
+	var direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var is_on_ground: bool = is_on_floor() or is_on_ceiling()
 	
-	# Reset dash, Reactor only
+	# REACTOR: Reset dash
 	if (
 			main_script.current_sector == main_script.Sector.REACTOR
 			and is_on_floor()
@@ -58,51 +65,49 @@ func _physics_process(delta: float) -> void:
 	):
 		can_dash = true
 	
-	# Coyote time
-	if not (
-			velocity.y 
-			or is_on_floor()
-			or is_on_wall()
-	):
-		coyote_time.start()
+	# Coyote time enable/disable
+	if is_coyote_time_active == (is_on_ground or wall_collider.is_colliding()): # Biconditional
+		is_coyote_time_active = not is_coyote_time_active
+		if is_coyote_time_active:
+			coyote_time.start()
 	
 	# Update velocity
 	if dash_time.is_stopped(): # Prevents velocity change while dashing
-		
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
+		
+		# enforce terminal y velocity for gravity and inverse gravity
+		desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY, TERMINAL_VELOCITY) 
 		
 		# Reduce velocity when in water by 15%
 		if water_collider.is_colliding():
-			desired_velocity.x *= 0.85
-			desired_velocity.y *= 0.85
+			desired_velocity *= 0.85
 		
 		# Cap the vertical velocity if sliding down the wall
-		if is_on_wall():
+		if wall_collider.is_colliding() and direction.x == -get_wall_normal().x:
 			if gravity_change == 1:
 				desired_velocity.y = min(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
 			elif gravity_change == -1:
 				desired_velocity.y = max(desired_velocity.y, WALL_SLIDE_VELOCITY_CAP * gravity_change)
 		
-		var velocity_acceleration: int = ACCELERATION if sign(velocity.x * direction.x) == 1 else DECELERATION
-		
-		velocity = Vector2(move_toward(velocity.x, desired_velocity.x, velocity_acceleration * delta), desired_velocity.y)
+		velocity = Vector2(
+				move_toward(velocity.x, desired_velocity.x, (ACCELERATION if sign(velocity.x) == sign(direction.x) else DECELERATION) * delta), 
+				desired_velocity.y
+		)
 	
 	# Jump action
-	if (
-			Input.is_action_just_pressed("jump")
-			or is_on_floor() and not jump_buffer.is_stopped()
-	):
-		if is_on_floor() or is_on_ceiling() or not coyote_time.is_stopped():
+	if Input.is_action_just_pressed("jump")	or (is_on_ground and not jump_buffer.is_stopped()): # Input-jump or auto-jump
+		if is_on_ground or not coyote_time.is_stopped():
 			velocity.y = JUMP_VELOCITY * gravity_change
+			is_jump_canceled = false
 			jump_buffer.stop()
 		else:
 			jump_buffer.start()
 			# Wall jump
-			if is_on_wall():
-				velocity.y = JUMP_VELOCITY * gravity_change
-				velocity.x = RUN_SPEED * get_wall_normal().x
+			if wall_collider.is_colliding():
+				velocity = Vector2(RUN_SPEED * get_wall_normal().x, JUMP_VELOCITY * gravity_change)
+				is_jump_canceled = false
 		
-	# Dash action, Reactor only
+	# REACTOR: Dash action
 	if (
 			main_script.current_sector == main_script.Sector.REACTOR
 			and Input.is_action_just_pressed("dash")
@@ -113,19 +118,20 @@ func _physics_process(delta: float) -> void:
 		dash_time.start()
 		can_dash = false
 	
-	# Invert gravity action, Life Support only 
+	# LIFE SUPPORT: Invert gravity action
 	if (
 			main_script.current_sector == main_script.Sector.LIFE_SUPPORT
 			and Input.is_action_just_pressed("invert_gravity")
 	):
-		gravity_invert()
+		gravity_invert(true)
 
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
 		set_collision_mask_value(2, false)
 	if Input.is_action_just_released("move_down"):
 		set_collision_mask_value(2, true)
-
+		
+	
 	move_and_slide()
 	
 	enable_closest_terminal()
@@ -136,27 +142,36 @@ func _process(_delta: float) -> void:
 		death()
 
 
-func death():
+
+func death(from_timer_timeout: bool = false) -> void:
+
 	if gravity_change == -1:
-		gravity_invert()
+
+		gravity_invert(false)
+
 	
-	if room_spawn.has(main_script.current_room):
-		position = room_spawn[main_script.current_room]
-	
-	if main_script.current_sector == main_script.Sector.REACTOR:
+	# REACTOR: If death was caused by the minute timer's timeout, spawn the player at the section checkpoint
+	if from_timer_timeout: #and main_script.current_sector == main_script.Sector.REACTOR:
 		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
+		position = main_script.sector_maps.get_child(-1).current_section_data.spawn_point
+	# spawn the player at the beginning of the room
+	else:
+		position = room_spawn[main_script.current_room]
 
 
-func gravity_invert() -> void:
+
+#inverts gravity for the player, flag denotes if the player roatates with a smooth (true) or abrupt (false) transition
+func gravity_invert(flag) -> void:
 
 	gravity_change *= -1
 	var rotate_player = create_tween()
-	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
-	
-	return 
+	if flag:
+		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
+	else:
+		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0)
 	
 
-func recharge_dash():
+func recharge_dash() -> void:
 	can_dash = true
 
 	
