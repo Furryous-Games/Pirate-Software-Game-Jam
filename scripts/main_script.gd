@@ -16,7 +16,7 @@ enum Sector {
 #const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
-const REACTOR_SECTOR = preload("res://scenes/reactor_sector.tscn")
+const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
 #const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 const SECTOR_DATA := {

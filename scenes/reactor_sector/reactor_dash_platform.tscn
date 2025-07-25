@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b6mrdx2sklm1e"]
 
-[ext_resource type="Script" uid="uid://drhhwowtr5q6s" path="res://scripts/reactor_dash_platform.gd" id="1_ymigc"]
+[ext_resource type="Script" uid="uid://drhhwowtr5q6s" path="res://scripts/reactor_sector/reactor_dash_platform.gd" id="1_ymigc"]
 [ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://scenes/test_tileset.tres" id="2_pktxm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7sp3b"]
