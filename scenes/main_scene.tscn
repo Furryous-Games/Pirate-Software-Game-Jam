@@ -20,12 +20,10 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rt2n2"]
-bg_color = Color(0.784314, 0, 0, 1)
 corner_detail = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_rt2n2"]
 font = ExtResource("4_gubc5")
-font_color = Color(0.784314, 0, 0, 1)
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
@@ -53,9 +51,9 @@ anchor_mode = 0
 
 [node name="MinuteBar" type="ProgressBar" parent="UI"]
 offset_left = 200.0
-offset_top = 20.0
+offset_top = 22.0
 offset_right = 380.0
-offset_bottom = 24.0
+offset_bottom = 26.0
 theme_override_styles/background = SubResource("StyleBoxFlat_gubc5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_rt2n2")
 max_value = 60.0

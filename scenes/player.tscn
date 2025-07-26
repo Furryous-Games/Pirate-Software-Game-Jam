@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://ke8ne88ddqf1"]
 
 [ext_resource type="Script" uid="uid://dtkmogktxrytf" path="res://scripts/player.gd" id="1_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://cyxpu55ypvp4s" path="res://assets/sprites/CharacterModels.png" id="1_v0iea"]
+[ext_resource type="Texture2D" uid="uid://dlv5tllol780b" path="res://assets/sprites/CharacterModels.png" id="1_v0iea"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
 atlas = ExtResource("1_v0iea")
@@ -67,14 +67,29 @@ shape = SubResource("RectangleShape2D_qhqgy")
 target_position = Vector2(0, 0)
 max_results = 2
 
+[node name="LaunchCollider" type="ShapeCast2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_qhqgy")
+target_position = Vector2(0, 0)
+max_results = 2
+collision_mask = 16
+
 [node name="JumpBuffer" type="Timer" parent="."]
+process_callback = 0
 wait_time = 0.1
 one_shot = true
 
 [node name="CoyoteTime" type="Timer" parent="."]
+process_callback = 0
 wait_time = 0.08
 one_shot = true
 
 [node name="DashTime" type="Timer" parent="."]
+process_callback = 0
 wait_time = 0.08
+one_shot = true
+
+[node name="RespawnInputPause" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.2
 one_shot = true

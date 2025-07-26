@@ -1,20 +1,23 @@
 extends Node2D
 
-
-const ROOM_SPAWN_DATA = {
-		Vector2i(0,0): Vector2i(80,300),
-		Vector2i(1,0): Vector2i(600, 300),
-		Vector2i(2,0): Vector2i(1160, 300),
-		Vector2i(3,0): Vector2i(1760, 200),
-		Vector2i(3,1): Vector2i(1760, 200),
-		Vector2i(3,-1): Vector2i(1760, 200),
-		Vector2i(4,0): Vector2i(2340,140),
-		Vector2i(4,1): Vector2i(2340,140),
-		Vector2i(4,-1): Vector2i(2340,140),
-}
-
 var terminal_3_toggled: bool = false
 var terminal_4_toggled: bool = false
+
+
+func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
+	var room_spawn: Vector2i
+	match room:
+		Vector2i(0,0): room_spawn = Vector2i(80,300)
+		Vector2i(1,0): room_spawn = Vector2i(600, 300)
+		Vector2i(2,0): room_spawn = Vector2i(1160, 300)
+		Vector2i(3,0): room_spawn = Vector2i(1760, 200)
+		Vector2i(3,1): room_spawn = Vector2i(1760, 200)
+		Vector2i(3,-1): room_spawn = Vector2i(1760, 200)
+		Vector2i(4,0): room_spawn = Vector2i(2340,140)
+		Vector2i(4,1): room_spawn = Vector2i(2340,140)
+		Vector2i(4,-1): room_spawn = Vector2i(2340,140)
+	return room_spawn
+
 
 func clear_tiles(coord, atlas_coord, tile_map_layer) -> void:
 	

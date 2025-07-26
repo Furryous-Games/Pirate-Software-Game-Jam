@@ -8,9 +8,11 @@ const DECELERATION = 1500
 const DASH_VELOCITY = 450
 const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
-const TERMINAL_VELOCITY = 400
+const TERMINAL_VELOCITY_LIFE_SUPPORT = 400 # LIFE SUPPORT
+const TERMINAL_VELOCITY_REACTOR = Vector2(1000, 500)
+const LAUNCH_BOOST = Vector2i(400, 0.5) # REACTOR
 
-var room_spawn: Dictionary
+var sector: Node2D
 
 var is_coyote_time_active := false
 var is_jump_canceled := false
@@ -29,18 +31,22 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 @onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
 @onready var water_collider: ShapeCast2D = $"Water Collider"
 @onready var wall_collider: ShapeCast2D = $WallCollider
+@onready var launch_collider: ShapeCast2D = $LaunchCollider
 
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
+@onready var respawn_input_pause: Timer = $RespawnInputPause
+
 
 func _input(event: InputEvent) -> void:
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
-		# Reduce velocity if the player isnt currently falling
-		if velocity.y * gravity_change < 0:
+
+		# If not falling
+		if sign(velocity.y * gravity_change) == -1:
 			velocity.y *= 0.50
-			
+
 		is_jump_canceled = true
 		return
 	
@@ -57,11 +63,11 @@ func _input(event: InputEvent) -> void:
 			curr_held_item = null
 
 
-func set_room_spawn(points) -> void:
-	room_spawn = points
-
-
 func _physics_process(delta: float) -> void:
+	if not respawn_input_pause.is_stopped():
+		move_and_slide()
+		return
+	
 	var direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var is_on_ground: bool = is_on_floor() or is_on_ceiling()
 	
@@ -84,9 +90,12 @@ func _physics_process(delta: float) -> void:
 	if dash_time.is_stopped(): # Prevents velocity change while dashing
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
 		
+		# LIFE SUPPORT: Enforce terminal y velocity for gravity and inverse gravity
 		if main_script.current_sector == main_script.Sector.LIFE_SUPPORT:
-			# enforce terminal y velocity for gravity and inverse gravity
-			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY, TERMINAL_VELOCITY) 
+			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY_LIFE_SUPPORT, TERMINAL_VELOCITY_LIFE_SUPPORT)
+		# REACTPR: clamp velocity to terminal velocity 
+		if main_script.current_sector == main_script.Sector.REACTOR:
+			velocity = clamp(velocity, -TERMINAL_VELOCITY_REACTOR, TERMINAL_VELOCITY_REACTOR)
 		
 		# Reduce velocity when in water by 15%
 		if water_collider.is_colliding():
@@ -103,6 +112,16 @@ func _physics_process(delta: float) -> void:
 				move_toward(velocity.x, desired_velocity.x, (ACCELERATION if sign(velocity.x) == sign(direction.x) else DECELERATION) * delta), 
 				desired_velocity.y
 		)
+	
+	# REACTOR: Increase velocity.x when launching off platform; clamp velocity
+	if (
+			main_script.current_sector == main_script.Sector.REACTOR
+			and launch_collider.is_colliding()
+			and sector.is_launch_active
+	):
+		velocity.x += LAUNCH_BOOST.x * direction.x
+		velocity.y *= LAUNCH_BOOST.y
+		velocity = clamp(velocity, -TERMINAL_VELOCITY_REACTOR, TERMINAL_VELOCITY_REACTOR)
 	
 	# Jump action
 	if Input.is_action_just_pressed("jump")	or (is_on_ground and not jump_buffer.is_stopped()): # Input-jump or auto-jump
@@ -147,8 +166,7 @@ func _physics_process(delta: float) -> void:
 		curr_held_item.velocity *= 0.8
 		# Push the item in the direction of the held item position
 		curr_held_item.velocity += ((position + held_item_pos) - curr_held_item.position) * 2
-		
-	
+
 	move_and_slide()
 	
 	enable_closest_terminal()
@@ -161,32 +179,41 @@ func _process(_delta: float) -> void:
 
 
 func death(from_timer_timeout: bool = false) -> void:
-	curr_held_item = null
 
+	curr_held_item = null
+  
 	if gravity_change == -1:
 
 		gravity_invert(false)
 
 	
-	# REACTOR: If death was caused by the minute timer's timeout, spawn the player at the section checkpoint
-	if from_timer_timeout: #and main_script.current_sector == main_script.Sector.REACTOR:
-		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
-		position = main_script.sector_maps.get_child(-1).current_section_data.spawn_point
+	if main_script.current_sector == main_script.Sector.REACTOR:
+		# Reset mechanisms
+		sector.reset_room()
+		
+		# If death was caused by the minute timer's timeout, spawn the player at the subsector checkpoint
+		if from_timer_timeout:
+			main_script.toggle_mirage_shader(false, 0)
+			main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
+			position = sector.respawn_player_at_subsector()
+			velocity = Vector2.ZERO
+			return
+	
+	# timeout death for other sectors
+	#elif from_timer_timeout:
+		#pass
+	
 	# spawn the player at the beginning of the room
-	else:
-		position = room_spawn[main_script.current_room]
+	position = sector.get_room_spawn_position(main_script.current_room)
+	velocity = Vector2.ZERO
+	respawn_input_pause.start()
 
 
-
-#inverts gravity for the player, flag denotes if the player roatates with a smooth (true) or abrupt (false) transition
-func gravity_invert(flag) -> void:
-
+# Inverts gravity for the player, flag denotes if the player roatates with a smooth (true) or abrupt (false) transition
+func gravity_invert(flag: bool) -> void:
 	gravity_change *= -1
 	var rotate_player = create_tween()
-	if flag:
-		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
-	else:
-		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0)
+	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3 if flag else 0.0)
 	
 
 func recharge_dash() -> void:
