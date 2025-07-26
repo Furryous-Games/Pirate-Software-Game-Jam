@@ -51,9 +51,9 @@ anchor_mode = 0
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="MinuteBar" type="ProgressBar" parent="UI"]
-offset_left = 191.0
+offset_left = 200.0
 offset_top = 22.0
-offset_right = 371.0
+offset_right = 380.0
 offset_bottom = 26.0
 theme_override_styles/background = SubResource("StyleBoxFlat_gubc5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_rt2n2")
@@ -62,9 +62,9 @@ value = 60.0
 show_percentage = false
 
 [node name="MinuteDisplay" type="Label" parent="UI"]
-offset_left = 241.0
+offset_left = 250.0
 offset_top = 30.0
-offset_right = 321.0
+offset_right = 330.0
 offset_bottom = 46.0
 text = "60.00"
 label_settings = SubResource("LabelSettings_rt2n2")

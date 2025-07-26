@@ -5,7 +5,7 @@ extends Node2D
 
 
 func reactivate_cooling() -> void:
-	# Only emit the signal if the section if overheating (only interact with each terminal once)
-	if reactor.is_section_overheating[reactor.current_section_data.section]:
+	# Only emit the signal if the subsector terminal has not already been activated
+	if not reactor.subsector_terminal_data[reactor.current_subsector].is_terminal_activated:
 		reactor.reactivate_cooling()
-		doors.find_child(reactor.current_section_data.section).open_door()
+		doors.find_child(reactor.current_subsector).open_door()

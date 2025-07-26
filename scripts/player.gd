@@ -10,7 +10,7 @@ const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 const TERMINAL_VELOCITY = 400
 
-var room_spawn: Dictionary
+var sector: Node2D
 
 var is_coyote_time_active := false
 var is_jump_canceled := false
@@ -49,10 +49,6 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):
 		if currently_selected_terminal:
 			currently_selected_terminal.interact_with_terminal()
-
-
-func set_room_spawn(points) -> void:
-	room_spawn = points
 
 
 func _physics_process(delta: float) -> void:
@@ -158,7 +154,7 @@ func death(from_timer_timeout: bool = false) -> void:
 		if from_timer_timeout:
 			main_script.toggle_mirage_shader(false, 0)
 			main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
-			position = main_script.sector_maps.get_child(-1).current_section_data.spawn_point
+			position = sector.respawn_player_at_subsector()
 			velocity = Vector2.ZERO
 			return
 	
@@ -167,7 +163,7 @@ func death(from_timer_timeout: bool = false) -> void:
 		#pass
 	
 	# spawn the player at the beginning of the room
-	position = room_spawn[main_script.current_room]
+	position = sector.get_room_spawn_position(main_script.current_room)
 	velocity = Vector2.ZERO
 
 

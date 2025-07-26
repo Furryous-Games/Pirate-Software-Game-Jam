@@ -4,6 +4,18 @@ signal room_change
 
 ## CAUTION: The TUTORIAL and ADMINISTRATIVE sectors have their code written, but are disabled as they do not yet actually exist
 
+## SETTING THE PLAYER SPAWN FOR DEBUGGING:
+##
+## func load_sector(get_sector):
+##		...
+##		match get_sector:
+##			Sector.<SECTOR>:
+##				room_coords = <desired room coords>
+##
+## You can then go to Sector -> get_room_spawn_position() and set the room coordinates to the desired xy position if desired
+
+
+
 enum Sector {
 	#TUTORIAL,
 	ENGINEERING,
@@ -19,21 +31,12 @@ const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
 #const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
-const SECTOR_DATA := {
-	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
-	Sector.ENGINEERING: {"player_position": Vector2i(2700, 280),}, # 100, 139
-	Sector.LIFE_SUPPORT: {"player_position": Vector2i(2340,140),},
-	Sector.REACTOR: {"player_position": Vector2i(280, 300),}, # 280, 300 -1620, -385
-	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
-}
-# INFO: {"sector_map_offset": Vector2i(0, 0)} may be used to offset the sector's position to stand after the transition room betwixt it and the sector lobby
-
 var current_room = Vector2i(0, 0)
 var is_timer_active := false
 var tween_mirage: Tween
 var is_mirage_shader_active := false
 
-var room_spawn: Dictionary
+#var room_spawn: Dictionary
 
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
@@ -59,32 +62,40 @@ func load_sector(get_sector: Sector) -> void:
 	
 	# Load sector and add it to scene tree as child of SectorMaps
 	var sector: Node2D
+	var room_coords: Vector2i # For debugging
 	match get_sector:
 		#Sector.TUTORIAL: 
-			#load_sector = TUTORIA_SECTOR.instantiate()
+			#load_sector = TUTORIAL_SECTOR.instantiate()
+			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
+			room_coords = Vector2i(4, 0)
+			
 		Sector.LIFE_SUPPORT: 
 			sector = LIFE_SUPPORT_SECTOR.instantiate()
+			room_coords = Vector2i(4, 0)
+			
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			self.room_change.connect(sector.get_new_room_data)
+			room_coords = Vector2i(0, 0)
+			
 		#Sector.ADMINISTRATIVE: 
 			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
 	
 	# Add sector scene as child of SectorMaps
-	sector_maps.add_child(sector)
-	current_sector = get_sector
+	sector_maps.add_child(sector) 
 	
-	# Set room spawn data
-	room_spawn = sector.ROOM_SPAWN_DATA
-	player.set_room_spawn(room_spawn)
+	current_sector = get_sector
+	# Set player.sector to the sector Node2D, allowing direct access instead of using main_script.sector_maps.get_child(-1)
+	player.sector = sector 
 	
 	if get_sector == Sector.REACTOR:
 		sector.get_new_room_data()
 	
 	# Spawn player at designated position
-	player.position = SECTOR_DATA[get_sector].player_position
+	# room_coords is for debugging. Default value for the funtion is empty (function defualt = (0, 0))
+	player.position = sector.get_room_spawn_position(room_coords)
 
 
 func toggle_mirage_shader(on: bool = true, time: bool = 5) -> void:
