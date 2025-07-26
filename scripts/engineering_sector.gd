@@ -15,15 +15,6 @@ extends Node2D
 @onready var timing_mechanism_platforms: Node2D = $"Timing Mechanism Platforms"
 
 
-const ROOM_SPAWN_DATA = {
-		Vector2i(0,0): Vector2i(0,300),
-		Vector2i(1,0): Vector2i(580, 300),
-		Vector2i(2,0): Vector2i(1240, 200),
-		Vector2i(2,1): Vector2i(1240, 200),
-		Vector2i(2,-1): Vector2i(1240, 200),
-}
-
-
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
 
@@ -44,6 +35,18 @@ func _ready() -> void:
 	_on_timing_mechanism_tick()
 	
 	print(main_script)
+
+
+func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
+	var room_spawn: Vector2i
+	match room:
+		Vector2i(0,0): room_spawn = Vector2i(100, 139)
+		Vector2i(1,0): room_spawn = Vector2i(580, 300)
+		Vector2i(2,0): room_spawn = Vector2i(1240, 200)
+		Vector2i(2,1): room_spawn = Vector2i(1240, 200)
+		Vector2i(2,-1): room_spawn = Vector2i(1240, 200)
+		Vector2i(4, 0): room_spawn = Vector2i(2700, 280)
+	return room_spawn
 
 
 func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
