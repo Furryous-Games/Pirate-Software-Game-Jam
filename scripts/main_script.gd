@@ -21,8 +21,9 @@ const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn"
 
 const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
-	Sector.ENGINEERING: {"player_position": Vector2i(2700, 280),}, # 100, 139
-	Sector.LIFE_SUPPORT: {"player_position": Vector2i(2340,140),},
+
+	Sector.ENGINEERING: {"player_position": Vector2i(3850, 139),}, # 100, 139
+	Sector.LIFE_SUPPORT: {"player_position": Vector2i(0, 300),},
 	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
 	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
 }

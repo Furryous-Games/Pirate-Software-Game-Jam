@@ -146,7 +146,9 @@ func _process(_delta: float) -> void:
 func death(from_timer_timeout: bool = false) -> void:
 
 	if gravity_change == -1:
+
 		gravity_invert(false)
+
 	
 	# REACTOR: If death was caused by the minute timer's timeout, spawn the player at the section checkpoint
 	if from_timer_timeout: #and main_script.current_sector == main_script.Sector.REACTOR:
