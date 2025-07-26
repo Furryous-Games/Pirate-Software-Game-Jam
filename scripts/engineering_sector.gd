@@ -16,11 +16,26 @@ extends Node2D
 
 
 const ROOM_SPAWN_DATA = {
-		Vector2i(0,0): Vector2i(0,300),
-		Vector2i(1,0): Vector2i(580, 300),
-		Vector2i(2,0): Vector2i(1240, 200),
-		Vector2i(2,1): Vector2i(1240, 200),
-		Vector2i(2,-1): Vector2i(1240, 200),
+		# Entrance
+		Vector2i(0, 0): Vector2i(160, 120),
+		# T1
+		Vector2i(1, 0): Vector2i(640, 120),
+		# T2
+		Vector2i(2, 0): Vector2i(1200, 120),
+		# P1
+		Vector2i(3, 0): Vector2i(1790, 280),
+		Vector2i(3, -1): Vector2i(1790, 280),
+		# P2
+		Vector2i(4, 0): Vector2i(2370, 280),
+		Vector2i(4, -1): Vector2i(2370, 280),
+		Vector2i(5, 0): Vector2i(2370, 280),
+		# Decontamination
+		Vector2i(5, -1): Vector2i(2950, 280),
+		# Officer
+		Vector2i(6, 0): Vector2i(3530, 280),
+		Vector2i(6, -1): Vector2i(3530, 280),
+		Vector2i(7, 0): Vector2i(3530, 280),
+		Vector2i(7, -1): Vector2i(3530, 280),
 }
 
 
