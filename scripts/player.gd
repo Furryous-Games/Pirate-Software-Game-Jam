@@ -23,6 +23,9 @@ var current_terminals: Array = []
 var last_checked_position: Vector2
 var currently_selected_terminal
 
+var curr_held_item: CharacterBody2D
+var held_item_pos: Vector2 = Vector2(0, -50)
+
 @onready var main_script = $"../"
 
 @onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
@@ -39,9 +42,11 @@ var currently_selected_terminal
 func _input(event: InputEvent) -> void:
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
+
 		# If not falling
 		if sign(velocity.y * gravity_change) == -1:
 			velocity.y *= 0.50
+
 		is_jump_canceled = true
 		return
 	
@@ -51,8 +56,11 @@ func _input(event: InputEvent) -> void:
 	
 	# Handles interact actions
 	if Input.is_action_just_pressed("interact"):
-		if currently_selected_terminal:
+		if currently_selected_terminal != null:
 			currently_selected_terminal.interact_with_terminal()
+		elif curr_held_item != null:
+			curr_held_item.drop_item()
+			curr_held_item = null
 
 
 func _physics_process(delta: float) -> void:
@@ -152,6 +160,13 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_released("move_down"):
 		set_collision_mask_value(2, true)
 	
+	# Handles the item the player is holding
+	if curr_held_item != null:
+		# Add a damening to the current item's velocity
+		curr_held_item.velocity *= 0.8
+		# Push the item in the direction of the held item position
+		curr_held_item.velocity += ((position + held_item_pos) - curr_held_item.position) * 2
+
 	move_and_slide()
 	
 	enable_closest_terminal()
@@ -164,6 +179,9 @@ func _process(_delta: float) -> void:
 
 
 func death(from_timer_timeout: bool = false) -> void:
+
+	curr_held_item = null
+  
 	if gravity_change == -1:
 
 		gravity_invert(false)
@@ -201,7 +219,7 @@ func gravity_invert(flag: bool) -> void:
 func recharge_dash() -> void:
 	can_dash = true
 
-	
+
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing
 	if current_terminals.is_empty():
@@ -247,3 +265,17 @@ func enable_closest_terminal() -> void:
 			
 			# Set the currently selected terminal
 			currently_selected_terminal = closest_terminal
+
+
+func carry_new_item() -> void:
+	print(currently_selected_terminal)
+	if currently_selected_terminal is CharacterBody2D:
+		# Drop the currently held item if there is one
+		if curr_held_item:
+			curr_held_item.drop_item()
+		
+		print("HOLDING NEW ITEM")
+		currently_selected_terminal.collider.disabled = true
+		currently_selected_terminal.area_check.monitoring = false
+		
+		curr_held_item = currently_selected_terminal

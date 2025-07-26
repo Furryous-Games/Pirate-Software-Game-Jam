@@ -14,7 +14,6 @@ extends Node2D
 
 @onready var timing_mechanism_platforms: Node2D = $"Timing Mechanism Platforms"
 
-
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
 
