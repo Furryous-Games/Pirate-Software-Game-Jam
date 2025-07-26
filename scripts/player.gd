@@ -165,7 +165,9 @@ func _process(_delta: float) -> void:
 
 func death(from_timer_timeout: bool = false) -> void:
 	if gravity_change == -1:
+
 		gravity_invert(false)
+
 	
 	if main_script.current_sector == main_script.Sector.REACTOR:
 		# Reset mechanisms

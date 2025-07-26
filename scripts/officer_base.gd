@@ -1,29 +1,28 @@
 extends Area2D
 
-@export var player_prompt: String = "Interact"
+@export var officer_name: String
+@onready var officer_prompt: Label = $Prompt
 
-@onready var key_prompt: Label = $"Key Prompt"
-
-signal terminal_interacted
+signal officer_interacted
 
 
 func _ready() -> void:
-	key_prompt.text = player_prompt
+	officer_prompt.text = officer_name
 
 
 func interact_with_terminal() -> void:
-	#print("INTERACT")
+	print("INTERACT OFFICER")
 	# Emit a signal to notify that the terminal was interacted with
-	emit_signal("terminal_interacted")
+	emit_signal("officer_interacted")
 	
 
 func enable_terminal() -> void:
 	# Make the interact prompt visible
-	key_prompt.visible = true
+	officer_prompt.visible = true
 
 func disable_terminal() -> void:
 	# Make the interact prompt hidden
-	key_prompt.visible = false
+	officer_prompt.visible = false
 
 
 # Called when the player enters into the radius of the terminal
