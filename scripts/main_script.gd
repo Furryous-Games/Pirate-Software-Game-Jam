@@ -23,7 +23,7 @@ const SECTOR_DATA := {
 	#Sector.TUTORIAL: {"player_position": Vector2i(0, 0),},
 	Sector.ENGINEERING: {"player_position": Vector2i(2700, 280),}, # 100, 139
 	Sector.LIFE_SUPPORT: {"player_position": Vector2i(2340,140),},
-	Sector.REACTOR: {"player_position": Vector2i(300, 300),},
+	Sector.REACTOR: {"player_position": Vector2i(280, 300),}, # 280, 300 -1620, -385
 	#Sector.ADMINISTRATIVE: {"player_position": Vector2i(0, 0),},
 }
 # INFO: {"sector_map_offset": Vector2i(0, 0)} may be used to offset the sector's position to stand after the transition room betwixt it and the sector lobby
@@ -69,8 +69,6 @@ func load_sector(get_sector: Sector) -> void:
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			self.room_change.connect(sector.get_new_room_data)
-			toggle_mirage_shader()
-			toggle_timer(true, 60, Color.RED, reactor_timer_timout)
 		#Sector.ADMINISTRATIVE: 
 			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
 	
@@ -79,20 +77,26 @@ func load_sector(get_sector: Sector) -> void:
 	current_sector = get_sector
 	
 	# Set room spawn data
-	room_spawn = sector_maps.get_child(-1).ROOM_SPAWN_DATA
+	room_spawn = sector.ROOM_SPAWN_DATA
 	player.set_room_spawn(room_spawn)
+	
+	if get_sector == Sector.REACTOR:
+		sector.get_new_room_data()
 	
 	# Spawn player at designated position
 	player.position = SECTOR_DATA[get_sector].player_position
 
 
-func toggle_mirage_shader() -> void:
+func toggle_mirage_shader(on: bool = true, time: bool = 5) -> void:
+	if is_mirage_shader_active == on:
+		return
+	
 	is_mirage_shader_active = not is_mirage_shader_active
 	tween_mirage = create_tween()
-	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
+	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), time)
 
 
-func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on_timeout = null) -> void:
+func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.WHITE, on_timeout = null) -> void:
 	if on:
 		# Set the color for the timer
 		change_timer_color(set_color)
@@ -117,7 +121,8 @@ func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.RED, on
 			
 	else:
 		minute_display.text = "--.--"
-		change_timer_color(Color.AQUA)
+		change_timer_color(Color.WHITE)
+		minute_timer.stop()
 		# refill the bar
 		var tween_minute_bar: Tween = create_tween()
 		tween_minute_bar.tween_property(minute_bar, "value", 60, 0.4)
@@ -131,7 +136,7 @@ func change_timer_color(new_color: Color) -> void:
 
 func reactor_timer_timout() -> void:
 	player.death(true)
-	toggle_timer(true, 60, Color.RED, reactor_timer_timout)
+	toggle_timer(true, 60, Color.WHITE, reactor_timer_timout)
 
 
 func _process(_delta: float) -> void:

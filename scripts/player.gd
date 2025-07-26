@@ -31,10 +31,13 @@ var currently_selected_terminal
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
 
+
 func _input(event: InputEvent) -> void:
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
-		velocity.y *= 0.50
+		# If not falling
+		if sign(velocity.y * gravity_change) == -1:
+			velocity.y *= 0.50
 		is_jump_canceled = true
 		return
 	
@@ -76,7 +79,8 @@ func _physics_process(delta: float) -> void:
 		var desired_velocity := Vector2(RUN_SPEED * direction.x, velocity.y + get_gravity().y * delta * gravity_change)
 		
 		# enforce terminal y velocity for gravity and inverse gravity
-		desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY, TERMINAL_VELOCITY) 
+		if main_script.current_sector == main_script.Sector.LIFE_SUPPORT:
+			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY, TERMINAL_VELOCITY) 
 		
 		# Reduce velocity when in water by 15%
 		if water_collider.is_colliding():
@@ -130,7 +134,6 @@ func _physics_process(delta: float) -> void:
 		set_collision_mask_value(2, false)
 	if Input.is_action_just_released("move_down"):
 		set_collision_mask_value(2, true)
-		
 	
 	move_and_slide()
 	
@@ -144,29 +147,36 @@ func _process(_delta: float) -> void:
 
 
 func death(from_timer_timeout: bool = false) -> void:
-
 	if gravity_change == -1:
 		gravity_invert(false)
 	
-	# REACTOR: If death was caused by the minute timer's timeout, spawn the player at the section checkpoint
-	if from_timer_timeout: #and main_script.current_sector == main_script.Sector.REACTOR:
-		main_script.toggle_timer(true, 60, Color.RED, main_script.reactor_timer_timout)
-		position = main_script.sector_maps.get_child(-1).current_section_data.spawn_point
+	if main_script.current_sector == main_script.Sector.REACTOR:
+		# Reset mechanisms
+		main_script.sector_maps.get_child(-1).reset_room()
+		
+		# If death was caused by the minute timer's timeout, spawn the player at the section checkpoint
+		if from_timer_timeout:
+			main_script.toggle_mirage_shader(false, 0)
+			main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
+			position = main_script.sector_maps.get_child(-1).current_section_data.spawn_point
+			velocity = Vector2.ZERO
+			return
+	
+	# timeout death for other sectors
+	#elif from_timer_timeout:
+		#pass
+	
 	# spawn the player at the beginning of the room
-	else:
-		position = room_spawn[main_script.current_room]
+	position = room_spawn[main_script.current_room]
+	velocity = Vector2.ZERO
 
 
 
 #inverts gravity for the player, flag denotes if the player roatates with a smooth (true) or abrupt (false) transition
 func gravity_invert(flag) -> void:
-
 	gravity_change *= -1
 	var rotate_player = create_tween()
-	if flag:
-		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3)
-	else:
-		rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0)
+	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3 if flag else 0.0)
 	
 
 func recharge_dash() -> void:

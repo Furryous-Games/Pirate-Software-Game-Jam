@@ -6,6 +6,6 @@ extends Node2D
 
 func reactivate_cooling() -> void:
 	# Only emit the signal if the section if overheating (only interact with each terminal once)
-	if reactor.is_section_overheating[reactor.current_section_data.title]:
+	if reactor.is_section_overheating[reactor.current_section_data.section]:
 		reactor.reactivate_cooling()
-		doors.find_child(reactor.current_section_data.title).open_door()
+		doors.find_child(reactor.current_section_data.section).open_door()
