@@ -12,9 +12,7 @@ signal room_change
 ##			Sector.<SECTOR>:
 ##				room_coords = <desired room coords>
 ##
-## You can then go to Sector -> get_room_spawn_position() and set the room coordinates to the desired xy position if desired
-
-
+## You can then go to Sector -> get_room_spawn_position() and set the room coordinates to the desired xy position
 
 enum Sector {
 	#TUTORIAL,
@@ -35,8 +33,6 @@ var current_room = Vector2i(0, 0)
 var is_timer_active := false
 var tween_mirage: Tween
 var is_mirage_shader_active := false
-
-#var room_spawn: Dictionary
 
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
@@ -62,7 +58,7 @@ func load_sector(get_sector: Sector) -> void:
 	
 	# Load sector and add it to scene tree as child of SectorMaps
 	var sector: Node2D
-	var room_coords: Vector2i # For debugging
+	var room_coords := Vector2i.ZERO # For debugging
 	match get_sector:
 		#Sector.TUTORIAL: 
 			#load_sector = TUTORIAL_SECTOR.instantiate()
@@ -78,7 +74,7 @@ func load_sector(get_sector: Sector) -> void:
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			self.room_change.connect(sector.get_new_room_data)
-			room_coords = Vector2i(0, 0)
+			room_coords = Vector2i(-2, -1)
 			
 		#Sector.ADMINISTRATIVE: 
 			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()

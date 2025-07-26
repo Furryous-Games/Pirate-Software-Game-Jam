@@ -8,10 +8,12 @@ const SUBSECTOR_DATA := {
 	"Puzzle1": {"mechanisms": 1, "spawn_point": Vector2i(-550, -40)},
 	"Puzzle2": {"mechanisms": 2, "spawn_point": Vector2i(-1620, -385)},
 	"Boss": {"mechanisms": 3, "spawn_point": Vector2i(-550, -40)},
+	"PostBoss": {"mechanisms": -1, "spawn_point": Vector2i(-550, -40)},
 }
 
 var current_subsector: String
 var active_subsector_mechanisms: int
+var is_launch_active := false
 
 var subsector_terminal_data := {
 	"Main": {"is_overheating": true, "is_terminal_activated": false},
@@ -61,7 +63,14 @@ func get_subsector(room: Vector2i = main_script.current_room) -> String:
 		Vector2i(-2, -2): subsector =  "Puzzle2"
 		Vector2i(-1, -2): subsector =  "Puzzle2"
 		Vector2i(-1, -3): subsector =  "Puzzle2"
+		Vector2i(0, -4): subsector = "Boss"
 		Vector2i(0, -3): subsector = "Boss"
+		Vector2i(0, -2): subsector = "Boss"
+		Vector2i(0, -1): subsector = "Boss"
+		Vector2i(1, -3): subsector = "PostBoss"
+		Vector2i(1, -2): subsector = "PostBoss"
+		Vector2i(1, -1): subsector = "PostBoss"
+		Vector2i(1, 0): subsector = "PostBoss"
 	return subsector
 	
 
@@ -83,7 +92,15 @@ func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 		Vector2i(-2, -2): room_spawn = Vector2i(-1620, -385) # Puzzle 2b
 		Vector2i(-1, -2): room_spawn = Vector2i(-1620, -385) # Puzzle 2c
 		Vector2i(-1, -3): room_spawn = Vector2i(-300, -725) # Puzzle 2d, Pre-Boss
-		Vector2i(0, -3): room_spawn = Vector2i(-1190, -225) # Boss 0,0
+		Vector2i(0, -4): room_spawn = Vector2i(-1190, -225) # Boss (0, 1)
+		Vector2i(0, -3): room_spawn = Vector2i(-1190, -225) # Boss (0, 0)
+		Vector2i(0, -2): room_spawn = Vector2i(-1190, -225) # Boss (0, -1)
+		Vector2i(0, -1): room_spawn = Vector2i(-1190, -225) # Boss (0, -2)
+		# Cannot die during PostBoss
+		#Vector2i(1, -3): room_spawn = Vector2i(-1190, -225) # PostBoss (0, 0)
+		#Vector2i(1, -2): room_spawn = Vector2i(-1190, -225) # PostBoss (0, -1)
+		#Vector2i(1, -1): room_spawn = Vector2i(-1190, -225) # PostBoss (0, -2)
+		#Vector2i(1, 0): room_spawn = Vector2i(-1190, -225) # PostBoss (0, -3)
 	return room_spawn
 
 
@@ -98,10 +115,8 @@ func signal_dash() -> void:
 	for platform in dash_platforms.get_child(active_subsector_mechanisms).get_children():
 		platform.move(true)
 	return_timer.start()
-
-
-func dash_recharge_entered() -> void:
-	recharge_dash.emit()
+	
+	is_launch_active = true
 
 
 func reactivate_cooling() -> void:

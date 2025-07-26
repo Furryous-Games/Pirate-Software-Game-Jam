@@ -66,14 +66,29 @@ shape = SubResource("RectangleShape2D_qhqgy")
 target_position = Vector2(0, 0)
 max_results = 2
 
+[node name="LaunchCollider" type="ShapeCast2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_qhqgy")
+target_position = Vector2(0, 0)
+max_results = 2
+collision_mask = 16
+
 [node name="JumpBuffer" type="Timer" parent="."]
+process_callback = 0
 wait_time = 0.1
 one_shot = true
 
 [node name="CoyoteTime" type="Timer" parent="."]
+process_callback = 0
 wait_time = 0.08
 one_shot = true
 
 [node name="DashTime" type="Timer" parent="."]
+process_callback = 0
 wait_time = 0.08
+one_shot = true
+
+[node name="RespawnInputPause" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.2
 one_shot = true
