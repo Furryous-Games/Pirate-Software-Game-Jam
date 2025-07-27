@@ -11,7 +11,7 @@ extends CharacterBody2D
 
 var player: CharacterBody2D
 
-var original_pos
+var original_pos: Vector2
 
 signal pickup_item
 

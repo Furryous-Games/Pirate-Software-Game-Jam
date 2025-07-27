@@ -31,8 +31,8 @@ func set_size() -> void:
 
 
 func open_door() -> void:
-	tween_door = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween_door = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
 	if vertical_door:
-		tween_door.tween_property(self, "position:y", position.y - (DOOR_SIZE * TILE_SIZE), 2)
+		tween_door.tween_property(self, "position:y", position.y - (DOOR_SIZE * TILE_SIZE), 1.5)
 	else:
-		tween_door.tween_property(self, "position:x", position.x - (DOOR_SIZE * TILE_SIZE), 2)
+		tween_door.tween_property(self, "position:x", position.x - (DOOR_SIZE * TILE_SIZE), 1.5)

@@ -26,7 +26,8 @@ var subsector_terminal_data := {
 
 @onready var main_script: Node2D = $"../../"
 @onready var dash_platforms: Node2D = $DashPlatforms
-@onready var return_timer: Timer = $ReturnTimer
+@onready var return_timer: Timer = $DashPlatforms/ReturnTimer
+@onready var doors: Node2D = $Doors
 
 
 func _ready() -> void:
@@ -40,7 +41,6 @@ func _ready() -> void:
 
 func get_new_room_data() -> void:
 	# Gets the data for the room (section, mechanisms, sector spawn point)
-	# BUG: Invalid access to property or key '(0, -1)' on a base object of type 'Dictionary' On timeout at (-1, -1)
 	current_subsector = get_subsector(main_script.current_room)
 	reset_room()
 	
@@ -96,12 +96,17 @@ func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 		Vector2i(0, -3): room_spawn = Vector2i(-1190, -225) # Boss (0, 0)
 		Vector2i(0, -2): room_spawn = Vector2i(-1190, -225) # Boss (0, -1)
 		Vector2i(0, -1): room_spawn = Vector2i(-1190, -225) # Boss (0, -2)
+		_: room_spawn = Vector2i(280, 300) # Failsafe back to Main
 		# Cannot die during PostBoss
 		#Vector2i(1, -3): room_spawn = Vector2i(-1190, -225) # PostBoss (0, 0)
 		#Vector2i(1, -2): room_spawn = Vector2i(-1190, -225) # PostBoss (0, -1)
 		#Vector2i(1, -1): room_spawn = Vector2i(-1190, -225) # PostBoss (0, -2)
 		#Vector2i(1, 0): room_spawn = Vector2i(-1190, -225) # PostBoss (0, -3)
 	return room_spawn
+
+
+func respawn_player_at_subsector() -> Vector2i:
+	return SUBSECTOR_DATA[current_subsector].spawn_point
 
 
 func signal_dash() -> void:
@@ -120,17 +125,21 @@ func signal_dash() -> void:
 
 
 func reactivate_cooling() -> void:
+	# Only emit the signal if the subsector terminal has not already been activated
+	if subsector_terminal_data[current_subsector].is_terminal_activated:
+		return
+	
 	subsector_terminal_data[current_subsector].is_overheating = false
 	subsector_terminal_data[current_subsector].is_terminal_activated = true
+	
 	main_script.toggle_timer(false)
 	main_script.toggle_mirage_shader(false)
-
-
-func respawn_player_at_subsector() -> Vector2i:
-	return SUBSECTOR_DATA[current_subsector].spawn_point
+	
+	doors.find_child(current_subsector).open_door()
 
 
 func _on_return_timer_timeout() -> void:
 	# return dash platforms to their initial position
+	is_launch_active = false
 	for platform in dash_platforms.get_child(active_subsector_mechanisms).get_children():
 		platform.move(false)

@@ -11,6 +11,7 @@ const TILE_SIZE: int = 20
 var platform_positions := {"initial": Vector2.ZERO, "final": Vector2.ZERO}
 var tween_position: Tween
 
+@onready var reactor: Node2D = $"../../.."
 @onready var platform_data = {"size": size, "magnitude": magnitude, "direction": direction}
 @onready var platform_sprite: TileMapLayer = $PlatformSprite
 @onready var platform_collider: CollisionShape2D = $PlatformCollider
@@ -43,7 +44,7 @@ func move(to_final: bool) -> void:
 		tween_position.tween_property(self, "position", (platform_positions.final * TILE_SIZE) as Vector2, 0.2)
 	else: # move to initial position
 		tween_position = create_tween()
-		tween_position.tween_property(self, "position", (platform_positions.initial * TILE_SIZE) as Vector2, 2)
+		tween_position.tween_property(self, "position", (platform_positions.initial * TILE_SIZE) as Vector2, 1.5)
 
 
 func reset() -> void:
