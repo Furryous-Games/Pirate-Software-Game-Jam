@@ -39,12 +39,26 @@ func _ready() -> void:
 func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 	var room_spawn: Vector2i
 	match room:
-		Vector2i(0,0): room_spawn = Vector2i(100, 139)
-		Vector2i(1,0): room_spawn = Vector2i(580, 300)
-		Vector2i(2,0): room_spawn = Vector2i(1240, 200)
-		Vector2i(2,1): room_spawn = Vector2i(1240, 200)
-		Vector2i(2,-1): room_spawn = Vector2i(1240, 200)
-		Vector2i(4, 0): room_spawn = Vector2i(2700, 280)
+		# Entrance Room
+		Vector2i(0, 0): room_spawn = Vector2i(160, 120)
+		# T1
+		Vector2i(1, 0): room_spawn = Vector2i(640, 120)
+		# T2
+		Vector2i(2, 0): room_spawn = Vector2i(1200, 120)
+		# P1
+		Vector2i(3, 0): room_spawn = Vector2i(1790, 280)
+		Vector2i(3, -1): room_spawn = Vector2i(1790, 280)
+		# P2
+		Vector2i(4, 0): room_spawn = Vector2i(2620, 280)
+		Vector2i(4, -1): room_spawn = Vector2i(2620, 280)
+		Vector2i(5, -1): room_spawn = Vector2i(2620, 280)
+		# Decontamination
+		Vector2i(5, 0): room_spawn = Vector2i(2960, 280)
+		# Officer Room
+		Vector2i(6, 0): room_spawn = Vector2i(3830, 160)
+		Vector2i(6, -1): room_spawn = Vector2i(3830, 160)
+		Vector2i(7, 0): room_spawn = Vector2i(3830, 160)
+		Vector2i(7, -1): room_spawn = Vector2i(3830, 160)
 	return room_spawn
 
 

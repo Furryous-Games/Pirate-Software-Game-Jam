@@ -25,6 +25,16 @@ var terminal_tasks = [
 		"use_item": true,
 	},
 	{
+		"prompt": "Replace Fuse\n(Needs Fuse)",
+		"required_item": "Fuse",
+		"use_item": true,
+	},
+	{
+		"prompt": "Replace Faceplate\n(Needs Wrench)",
+		"required_item": "Wrench",
+		"use_item": false,
+	},
+	{
 		"prompt": "",
 		"required_item": null,
 		"use_item": false,
@@ -47,7 +57,7 @@ func _disable_timer():
 func _officer_terminal_interacted():
 	# Handles the initial interaction with the officer
 	if curr_terminal_task <= 0:
-		_enable_timer(15, _officer_battle_timeout)
+		_enable_timer(60, _officer_battle_timeout)
 		
 		engineering_officer_door_node.get_node("Room Lock").toggle_door(false)
 		

@@ -365,7 +365,7 @@ platform_size = Vector2i(1, 1)
 position = Vector2(3480, 0)
 
 [node name="Elevator 1" parent="Timing Mechanism Platforms/Engineering Room B" instance=ExtResource("2_4rmap")]
-position = Vector2(510, 310)
+position = Vector2(470, 310)
 max_distance = Vector2i(0, -27)
 initial_direction = Vector2i(1, -1)
 step_size = 3
@@ -373,7 +373,7 @@ platform_size = Vector2i(3, 1)
 instant_return = true
 
 [node name="Elevator 2" parent="Timing Mechanism Platforms/Engineering Room B" instance=ExtResource("2_4rmap")]
-position = Vector2(510, 310)
+position = Vector2(470, 310)
 max_distance = Vector2i(0, -27)
 start_distance = Vector2i(0, -6)
 initial_direction = Vector2i(1, -1)
@@ -382,7 +382,7 @@ platform_size = Vector2i(3, 1)
 instant_return = true
 
 [node name="Elevator 3" parent="Timing Mechanism Platforms/Engineering Room B" instance=ExtResource("2_4rmap")]
-position = Vector2(510, 310)
+position = Vector2(470, 310)
 max_distance = Vector2i(0, -27)
 start_distance = Vector2i(0, -12)
 initial_direction = Vector2i(1, -1)
@@ -391,7 +391,7 @@ platform_size = Vector2i(3, 1)
 instant_return = true
 
 [node name="Elevator 4" parent="Timing Mechanism Platforms/Engineering Room B" instance=ExtResource("2_4rmap")]
-position = Vector2(510, 310)
+position = Vector2(470, 310)
 max_distance = Vector2i(0, -27)
 start_distance = Vector2i(0, -18)
 initial_direction = Vector2i(1, -1)
@@ -400,7 +400,7 @@ platform_size = Vector2i(3, 1)
 instant_return = true
 
 [node name="Elevator 5" parent="Timing Mechanism Platforms/Engineering Room B" instance=ExtResource("2_4rmap")]
-position = Vector2(510, 310)
+position = Vector2(470, 310)
 max_distance = Vector2i(0, -27)
 start_distance = Vector2i(0, -24)
 initial_direction = Vector2i(1, -1)
@@ -583,16 +583,16 @@ officer_name = "Engineering Officer"
 [node name="Items" type="Node2D" parent="Boss Room"]
 
 [node name="Wrench" parent="Boss Room/Items" instance=ExtResource("4_eorrm")]
-position = Vector2(3660, 150)
+position = Vector2(3810, -220)
 item_name = "Wrench"
 
 [node name="Cable" parent="Boss Room/Items" instance=ExtResource("4_eorrm")]
-position = Vector2(3640, 150)
+position = Vector2(3730, -220)
 item_name = "Cable"
 
-[node name="Movable Item2" parent="Boss Room/Items" instance=ExtResource("4_eorrm")]
-position = Vector2(3620, 150)
-item_name = "Wrench"
+[node name="Fuse" parent="Boss Room/Items" instance=ExtResource("4_eorrm")]
+position = Vector2(3640, -220)
+item_name = "Fuse"
 
 [node name="Timing Mechanisms" type="Timer" parent="."]
 autostart = true
