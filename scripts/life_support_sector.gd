@@ -9,13 +9,14 @@ func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 	match room:
 		Vector2i(0,0): room_spawn = Vector2i(80,300)
 		Vector2i(1,0): room_spawn = Vector2i(600, 300)
-		Vector2i(2,0): room_spawn = Vector2i(1160, 300)
+		Vector2i(2,0): room_spawn = Vector2i(1180, 300)
 		Vector2i(3,0): room_spawn = Vector2i(1760, 200)
 		Vector2i(3,1): room_spawn = Vector2i(1760, 200)
 		Vector2i(3,-1): room_spawn = Vector2i(1760, 200)
-		Vector2i(4,0): room_spawn = Vector2i(2340,140)
-		Vector2i(4,1): room_spawn = Vector2i(2340,140)
-		Vector2i(4,-1): room_spawn = Vector2i(2340,140)
+		Vector2i(4,0): room_spawn = Vector2i(2340,160)
+		Vector2i(4,1): room_spawn = Vector2i(2340,160)
+		Vector2i(4,-1): room_spawn = Vector2i(2340,160)
+		Vector2i(5,0): room_spawn = Vector2i(2920,160)
 	return room_spawn
 
 
