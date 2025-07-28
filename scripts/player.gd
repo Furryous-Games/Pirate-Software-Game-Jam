@@ -152,7 +152,7 @@ func _physics_process(delta: float) -> void:
 			main_script.current_sector == main_script.Sector.LIFE_SUPPORT
 			and Input.is_action_just_pressed("invert_gravity")
 	):
-		gravity_invert(true)
+		gravity_invert()
 
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
@@ -181,40 +181,44 @@ func _process(_delta: float) -> void:
 func death(from_timer_timeout: bool = false) -> void:
 
 	curr_held_item = null
-  
-	if gravity_change == -1:
-
-		gravity_invert(false)
-
 	
-	if main_script.current_sector == main_script.Sector.REACTOR:
-		# Reset mechanisms
-		sector.reset_room()
+	match main_script.current_sector:
 		
-		# If death was caused by the minute timer's timeout, spawn the player at the subsector checkpoint
-		if from_timer_timeout:
-			main_script.toggle_mirage_shader(false, 0)
-			main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
-			position = sector.respawn_player_at_subsector()
-			velocity = Vector2.ZERO
-			return
+		main_script.Sector.LIFE_SUPPORT:
+			#check if player inverted
+			if rotation_degrees != 0:
+				rotation_degrees = 0
+		  	#ensure gravity resets
+			if gravity_change == -1:
+				gravity_invert()
+			
+		main_script.Sector.REACTOR:
+			# Reset mechanisms
+			sector.reset_room()
+			
+			# If death was caused by the minute timer's timeout, spawn the player at the subsector checkpoint
+			if from_timer_timeout:
+				main_script.toggle_mirage_shader(false, 0)
+				main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
+				position = sector.respawn_player_at_subsector()
+				velocity = Vector2.ZERO
+				return
 	
 	# timeout death for other sectors
 	#elif from_timer_timeout:
 		#pass
 	
-	# spawn the player at the beginning of the room
+	# spawn the player at the beginning of the room, and ensure player not upside down
 	position = sector.get_room_spawn_position(main_script.current_room)
 	velocity = Vector2.ZERO
 	respawn_input_pause.start()
 
 
-# Inverts gravity for the player, flag denotes if the player roatates with a smooth (true) or abrupt (false) transition
-func gravity_invert(flag: bool) -> void:
-	gravity_change *= -1
+# Inverts gravity for the player
+func gravity_invert() -> void:
 	var rotate_player = create_tween()
-	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == 1 else 180, 0.3 if flag else 0.0)
-	
+	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == -1 else 180, 0.2)
+	gravity_change *= -1
 
 func recharge_dash() -> void:
 	can_dash = true
