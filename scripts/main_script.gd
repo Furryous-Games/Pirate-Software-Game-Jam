@@ -31,8 +31,8 @@ const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn"
 
 var current_room = Vector2i(0, 0)
 var is_timer_active := false
-var tween_mirage: Tween
 var is_mirage_shader_active := false
+var tween_mirage: Tween
 
 var camera_tween: Tween
 var camera_pos: Vector2
@@ -69,16 +69,20 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
-			room_coords = Vector2i(4, 0)
+			#room_coords = Vector2i(4, 0)
 			
 		Sector.LIFE_SUPPORT: 
 			sector = LIFE_SUPPORT_SECTOR.instantiate()
-			room_coords = Vector2i(4, 0)
+			#room_coords = Vector2i(4, 0)
 			
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			self.room_change.connect(sector.get_new_room_data)
-			#room_coords = Vector2i(-2, -1)
+			toggle_timer(true, 60, Color.WHITE, reactor_timer_timout)
+			toggle_mirage_shader(true)
+			#room_coords = Vector2i(0, -4) # Boss0
+			#room_coords = Vector2i(-2, -2) # Puzzle2a
+			room_coords = Vector2i(-1, -3) # Puzzle2d
 			
 		#Sector.ADMINISTRATIVE: 
 			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
@@ -98,13 +102,13 @@ func load_sector(get_sector: Sector) -> void:
 	player.position = sector.get_room_spawn_position(room_coords)
 
 
-func toggle_mirage_shader(on: bool = true, time: bool = 5) -> void:
+func toggle_mirage_shader(on: bool = true) -> void:
 	if is_mirage_shader_active == on:
 		return
 	
 	is_mirage_shader_active = not is_mirage_shader_active
 	tween_mirage = create_tween()
-	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), time)
+	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
 
 
 func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.WHITE, on_timeout = null) -> void:
@@ -147,7 +151,6 @@ func change_timer_color(new_color: Color) -> void:
 
 func reactor_timer_timout() -> void:
 	player.death(true)
-	toggle_timer(true, 60, Color.WHITE, reactor_timer_timout)
 
 
 func _process(_delta: float) -> void:

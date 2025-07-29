@@ -9,7 +9,7 @@ const DASH_VELOCITY = 450
 const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 const TERMINAL_VELOCITY_LIFE_SUPPORT = 400 # LIFE SUPPORT
-const TERMINAL_VELOCITY_REACTOR = Vector2(1000, 500)
+const TERMINAL_VELOCITY_REACTOR = Vector2(1000, 400)
 const LAUNCH_BOOST = Vector2i(400, 0.2) # REACTOR
 
 var sector: Node2D
@@ -40,6 +40,10 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 
 
 func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("restart"):
+		death()
+		return
+	
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
 
@@ -95,8 +99,8 @@ func _physics_process(delta: float) -> void:
 		if main_script.current_sector == main_script.Sector.LIFE_SUPPORT:
 			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY_LIFE_SUPPORT, TERMINAL_VELOCITY_LIFE_SUPPORT)
 		# REACTER: clamp velocity to terminal velocity 
-		if main_script.current_sector == main_script.Sector.REACTOR:
-			velocity = clamp(velocity, -TERMINAL_VELOCITY_REACTOR, TERMINAL_VELOCITY_REACTOR)
+		elif main_script.current_sector == main_script.Sector.REACTOR:
+			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY_REACTOR.y, TERMINAL_VELOCITY_REACTOR.y)
 		
 		# Reduce velocity when in water by 15%
 		if water_collider.is_colliding():
@@ -114,6 +118,7 @@ func _physics_process(delta: float) -> void:
 				desired_velocity.y
 		)
 	
+	# REACTOR: Increase velocity.x when launching off platform; clamp velocity
 	if (
 			main_script.current_sector == main_script.Sector.REACTOR
 			and launch_collider.is_colliding()
@@ -134,11 +139,10 @@ func _physics_process(delta: float) -> void:
 			
 			# Wall jump
 			if wall_collider.is_colliding():
-				
-				velocity = Vector2(RUN_SPEED * get_wall_normal().x, JUMP_VELOCITY * gravity_change)
+				var wall_jump_boost: float = get_wall_normal().x * (2.5 if direction.x == get_wall_normal().x else 1.0)
+				velocity = Vector2(RUN_SPEED * wall_jump_boost, JUMP_VELOCITY * gravity_change)
 				is_jump_canceled = false
 				
-				# REACTOR: Increase velocity.x when launching off platform; clamp velocity
 				
 		
 	# REACTOR: Dash action
@@ -162,7 +166,7 @@ func _physics_process(delta: float) -> void:
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
 		set_collision_mask_value(2, false)
-	if Input.is_action_just_released("move_down"):
+	elif Input.is_action_just_released("move_down"):
 		set_collision_mask_value(2, true)
 	
 	# Handles the item the player is holding
@@ -194,15 +198,11 @@ func death(from_timer_timeout: bool = false) -> void:
 		
 		# If death was caused by the minute timer's timeout, spawn the player at the subsector checkpoint
 		if from_timer_timeout:
-			main_script.toggle_mirage_shader(false, 0)
+			main_script.toggle_mirage_shader(false)
 			main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
 			position = sector.respawn_player_at_subsector()
 			velocity = Vector2.ZERO
 			return
-	
-	# timeout death for other sectors
-	#elif from_timer_timeout:
-		#pass
 	
 	# Respawn the player at the beginning of the room
 	position = sector.get_room_spawn_position(main_script.current_room)
