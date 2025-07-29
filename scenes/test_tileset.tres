@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bu4gn6thqnrqb"]
 
-[ext_resource type="Texture2D" uid="uid://dk3jb7um6sv6a" path="res://assets/sprites/buildingTileset.png" id="1_4qsck"]
+[ext_resource type="Texture2D" uid="uid://f6i0cinlejjw" path="res://assets/sprites/buildingTileset.png" id="1_4qsck"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6l7je"]
 texture = ExtResource("1_4qsck")
@@ -103,8 +103,8 @@ physics_layer_2/collision_layer = 4
 physics_layer_2/collision_mask = 4
 physics_layer_3/collision_layer = 8
 physics_layer_3/collision_mask = 8
-physics_layer_4/collision_layer = 16
-physics_layer_4/collision_mask = 16
+physics_layer_4/collision_layer = 96
+physics_layer_4/collision_mask = 96
 physics_layer_5/collision_layer = 64
 physics_layer_5/collision_mask = 64
 sources/1 = SubResource("TileSetAtlasSource_6l7je")

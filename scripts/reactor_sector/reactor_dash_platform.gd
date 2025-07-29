@@ -1,6 +1,6 @@
 extends AnimatableBody2D
 
-@export_group("Platform Data")
+@export_group(&"Platform Data")
 @export var size := Vector2i.ONE ## platform dimentions
 @export_range(0, 12) var magnitude: int = 1 ## Number of tiles moved [br]Range: (0, 12)
 @export var direction := Vector2i.ZERO ## Movement direction [br]Range: (-1, 1)
@@ -8,11 +8,11 @@ extends AnimatableBody2D
 const TILE_SIZE: int = 20
 const ATLAS_TILE = Vector2i(8, 3)
 
-var platform_positions := {"initial": Vector2.ZERO, "final": Vector2.ZERO}
+var platform_positions := {&"initial": Vector2.ZERO, &"final": Vector2.ZERO}
 var tween_position: Tween
 
 @onready var reactor: Node2D = $"../../.."
-@onready var platform_data = {"size": size, "magnitude": magnitude, "direction": direction}
+@onready var platform_data = {&"size": size, &"magnitude": magnitude, &"direction": direction}
 @onready var platform_sprite: TileMapLayer = $PlatformSprite
 @onready var platform_collider: CollisionShape2D = $PlatformCollider
 
