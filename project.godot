@@ -85,6 +85,7 @@ invert_gravity={
 2d_physics/layer_1="Default Collisions"
 2d_physics/layer_2="Pass Through Layer"
 2d_physics/layer_5="Terminal Check Layer"
+2d_physics/layer_7="Wall Climb Layer"
 
 [physics]
 
