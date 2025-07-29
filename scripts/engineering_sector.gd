@@ -14,6 +14,9 @@ extends Node2D
 
 @onready var timing_mechanism_platforms: Node2D = $"Timing Mechanism Platforms"
 
+@onready var main_platforms: TileMapLayer = $"Tilemaps/Main Platforms"
+@onready var death_layer: TileMapLayer = $"Tilemaps/Death Layer"
+
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
 
@@ -32,6 +35,10 @@ func _ready() -> void:
 		]
 	
 	_on_timing_mechanism_tick()
+	
+	# Fill the water in the coolant room
+	fill_water_layer(Vector2i(210, 11), Vector2i(19, 1))
+	fill_water(Vector2i(210, 12), Vector2i(18, 1))
 	
 	print(main_script)
 
@@ -65,6 +72,67 @@ func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
 	platform_layer.visible = enable
 	platform_layer.collision_enabled = enable
+
+
+func drain_water(layer_coordinate):
+	var check_pos = layer_coordinate - Vector2i(1, 0)
+	
+	# Removes to the left of the host cell
+	for i in range(100):
+		if death_layer.get_cell_atlas_coords(check_pos) != Vector2i(-1, -1):
+			death_layer.erase_cell(check_pos)
+			check_pos -= Vector2i(1, 0)
+		else:
+			break
+	
+	check_pos = layer_coordinate + Vector2i(1, 0)
+	
+	# Removes to the right of the host cell
+	for i in range(100):
+		if death_layer.get_cell_atlas_coords(check_pos) != Vector2i(-1, -1):
+			death_layer.erase_cell(check_pos)
+			check_pos += Vector2i(1, 0)
+		else:
+			break
+	
+	if death_layer.get_cell_atlas_coords(layer_coordinate) != Vector2i(-1, -1):
+		# Removes the host cell
+		death_layer.erase_cell(layer_coordinate)
+		
+		# Delays removing the next layer
+		get_tree().create_timer(0.3).timeout.connect(drain_water.bind(layer_coordinate + Vector2i(0, 1)))
+
+func fill_water(layer_coordinate, atlas_coord):
+	# Only fills layers that are empty
+	if main_platforms.get_cell_atlas_coords(layer_coordinate) == Vector2i(-1, -1):
+		# Fill the layer
+		fill_water_layer(layer_coordinate, atlas_coord)
+		
+		# Sets the next layer
+		fill_water(layer_coordinate + Vector2i(0, 1), atlas_coord)
+func fill_water_layer(layer_coordinate, atlas_coord):
+	# Sets the host cell
+	death_layer.set_cell(layer_coordinate, 1, atlas_coord)
+	
+	var check_pos = layer_coordinate - Vector2i(1, 0)
+	
+	# Sets to the left of the host cell
+	for i in range(100):
+		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
+			death_layer.set_cell(check_pos, 1, atlas_coord)
+			check_pos -= Vector2i(1, 0)
+		else:
+			break
+	
+	check_pos = layer_coordinate + Vector2i(1, 0)
+	
+	# Sets to the right of the host cell
+	for i in range(100):
+		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
+			death_layer.set_cell(check_pos, 1, atlas_coord)
+			check_pos += Vector2i(1, 0)
+		else:
+			break
 
 
 func _on_timing_mechanism_tick() -> void:
