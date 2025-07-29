@@ -9,8 +9,8 @@ const DASH_VELOCITY = 450
 const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 const TERMINAL_VELOCITY_LIFE_SUPPORT = 400 # LIFE SUPPORT
-const TERMINAL_VELOCITY_REACTOR = Vector2(1000, 500)
-const LAUNCH_BOOST = Vector2i(400, 0.5) # REACTOR
+const TERMINAL_VELOCITY_REACTOR = Vector2(1000, 400)
+const LAUNCH_BOOST = Vector2i(400, 0.2) # REACTOR
 
 var sector: Node2D
 
@@ -23,7 +23,7 @@ var current_terminals: Array = []
 var last_checked_position: Vector2
 var currently_selected_terminal
 
-var curr_held_item: CharacterBody2D
+var current_held_item: CharacterBody2D
 var held_item_pos: Vector2 = Vector2(0, -50)
 
 @onready var main_script = $"../"
@@ -40,6 +40,10 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 
 
 func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("restart"):
+		death()
+		return
+	
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
 
@@ -58,23 +62,24 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):
 		if currently_selected_terminal != null:
 			currently_selected_terminal.interact_with_terminal()
-		elif curr_held_item != null:
-			curr_held_item.drop_item()
-			curr_held_item = null
+		elif current_held_item != null:
+			current_held_item.drop_item()
+			current_held_item = null
 
 
 func _physics_process(delta: float) -> void:
+	# Prevents input while the RespawnInputPause timer is active
 	if not respawn_input_pause.is_stopped():
 		move_and_slide()
 		return
 	
 	var direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	var is_on_ground: bool = is_on_floor() or is_on_ceiling()
+	var is_on_ground: bool = is_on_floor() if gravity_change == 1 else is_on_ceiling()
 	
 	# REACTOR: Reset dash
 	if (
 			main_script.current_sector == main_script.Sector.REACTOR
-			and is_on_floor()
+			and is_on_ground
 			and not can_dash
 			and dash_time.is_stopped()
 	):
@@ -93,9 +98,9 @@ func _physics_process(delta: float) -> void:
 		# LIFE SUPPORT: Enforce terminal y velocity for gravity and inverse gravity
 		if main_script.current_sector == main_script.Sector.LIFE_SUPPORT:
 			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY_LIFE_SUPPORT, TERMINAL_VELOCITY_LIFE_SUPPORT)
-		# REACTPR: clamp velocity to terminal velocity 
-		if main_script.current_sector == main_script.Sector.REACTOR:
-			velocity = clamp(velocity, -TERMINAL_VELOCITY_REACTOR, TERMINAL_VELOCITY_REACTOR)
+		# REACTER: clamp velocity to terminal velocity 
+		elif main_script.current_sector == main_script.Sector.REACTOR:
+			desired_velocity.y = clamp(desired_velocity.y, -TERMINAL_VELOCITY_REACTOR.y, TERMINAL_VELOCITY_REACTOR.y)
 		
 		# Reduce velocity when in water by 15%
 		if water_collider.is_colliding():
@@ -131,10 +136,14 @@ func _physics_process(delta: float) -> void:
 			jump_buffer.stop()
 		else:
 			jump_buffer.start()
+			
 			# Wall jump
 			if wall_collider.is_colliding():
-				velocity = Vector2(RUN_SPEED * get_wall_normal().x, JUMP_VELOCITY * gravity_change)
+				var wall_jump_boost: float = get_wall_normal().x * (2.5 if direction.x == get_wall_normal().x else 1.0)
+				velocity = Vector2(RUN_SPEED * wall_jump_boost, JUMP_VELOCITY * gravity_change)
 				is_jump_canceled = false
+				
+				
 		
 	# REACTOR: Dash action
 	if (
@@ -157,15 +166,15 @@ func _physics_process(delta: float) -> void:
 	# Handles movement actions
 	if Input.is_action_just_pressed("move_down"):
 		set_collision_mask_value(2, false)
-	if Input.is_action_just_released("move_down"):
+	elif Input.is_action_just_released("move_down"):
 		set_collision_mask_value(2, true)
 	
 	# Handles the item the player is holding
-	if curr_held_item != null:
+	if current_held_item != null:
 		# Add a damening to the current item's velocity
-		curr_held_item.velocity *= 0.8
+		current_held_item.velocity *= 0.8
 		# Push the item in the direction of the held item position
-		curr_held_item.velocity += ((position + held_item_pos) - curr_held_item.position) * 2
+		current_held_item.velocity += ((position + held_item_pos) - current_held_item.position) * 2
 
 	move_and_slide()
 	
@@ -175,7 +184,6 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
 		death()
-
 
 
 func death(from_timer_timeout: bool = false) -> void:
@@ -275,11 +283,11 @@ func carry_new_item() -> void:
 	print(currently_selected_terminal)
 	if currently_selected_terminal is CharacterBody2D:
 		# Drop the currently held item if there is one
-		if curr_held_item:
-			curr_held_item.drop_item()
+		if current_held_item:
+			current_held_item.drop_item()
 		
 		print("HOLDING NEW ITEM")
 		currently_selected_terminal.collider.disabled = true
 		currently_selected_terminal.area_check.monitoring = false
 		
-		curr_held_item = currently_selected_terminal
+		current_held_item = currently_selected_terminal

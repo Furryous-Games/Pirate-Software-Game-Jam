@@ -31,12 +31,16 @@ const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn"
 
 var current_room = Vector2i(0, 0)
 var is_timer_active := false
-var tween_mirage: Tween
 var is_mirage_shader_active := false
+var tween_mirage: Tween
+
+var camera_tween: Tween
+var camera_pos: Vector2
 
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
 @onready var camera: Camera2D = $Camera
+@onready var camera_transition: Timer = $CameraTransition
 
 @onready var minute_bar: ProgressBar = $UI/MinuteBar
 @onready var minute_display: Label = $UI/MinuteDisplay
@@ -65,6 +69,7 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
+
 			room_coords = Vector2i(6, 0)
 			
 		Sector.LIFE_SUPPORT: 
@@ -74,7 +79,11 @@ func load_sector(get_sector: Sector) -> void:
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			self.room_change.connect(sector.get_new_room_data)
-			room_coords = Vector2i(-2, -1)
+			toggle_timer(true, 60, Color.WHITE, reactor_timer_timout)
+			toggle_mirage_shader(true)
+			#room_coords = Vector2i(0, -4) # Boss0
+			#room_coords = Vector2i(-2, -2) # Puzzle2a
+			room_coords = Vector2i(-1, -3) # Puzzle2d
 			
 		#Sector.ADMINISTRATIVE: 
 			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
@@ -94,13 +103,13 @@ func load_sector(get_sector: Sector) -> void:
 	player.position = sector.get_room_spawn_position(room_coords)
 
 
-func toggle_mirage_shader(on: bool = true, time: bool = 5) -> void:
+func toggle_mirage_shader(on: bool = true) -> void:
 	if is_mirage_shader_active == on:
 		return
 	
 	is_mirage_shader_active = not is_mirage_shader_active
 	tween_mirage = create_tween()
-	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), time)
+	tween_mirage.tween_property(mirage, "material:shader_parameter/is_active", int(is_mirage_shader_active), 5)
 
 
 func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.WHITE, on_timeout = null) -> void:
@@ -143,33 +152,46 @@ func change_timer_color(new_color: Color) -> void:
 
 func reactor_timer_timout() -> void:
 	player.death(true)
-	toggle_timer(true, 60, Color.WHITE, reactor_timer_timout)
 
 
 func _process(_delta: float) -> void:
-	# Player moves to the room to the left
-	if camera.to_local(player.position).x < 0:
-		current_room.x -= 1
-		camera.position.x -= get_viewport().get_visible_rect().size.x
-		room_change.emit()
-	# Player moves to the room to the right
-	elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
-		current_room.x += 1
-		camera.position.x += get_viewport().get_visible_rect().size.x
-		room_change.emit()
-	# Player moves to the room to the top
-	if camera.to_local(player.position).y < 0:
-		current_room.y -= 1
-		camera.position.y -= get_viewport().get_visible_rect().size.y
-		room_change.emit()
-	# Player moves to the room to the bottom
-	elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
-		current_room.y += 1
-		camera.position.y += get_viewport().get_visible_rect().size.y
-		room_change.emit()
+	# Move camera, don't check if camera is currently moving
+	if camera_tween == null:
+		# Player moves to the room to the left
+		if camera.to_local(player.position).x < 0:
+			current_room.x -= 1
+			camera_pos.x = camera.position.x - get_viewport().get_visible_rect().size.x
+			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+			camera_tween.tween_property(camera, "position:x", camera_pos.x, 0.3)
+		# Player moves to the room to the right
+		elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
+			current_room.x += 1
+			camera_pos.x = camera.position.x + get_viewport().get_visible_rect().size.x
+			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+			camera_tween.tween_property(camera, "position:x", camera_pos.x, 0.3)
+		# Player moves to the room to the top
+		if camera.to_local(player.position).y < 0:
+			current_room.y -= 1
+			camera_pos.y = camera.position.y - get_viewport().get_visible_rect().size.y
+			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+			camera_tween.tween_property(camera, "position:y", camera_pos.y, 0.3)
+		# Player moves to the room to the bottom
+		elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
+			current_room.y += 1
+			camera_pos.y = camera.position.y + get_viewport().get_visible_rect().size.y
+			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+			camera_tween.tween_property(camera, "position:y", camera_pos.y, 0.3)
+		
+		if camera_tween != null:
+			room_change.emit()
+			camera_transition.start()
 	
 	# Updates the timer display
 	if is_timer_active:
 		var time_left: float = snappedf(minute_timer.time_left, 0.01)
 		minute_display.text = ("0" if time_left < 10.00 else "") + str(time_left)
 		minute_bar.value = time_left
+
+
+func _on_camera_transition_timeout() -> void:
+	camera_tween = null

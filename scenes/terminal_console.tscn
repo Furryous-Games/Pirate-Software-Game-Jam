@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://b14pc37pvv8l5"]
+
+[ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="1_tflpi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pe2s5"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_detail = 1
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[node name="Control" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -860.0
+offset_bottom = -580.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pe2s5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_direction = 2
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 60.0
+
+[node name="PreInputText" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_tflpi")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "[color=RED]// WARNING:
+	Interference in REACTOR Cooldown;
+	Meltdown imminent."
+fit_content = true
+scroll_active = false
+scroll_following = true
+tab_size = 2
+
+[node name="InputText" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_tflpi")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+text = "Command: SYSTEM RESET:
+	[color=GREEN] MATCH: [/color] ,./<>?
+awaiting input:_"
+fit_content = true
+scroll_active = false
+scroll_following = true
+tab_size = 2
