@@ -6,8 +6,10 @@ extends Node2D
 @export var items_node: Node2D
 @export var officer_script: Node2D
 
+var officer_battle_ongoing: bool = false
 
-var curr_terminal_task = -1
+
+var curr_terminal_task: int = -1
 var terminal_tasks = [
 	{
 		"prompt": "Run Diagnostics",
@@ -35,11 +37,17 @@ var terminal_tasks = [
 		"use_item": false,
 	},
 	{
-		"prompt": "",
+		"prompt": "<TERMINAL OK>",
 		"required_item": null,
 		"use_item": false,
 	},
 ]
+var all_tasks_complete = {
+	"repair": false,
+	"coolant_loop_flushed": false,
+	"servers_rebooted": false,
+	"clock_rebooted": false
+}
 
 
 func _ready() -> void:
@@ -59,12 +67,11 @@ func _officer_terminal_interacted():
 	if curr_terminal_task <= 0:
 		_enable_timer(60, _officer_battle_timeout)
 		
-		engineering_officer_door_node.get_node("Room Lock").toggle_door(false)
+		# Set the officer battle variable
+		officer_battle_ongoing = true
 		
-		engineering_officer_door_node.get_node("Door A").toggle_door(true)
-		engineering_officer_door_node.get_node("Door B").toggle_door(true)
-		engineering_officer_door_node.get_node("Door C").toggle_door(true)
-		engineering_officer_door_node.get_node("Door D").toggle_door(true)
+		# Open the doors
+		toggle_doors(true)
 		
 		get_node("../Timing Mechanisms").wait_time *= 0.75
 		
@@ -89,23 +96,32 @@ func _officer_battle_timeout():
 	# Disable the timer
 	_disable_timer()
 	
+	# Refill the water in the coolant room
+	sector_main.fill_water_layer(Vector2i(210, 11), Vector2i(19, 1))
+	sector_main.fill_water(Vector2i(210, 12), Vector2i(18, 1))
+	
 	# Reset the officer's interactions
 	curr_terminal_task = -1
 	
 	# Update the officer's task
 	update_officer_task()
 	
+	# Set the officer battle variable
+	officer_battle_ongoing = false
+	
+	# Reset the tasks
+	all_tasks_complete = {
+		"repair": false,
+		"coolant_loop_flushed": false,
+		"servers_rebooted": false,
+		"clock_rebooted": false
+	}
+	
 	# Kill the player
 	sector_main.main_script.player.death()
 	
-	# Open the room lock
-	engineering_officer_door_node.get_node("Room Lock").toggle_door(true)
-	
-	# Close all off room doors
-	engineering_officer_door_node.get_node("Door A").toggle_door(false)
-	engineering_officer_door_node.get_node("Door B").toggle_door(false)
-	engineering_officer_door_node.get_node("Door C").toggle_door(false)
-	engineering_officer_door_node.get_node("Door D").toggle_door(false)
+	# Close the doors
+	toggle_doors(false)
 	
 	# Slow down the tick speed of the timing mechanisms
 	get_node("../Timing Mechanisms").wait_time /= 0.75
@@ -114,12 +130,70 @@ func _officer_battle_timeout():
 		item.reset_item()
 
 
+## DOORS
+func toggle_doors(enabled):
+	# Open the room lock
+	engineering_officer_door_node.get_node("Room Lock").toggle_door(not enabled)
+	
+	# Close all off room doors
+	engineering_officer_door_node.get_node("Door A").toggle_door(enabled)
+	engineering_officer_door_node.get_node("Door B").toggle_door(enabled)
+	engineering_officer_door_node.get_node("Door C").toggle_door(enabled)
+	engineering_officer_door_node.get_node("Door D").toggle_door(enabled)
+	engineering_officer_door_node.get_node("Door E").toggle_door(enabled)
+
+
 ## TASKS
 func _on_complete_task(task_name: String) -> void:
 	print("TASK COMPLETE: ", task_name)
+	
+	if task_name == "coolant_loop_flushed":
+		sector_main.drain_water(Vector2i(210, 11))
+	
+	# Make note that the task is complete
+	all_tasks_complete[task_name] = true
+	
+	# Check if all tasks are complete
+	check_tasks_complete()
 
 func update_officer_task() -> void:
 	if curr_terminal_task < len(terminal_tasks) - 1:
 		curr_terminal_task += 1
 	
 	officer_script.set_officer_task(terminal_tasks[curr_terminal_task]["prompt"])
+	
+	if curr_terminal_task == len(terminal_tasks) - 1:
+		all_tasks_complete["repair"] = true
+	
+	# Check if all tasks are complete
+	check_tasks_complete()
+
+func check_tasks_complete() -> void:
+	print(all_tasks_complete)
+	
+	if officer_battle_ongoing == true:
+		for task in all_tasks_complete:
+			if all_tasks_complete[task] == false:
+				return
+		
+		# Disable the timer
+		_disable_timer()
+		
+		# Open the room lock
+		engineering_officer_door_node.get_node("Room Lock").toggle_door(true)
+		
+		officer_script.set_officer_task("<OPERATING NORMALLY>")
+		
+		# Slow down the tick speed of the timing mechanisms
+		get_node("../Timing Mechanisms").wait_time /= 0.75
+		
+		print("ALL TASKS OK")
+		print(all_tasks_complete)
+		
+		officer_battle_ongoing = false
+		
+		# Open all sector EXIT doors to allow for exit through the sector
+		get_node("../Doors/Engineering T1/Exit Door").toggle_door(true)
+		get_node("../Doors/Engineering T2/Exit Door").toggle_door(true)
+		get_node("../Doors/Engineering P1/Exit Door").toggle_door(true)
+		get_node("../Doors/Engineering P2/Exit Door").toggle_door(true)
