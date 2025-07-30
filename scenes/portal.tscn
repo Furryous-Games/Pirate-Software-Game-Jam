@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://wnrxc4didqvg"]
+
+[ext_resource type="Script" uid="uid://dyhbsfvnf1dfw" path="res://scripts/portal.gd" id="1_1ffj6"]
+[ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="2_jr6l0"]
+[ext_resource type="FontFile" uid="uid://dc4s3s34c371l" path="res://assets/fonts/PixelOperator8.ttf" id="3_jr6l0"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d4jfq"]
+texture = ExtResource("2_jr6l0")
+texture_region_size = Vector2i(20, 20)
+9:4/0 = 0
+9:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_dyed0"]
+tile_size = Vector2i(20, 20)
+sources/0 = SubResource("TileSetAtlasSource_d4jfq")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ckw30"]
+size = Vector2(20, 40)
+
+[node name="Portal" type="Area2D"]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("1_1ffj6")
+
+[node name="Portal Visual" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 9, 0, 4, 0, 0, 0)
+tile_set = SubResource("TileSet_dyed0")
+
+[node name="Portal Collider" type="CollisionShape2D" parent="."]
+position = Vector2(10, 20)
+shape = SubResource("RectangleShape2D_ckw30")
+
+[node name="Key Prompt" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("3_jr6l0")
+theme_override_font_sizes/font_size = 8
+text = "Enter"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -30,6 +30,7 @@ const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn"
 const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 var current_room = Vector2i(0, 0)
+var completed_sectors: Array [Sector]
 var is_timer_active := false
 var is_mirage_shader_active := false
 var tween_mirage: Tween
@@ -78,7 +79,7 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.LIFE_SUPPORT: 
 			sector = LIFE_SUPPORT_SECTOR.instantiate()
-			room_coords = Vector2i(5, 0)
+			room_coords = Vector2i(0, 0)
 			
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
@@ -149,6 +150,15 @@ func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.WHITE, 
 func change_timer_color(new_color: Color) -> void:
 	minute_display.label_settings.font_color = new_color
 	minute_bar_bg_color.bg_color = new_color
+
+
+func check_completed_sectors(sector: Sector) -> bool:
+	return completed_sectors.has(sector)
+
+
+func add_completed_sector(sector: Sector = current_sector) -> void:
+	if !check_completed_sectors(sector):
+		completed_sectors.append(sector)
 
 
 func _process(_delta: float) -> void:
