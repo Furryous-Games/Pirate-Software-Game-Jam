@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bu4gn6thqnrqb"]
 
-[ext_resource type="Texture2D" uid="uid://dk3jb7um6sv6a" path="res://assets/sprites/buildingTileset.png" id="1_4qsck"]
+[ext_resource type="Texture2D" uid="uid://d27tsxum3uolh" path="res://assets/sprites/buildingTileset.png" id="1_4qsck"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6l7je"]
 texture = ExtResource("1_4qsck")
@@ -53,6 +53,7 @@ texture_region_size = Vector2i(20, 20)
 2:3/0 = 0
 3:3/0 = 0
 4:3/0 = 0
+4:3/0/physics_layer_5/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 6:3/0 = 0
 7:3/0 = 0
 8:3/0 = 0

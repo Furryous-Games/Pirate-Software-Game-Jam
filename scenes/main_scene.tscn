@@ -37,6 +37,7 @@ shader_parameter/is_active = 0.0
 script = ExtResource("1_7ykc4")
 current_sector = 4
 
+
 [node name="SectorMaps" type="Node2D" parent="."]
 
 [node name="SectorLobby" type="TileMapLayer" parent="SectorMaps"]
@@ -44,6 +45,7 @@ tile_set = ExtResource("3_7ykc4")
 
 [node name="Player" parent="." instance=ExtResource("2_pu3yx")]
 scale = Vector2(2, 2)
+collision_layer = 48
 
 [node name="Camera" type="Camera2D" parent="."]
 anchor_mode = 0
