@@ -55,7 +55,6 @@ func _input(event: InputEvent) -> void:
 			main_script.Sector.LIFE_SUPPORT:
 				if sector.get_subsector(main_script.current_room):
 					sector.get_node("Life Support Officer")._officer_battle_timeout()
-					gravity_invert_enabled = true
 		
 			main_script.Sector.REACTOR:
 				death(true)
@@ -165,6 +164,7 @@ func _physics_process(delta: float) -> void:
 	# REACTOR: Dash action
 	if (
 			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
+			and not (main_script.current_sector == main_script.Sector.ADMINISTRATIVE and sector.timed_dash_action.is_stopped())
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
@@ -241,6 +241,8 @@ func death(from_timer_timeout: bool = false) -> void:
 			if gravity_change == -1:
 				gravity_invert()
 			
+			sector.timed_gravity_flip.stop()
+			
 		main_script.Sector.REACTOR:
 			# Reset mechanisms
 			sector.reset_room()
@@ -273,11 +275,11 @@ func gravity_invert() -> void:
 	gravity_change *= -1
 
 
-func enable_disable_gravity() -> void:
-	if gravity_invert_enabled:
-		gravity_invert_enabled = false
-	else:
+func enable_disable_gravity(enable: bool = true) -> void:
+	if enable:
 		gravity_invert_enabled = true
+	else:
+		gravity_invert_enabled = false
 
 
 func enable_closest_terminal() -> void:

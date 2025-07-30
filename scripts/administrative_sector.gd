@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var main_script: Node2D = $"../../"
+@onready var effects_hud: VBoxContainer = $"../../UI/Effects"
 
 @onready var timing_mechanism_tick_1: TileMapLayer = $"Tilemaps/Mechanism Tick 1"
 @onready var timing_mechanism_tick_2: TileMapLayer = $"Tilemaps/Mechanism Tick 2"
@@ -13,6 +14,9 @@ extends Node2D
 @onready var timing_mechanism_tick_9: TileMapLayer = $"Tilemaps/Mechanism Tick 9"
 
 @onready var timing_mechanism_platforms: Node2D = $"Timing Mechanism Platforms"
+
+@onready var timed_gravity_flip: Timer = $"Timed Gravity Flip"
+@onready var timed_dash_action: Timer = $"Timed Dash Action"
 
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
@@ -50,7 +54,12 @@ func _ready() -> void:
 		timing_mechanism_tick_9
 		]
 	
+	# Tick the engineering mechanisms
 	_on_timing_mechanism_tick()
+	
+	# Set the timers for the effects hud
+	effects_hud.make_new_ability("Gravity Flip", timed_gravity_flip)
+	effects_hud.make_new_ability("Dash Action", timed_dash_action)
 
 
 ## ENGINEERING FUNCTIONS
@@ -82,6 +91,7 @@ func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
 ## REACTOR FUNCTIONS
 func signal_dash() -> void:
 	pass
+
 	# extend dash platforms
 	#for platform in subsector_platforms:
 		#platform.move(true)
@@ -89,3 +99,4 @@ func signal_dash() -> void:
 	#return_timer.start()
 	#launch_boost_timeframe.start()
 	#is_launch_active = true
+
