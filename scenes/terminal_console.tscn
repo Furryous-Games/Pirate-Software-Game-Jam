@@ -1,6 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://b14pc37pvv8l5"]
+[gd_scene load_steps=5 format=3 uid="uid://b14pc37pvv8l5"]
 
-[ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="1_tflpi"]
+[ext_resource type="Script" uid="uid://c5v5o6eretlcs" path="res://scripts/title_terminal.gd" id="1_pe2s5"]
+[ext_resource type="FontFile" uid="uid://demjpldkqshrg" path="res://assets/fonts/pzim3x5b.ttf" id="2_pe2s5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_404u8"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_detail = 1
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pe2s5"]
 bg_color = Color(0, 0, 0, 1)
@@ -14,48 +27,49 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
-[node name="Control" type="PanelContainer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -860.0
-offset_bottom = -580.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TerminalConsole" type="Panel"]
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = 2.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_404u8")
+script = ExtResource("1_pe2s5")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 2
+[node name="ConsoleFrame" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 576.0
+offset_bottom = 336.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_pe2s5")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ConsoleFrame"]
+clip_contents = true
 layout_direction = 2
-layout_mode = 0
-offset_right = 300.0
-offset_bottom = 60.0
-
-[node name="PreInputText" type="RichTextLabel" parent="Panel/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("1_tflpi")
-theme_override_font_sizes/normal_font_size = 8
+
+[node name="SystemText" type="RichTextLabel" parent="ConsoleFrame/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_separation = 3
+theme_override_fonts/normal_font = ExtResource("2_pe2s5")
+theme_override_font_sizes/normal_font_size = 10
 bbcode_enabled = true
-text = "[color=RED]// WARNING:
-	Interference in REACTOR Cooldown;
-	Meltdown imminent."
-fit_content = true
 scroll_active = false
 scroll_following = true
 tab_size = 2
 
-[node name="InputText" type="RichTextLabel" parent="Panel/VBoxContainer"]
+[node name="PlayerInput" type="LineEdit" parent="ConsoleFrame/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("1_tflpi")
-theme_override_font_sizes/normal_font_size = 8
-bbcode_enabled = true
-text = "Command: SYSTEM RESET:
-	[color=GREEN]MATCH: [/color],./<>?
-awaiting input:
-	>_"
-fit_content = true
-scroll_active = false
-scroll_following = true
-tab_size = 2
+theme_override_constants/outline_size = -1
+theme_override_constants/caret_width = 2
+theme_override_fonts/font = ExtResource("2_pe2s5")
+theme_override_font_sizes/font_size = 10
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+drag_and_drop_selection_enabled = false
+flat = true
+caret_blink = true
+
+[connection signal="text_submitted" from="ConsoleFrame/VBoxContainer/PlayerInput" to="." method="_on_player_input_text_submitted"]

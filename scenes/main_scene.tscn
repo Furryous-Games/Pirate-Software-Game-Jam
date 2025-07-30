@@ -1,11 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://cyddofgvf7ot2"]
+[gd_scene load_steps=14 format=3 uid="uid://cyddofgvf7ot2"]
 
 [ext_resource type="Script" uid="uid://c1uh0ur1dwxgn" path="res://scripts/main_script.gd" id="1_7ykc4"]
-[ext_resource type="Texture2D" uid="uid://d27tsxum3uolh" path="res://assets/sprites/buildingTileset.png" id="2_gubc5"]
+[ext_resource type="Texture2D" uid="uid://f6i0cinlejjw" path="res://assets/sprites/buildingTileset.png" id="2_gubc5"]
 [ext_resource type="PackedScene" uid="uid://ke8ne88ddqf1" path="res://scenes/player.tscn" id="2_pu3yx"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="4_gubc5"]
 [ext_resource type="Shader" uid="uid://cuahv7mnr5q7i" path="res://scripts/reactor_sector/mirage.gdshader" id="4_pu3yx"]
 [ext_resource type="Script" uid="uid://dknosvp3e7fls" path="res://scripts/ability_hud.gd" id="5_rt2n2"]
+[ext_resource type="PackedScene" uid="uid://b14pc37pvv8l5" path="res://scenes/terminal_console.tscn" id="7_c16ls"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6l7je"]
 texture = ExtResource("2_gubc5")
@@ -156,10 +157,6 @@ scale = Vector2(2, 2)
 [node name="Camera" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="CameraTransition" type="Timer" parent="."]
-wait_time = 0.4
-one_shot = true
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="MinuteBar" type="ProgressBar" parent="UI"]
@@ -206,4 +203,6 @@ material = SubResource("ShaderMaterial_gubc5")
 offset_right = 580.0
 offset_bottom = 340.0
 
-[connection signal="timeout" from="CameraTransition" to="." method="_on_camera_transition_timeout"]
+[node name="Title" type="CanvasLayer" parent="."]
+
+[node name="TerminalConsole" parent="Title" instance=ExtResource("7_c16ls")]
