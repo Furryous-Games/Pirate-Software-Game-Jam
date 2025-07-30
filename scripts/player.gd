@@ -47,6 +47,14 @@ func _input(event: InputEvent) -> void:
 			gravity_invert_enabled = true
 			return
 		death()
+		
+		match main_script.current_sector:
+			main_script.Sector.ENGINEERING:
+				sector.reset_room()
+			
+			main_script.Sector.TUTORIAL:
+				sector.reset_room()
+		
 		return
 	
 	# Reduce jump height if input is released early
@@ -83,7 +91,7 @@ func _physics_process(delta: float) -> void:
 	
 	# REACTOR: Reset dash
 	if (
-			main_script.current_sector == main_script.Sector.REACTOR
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and is_on_ground
 			and not can_dash
 			and dash_time.is_stopped()
@@ -125,7 +133,7 @@ func _physics_process(delta: float) -> void:
 	
 	# REACTOR: Increase velocity.x when launching off platform; clamp velocity
 	if (
-			main_script.current_sector == main_script.Sector.REACTOR
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and launch_collider.is_colliding()
 			and sector.is_launch_active
 	):
@@ -147,16 +155,14 @@ func _physics_process(delta: float) -> void:
 				var wall_jump_boost: float = get_wall_normal().x * (2.5 if direction.x == get_wall_normal().x else 1.0)
 				velocity = Vector2(RUN_SPEED * wall_jump_boost, JUMP_VELOCITY * gravity_change)
 				is_jump_canceled = false
-				
-				
-		
+	
 	# REACTOR: Dash action
 	if (
-			main_script.current_sector == main_script.Sector.REACTOR
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
-		velocity = round(Vector2.from_angle(direction.angle()) * DASH_VELOCITY) # Corrects diagonal dashing
+		velocity = round(Vector2.from_angle(direction.angle()) * DASH_VELOCITY) * Vector2(1, gravity_change) # Corrects diagonal dashing and inverted gravity dashing
 		player_dash.emit()
 		dash_time.start()
 		can_dash = false
@@ -193,14 +199,17 @@ func _process(_delta: float) -> void:
 
 
 func death(from_timer_timeout: bool = false) -> void:
+	
+	# Drop the current item
+	if current_held_item:
+		current_held_item.drop_item()
 
 	current_held_item = null
 	
 	match main_script.current_sector:
 		
 		main_script.Sector.LIFE_SUPPORT:
-			#check if player inverted
-			
+
 			if from_timer_timeout:
 				if rotation_degrees != 0:
 					rotation_degrees = 0
@@ -215,6 +224,14 @@ func death(from_timer_timeout: bool = false) -> void:
 			  	#ensure gravity resets
 				if gravity_change == -1 and gravity_invert_enabled:
 					gravity_invert()
+		
+		main_script.Sector.ADMINISTRATIVE:
+			#check if player inverted
+			if rotation_degrees != 0:
+				rotation_degrees = 0
+		  	#ensure gravity resets
+			if gravity_change == -1:
+				gravity_invert()
 			
 		main_script.Sector.REACTOR:
 			# Reset mechanisms
