@@ -55,7 +55,6 @@ func _input(event: InputEvent) -> void:
 			main_script.Sector.LIFE_SUPPORT:
 				if sector.get_subsector(main_script.current_room):
 					sector.get_node("Life Support Officer")._officer_battle_timeout()
-					gravity_invert_enabled = true
 		
 			main_script.Sector.REACTOR:
 				death(true)
@@ -273,11 +272,11 @@ func gravity_invert() -> void:
 	gravity_change *= -1
 
 
-func enable_disable_gravity() -> void:
-	if gravity_invert_enabled:
-		gravity_invert_enabled = false
-	else:
+func enable_disable_gravity(enable: bool = true) -> void:
+	if enable:
 		gravity_invert_enabled = true
+	else:
+		gravity_invert_enabled = false
 
 
 func enable_closest_terminal() -> void:

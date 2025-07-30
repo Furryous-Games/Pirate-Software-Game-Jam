@@ -66,7 +66,7 @@ func update_officer_task() -> void:
 	
 	if task_order[curr_terminal_task] == "gravity":
 		sector_main.main_script.player.gravity_invert()
-		sector_main.main_script.player.enable_disable_gravity()
+		sector_main.main_script.player.enable_disable_gravity(false)
 		sector_main.gravity_diabeld_toggle()
 	
 	# Check if all tasks are complete
@@ -90,7 +90,7 @@ func _on_complete_task(task_name: String) -> void:
 		
 		"gravity":
 			if !gravity_terminal_toggle:
-				sector_main.main_script.player.enable_disable_gravity()
+				sector_main.main_script.player.enable_disable_gravity(true)
 				sector_main.main_script.player.gravity_invert()
 				gravity_terminal_toggle = true
 				update_officer_task()
@@ -146,6 +146,8 @@ func _officer_terminal_interacted():
 		toggle_doors(false)
 		
 		update_officer_task()
+	elif task_order[curr_terminal_task] == "OK":
+		return
 	else:
 		print(task_order[curr_terminal_task], all_tasks_complete)
 		if terminal_tasks[curr_terminal_task]["required_item"] == null:
@@ -162,13 +164,16 @@ func _officer_terminal_interacted():
 					
 					# Make the player drop the item
 					sector_main.main_script.player.current_held_item = null
-				
+					
+					#Update task list 
+					all_tasks_complete[task_order[curr_terminal_task]] = true
+					
 				update_officer_task()
 
 
 func toggle_doors(enable):
-	door_node.get_node("P2/Door 3").toggle_door(enable)
-	door_node.get_node("Operator/Door 4").toggle_door(enable)
+	door_node.get_node("P2/Door 3").toggle_door(!enable)
+	door_node.get_node("Operator/Door 4").toggle_door(!enable)
 	door_node.get_node("Operator/Door 5").toggle_door(!enable)
 	door_node.get_node("Operator/Door 6").toggle_door(!enable)
 
@@ -202,10 +207,13 @@ func _officer_battle_timeout():
 	officer_battle_ongoing = false
 	
 	# Reset doors
-	toggle_doors(false)
+	toggle_doors(true)
 	
-	sector_main.main_script.player.enable_disable_gravity()
+	sector_main.main_script.player.enable_disable_gravity(true)
 	sector_main.gravity_diabeld_toggle()
+	
+	gravity_terminal_toggle = false
+	server_room_toggle = false
 	
 	# Reset items
 	for item in items_node.get_children():
