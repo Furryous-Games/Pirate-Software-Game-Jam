@@ -12,8 +12,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	# Updates each status effect's value
 	for ability_name in all_curr_abilities:
-		all_curr_abilities[ability_name]["label"]
-		all_curr_abilities[ability_name]["timer"]
+		#all_curr_abilities[ability_name]["label"]
+		#all_curr_abilities[ability_name]["timer"]
 		
 		# If the timer instance is invalid, remove the ability
 		if not is_instance_valid(all_curr_abilities[ability_name]["timer"]):

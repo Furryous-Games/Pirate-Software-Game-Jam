@@ -1,24 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cl4h22vr4u083"]
+[gd_scene load_steps=6 format=3 uid="uid://cl4h22vr4u083"]
 
 [ext_resource type="Script" uid="uid://bo6rn5dokashf" path="res://scripts/officer_base.gd" id="1_av75a"]
 [ext_resource type="FontFile" uid="uid://w4mrn5jwyvik" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_n5w78"]
 [ext_resource type="FontFile" uid="uid://dw8vbheox2fb0" path="res://assets/fonts/PixelOperator8.ttf" id="2_rtf3f"]
-[ext_resource type="Texture2D" uid="uid://f6i0cinlejjw" path="res://assets/sprites/buildingTileset.png" id="3_n5w78"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_44g47"]
-atlas = ExtResource("3_n5w78")
-region = Rect2(180, 20, 20, 20)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_yikx2"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_44g47")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[ext_resource type="SpriteFrames" uid="uid://dqvtv2lwl7vh1" path="res://assets/sprites/wall_terminal.tres" id="4_rtf3f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ydjog"]
 size = Vector2(80, 80)
@@ -62,7 +47,7 @@ vertical_alignment = 1
 
 [node name="Wall Terminal Sprite" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
-sprite_frames = SubResource("SpriteFrames_yikx2")
+sprite_frames = ExtResource("4_rtf3f")
 
 [node name="Detection Size" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_ydjog")

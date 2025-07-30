@@ -166,6 +166,8 @@ func toggle_subsector_doors() -> void:
 		doors.find_child(&"Officer1a" if current_subsector == &"Officer0" else &"Officer1b").toggle_door(false)
 	
 	else:
+		# BUG: Restarting at Officer0 returns null current_subsector
+		
 		# Reopen the door if the current subsector's terminal has already been activated
 		if subsector_terminal_data[current_subsector].is_terminal_online:
 			doors.find_child(current_subsector).toggle_door()
@@ -236,12 +238,18 @@ func officer_terminal_interact() -> void:
 	elif (
 			subsector_terminal_data.Officer0.is_terminal_online
 			and subsector_terminal_data.Officer2.is_terminal_online
+			and is_officer_active
 	):
 		main_script.toggle_timer(false)
 		main_script.toggle_mirage_shader(false)
 		doors.find_child(&"Officer1c").toggle_door(true)
 		is_officer_active = false
 		update_officer_terminal(true, true, true)
+		main_script.add_completed_sector()
+	
+	# Reopen the elevator entrance door
+	elif not is_officer_active:
+		doors.find_child(&"Officer1c").toggle_door(true)
 
 
 func update_officer_terminal(terminal_0_online: bool = false, terminal_1_online: bool = false, meltdown_stop: bool = false) -> void:
