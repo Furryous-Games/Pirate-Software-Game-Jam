@@ -1,27 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://5p3nb0s7xyta"]
+[gd_scene load_steps=5 format=3 uid="uid://5p3nb0s7xyta"]
 
 [ext_resource type="Script" uid="uid://coblrw8vgppis" path="res://scripts/wall_terminal.gd" id="1_1quvr"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="2_1quvr"]
-<<<<<<< Updated upstream
-[ext_resource type="Texture2D" uid="uid://dk3jb7um6sv6a" path="res://assets/sprites/buildingTileset.png" id="3_f8cx1"]
-=======
-[ext_resource type="Texture2D" uid="uid://d27tsxum3uolh" path="res://assets/sprites/buildingTileset.png" id="3_f8cx1"]
->>>>>>> Stashed changes
+[ext_resource type="SpriteFrames" uid="uid://dqvtv2lwl7vh1" path="res://assets/sprites/wall_terminal.tres" id="3_1quvr"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_44g47"]
-atlas = ExtResource("3_f8cx1")
-region = Rect2(180, 20, 20, 20)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_bdsxk"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_44g47")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ignkq"]
 size = Vector2(30, 30)
@@ -54,7 +36,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Wall Terminal Sprite" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_bdsxk")
+sprite_frames = ExtResource("3_1quvr")
 
 [node name="Detection Size" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_ignkq")

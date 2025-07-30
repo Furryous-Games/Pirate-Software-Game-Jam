@@ -29,16 +29,17 @@ const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
 const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
+const CAMERA_PAN_TIME = 0 # 0.3
+
 var current_room = Vector2i(0, 0)
-var completed_sectors: Array [Sector]
+var completed_sectors: Array[Sector]
+
 var is_timer_active := false
 var is_mirage_shader_active := false
 var tween_mirage: Tween
 
 var camera_tween: Tween
 var camera_pos: Vector2
-
-const camera_pan_time: float = 0
 
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
@@ -57,7 +58,7 @@ const camera_pan_time: float = 0
 func _ready() -> void:
 	load_sector(current_sector)
 	
-	camera_transition.wait_time = camera_pan_time + 0.0001
+	camera_transition.wait_time = CAMERA_PAN_TIME + 0.0001
 
 
 func load_sector(get_sector: Sector) -> void:
@@ -86,7 +87,7 @@ func load_sector(get_sector: Sector) -> void:
 			self.room_change.connect(sector.get_new_room_data)
 			toggle_timer(true, 60, Color.WHITE, func(): player.death(true))
 			toggle_mirage_shader(true)
-			room_coords = Vector2i(-1, -3)
+			#room_coords = Vector2i(1, -3)
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
@@ -162,6 +163,29 @@ func add_completed_sector(sector: Sector = current_sector) -> void:
 
 
 func _process(_delta: float) -> void:
+	
+	## Original Camera
+	#if camera.to_local(player.position).x < 0:
+		#current_room.x -= 1
+		#camera.position.x -= get_viewport().get_visible_rect().size.x
+		#room_change.emit()
+	# # Player moves to the room to the right
+	#elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
+		#current_room.x += 1
+		#camera.position.x += get_viewport().get_visible_rect().size.x
+		#room_change.emit()
+	# # Player moves to the room to the top
+	#if camera.to_local(player.position).y < 0:
+		#current_room.y -= 1
+		#camera.position.y -= get_viewport().get_visible_rect().size.y
+		#room_change.emit()
+	# # Player moves to the room to the bottom
+	#elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
+		#current_room.y += 1
+		#camera.position.y += get_viewport().get_visible_rect().size.y
+		#room_change.emit()
+	
+	## Smooth Camera
 	# Move camera, don't check if camera is currently moving
 	if camera_tween == null:
 		# Player moves to the room to the left
@@ -170,7 +194,7 @@ func _process(_delta: float) -> void:
 			camera_pos.x = camera.position.x - get_viewport().get_visible_rect().size.x
 			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:x", camera_pos.x, camera_pan_time)
+			camera_tween.tween_property(camera, "position:x", camera_pos.x, CAMERA_PAN_TIME)
 		
 		# Player moves to the room to the right
 		elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
@@ -178,7 +202,7 @@ func _process(_delta: float) -> void:
 			camera_pos.x = camera.position.x + get_viewport().get_visible_rect().size.x
 			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:x", camera_pos.x, camera_pan_time)
+			camera_tween.tween_property(camera, "position:x", camera_pos.x, CAMERA_PAN_TIME)
 		
 		# Player moves to the room to the top
 		if camera.to_local(player.position).y < 0:
@@ -186,7 +210,7 @@ func _process(_delta: float) -> void:
 			camera_pos.y = camera.position.y - get_viewport().get_visible_rect().size.y
 			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:y", camera_pos.y, camera_pan_time)
+			camera_tween.tween_property(camera, "position:y", camera_pos.y, CAMERA_PAN_TIME)
 		
 		# Player moves to the room to the bottom
 		elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
@@ -194,11 +218,12 @@ func _process(_delta: float) -> void:
 			camera_pos.y = camera.position.y + get_viewport().get_visible_rect().size.y
 			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:y", camera_pos.y, camera_pan_time)
+			camera_tween.tween_property(camera, "position:y", camera_pos.y, CAMERA_PAN_TIME)
 		
 		if camera_tween != null:
 			room_change.emit()
 			camera_transition.start()
+	
 	
 	# Updates the timer display
 	if is_timer_active:
@@ -208,4 +233,5 @@ func _process(_delta: float) -> void:
 
 
 func _on_camera_transition_timeout() -> void:
-	camera_tween = null
+	pass
+	#camera_tween = null
