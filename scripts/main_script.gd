@@ -21,7 +21,7 @@ enum Sector {
 	REACTOR,
 	ADMINISTRATIVE,
 }
-@export var current_sector: Sector
+@export var current_sector: Sector = Sector.TUTORIAL
 
 const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
@@ -70,7 +70,7 @@ func load_sector(get_sector: Sector) -> void:
 	match get_sector:
 		Sector.TUTORIAL: 
 			sector = TUTORIAL_SECTOR.instantiate()
-			room_coords = Vector2i(0, 0)
+			#room_coords = Vector2i(0, 0)
 			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
@@ -85,10 +85,11 @@ func load_sector(get_sector: Sector) -> void:
 			self.room_change.connect(sector.get_new_room_data)
 			toggle_timer(true, 60, Color.WHITE, func(): player.death(true))
 			toggle_mirage_shader(true)
+			room_coords = Vector2i(-1, -3)
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
-			room_coords = Vector2i(0, -1)
+			#room_coords = Vector2i(0, -1)
 	
 	# Add sector scene as child of SectorMaps
 	sector_maps.add_child(sector) 

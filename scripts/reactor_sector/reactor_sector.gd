@@ -145,7 +145,7 @@ func reset_officer() -> void:
 	open_officer1_doors = {&"Officer1a": $"Doors/Officer1a", &"Officer1b": $"Doors/Officer1b"}
 	for officer_door in [open_officer1_doors.Officer1a, open_officer1_doors.Officer1b, doors.find_child(&"Officer0"), doors.find_child(&"Officer2")]:
 		officer_door.toggle_door(false)
-	update_terminal()
+	update_officer_terminal()
 
 		
 func toggle_subsector_doors() -> void:
@@ -161,6 +161,10 @@ func toggle_subsector_doors() -> void:
 			doors.find_child(&"Puzzle2").toggle_door(false)
 			doors.find_child(&"Officer1c").toggle_door(false)
 	
+	# Close the officer subsector door after entering
+	elif close_subsector == &"Officer1" and is_officer_active:
+		doors.find_child(&"Officer1a" if current_subsector == &"Officer0" else &"Officer1b").toggle_door(false)
+	
 	else:
 		# Reopen the door if the current subsector's terminal has already been activated
 		if subsector_terminal_data[current_subsector].is_terminal_online:
@@ -168,23 +172,16 @@ func toggle_subsector_doors() -> void:
 		
 		# Only toggle timer and mirage if can be overheating
 		if subsector_terminal_data[current_subsector].has(&"is_overheating"):
-			# Turn on/off the minute timer and mirage when entering a room
 			var is_subsector_overheating: bool = subsector_terminal_data[current_subsector].is_overheating
+			
+			# Turn on/off the minute timer and mirage when entering a room
 			if is_subsector_overheating != main_script.is_timer_active:
 				main_script.toggle_timer(int(is_subsector_overheating), 60, Color.WHITE, func(): main_script.player.death(true))
 				main_script.toggle_mirage_shader(int(is_subsector_overheating))
-	
-		# Close the officer subsector door after entering
-		if close_subsector == &"Officer1":
-			for i in open_officer1_doors.keys():
-				open_officer1_doors[i].toggle_door(false)
-		
-		# Close the previous door if the current subsector is overheating
-		elif (
-				subsector_terminal_data[current_subsector].has(&"is_overheating") 
-				and subsector_terminal_data[current_subsector].is_overheating
-		):
-			doors.find_child(close_subsector).toggle_door(false)
+			
+			# Close the previous door if the current subsector is overheating
+			if is_subsector_overheating:
+				doors.find_child(close_subsector).toggle_door(false)
 		
 
 func reactivate_cooling() -> void:
@@ -217,7 +214,7 @@ func activate_officer_terminal() -> void:
 	open_officer1_doors.erase(&"Officer1a" if current_subsector == &"Officer0" else &"Officer1b")
 	
 	# Update the status of each terminal on the Officer
-	update_terminal(
+	update_officer_terminal(
 			subsector_terminal_data.Officer0.is_terminal_online,
 			subsector_terminal_data.Officer2.is_terminal_online
 	)
@@ -233,7 +230,7 @@ func officer_terminal_interact() -> void:
 		subsector_terminal_data.Officer1.is_terminal_online = true
 		is_officer_active = true
 		is_officer_interaction_initial = false
-		update_terminal()
+		update_officer_terminal()
 	
 	# If both terminals are online
 	elif (
@@ -244,10 +241,10 @@ func officer_terminal_interact() -> void:
 		main_script.toggle_mirage_shader(false)
 		doors.find_child(&"Officer1c").toggle_door(true)
 		is_officer_active = false
-		update_terminal(true, true, true)
+		update_officer_terminal(true, true, true)
 
 
-func update_terminal(terminal_0_online: bool = false, terminal_1_online: bool = false, meltdown_stop: bool = false) -> void:
+func update_officer_terminal(terminal_0_online: bool = false, terminal_1_online: bool = false, meltdown_stop: bool = false) -> void:
 	officer_base.set_officer_task(
 			"Terminal 0: " + ("ONLINE" if terminal_0_online else "OFFLINE") + "\n"
 			+ "Terminal 1: " + ("ONLINE" if terminal_1_online else "OFFLINE") + "\n"
