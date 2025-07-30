@@ -74,6 +74,7 @@ func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
 	platform_layer.collision_enabled = enable
 
 
+## WATER HANDLING FUNCTIONS
 func drain_water(layer_coordinate):
 	var check_pos = layer_coordinate - Vector2i(1, 0)
 	
@@ -135,6 +136,13 @@ func fill_water_layer(layer_coordinate, atlas_coord):
 			break
 
 
+## OFFICER FIGHT RESET
+func reset_room():
+	get_node("Boss Room").reset_battle()
+	pass
+
+
+## MECHANISM CLOCK FUNCTION
 func _on_timing_mechanism_tick() -> void:
 	# Tick the current mechanism frame
 	curr_timing_mechanism_tick = (curr_timing_mechanism_tick + 1) % len(all_timing_mechanism_platforms)

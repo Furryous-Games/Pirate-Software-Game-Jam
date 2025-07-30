@@ -7,6 +7,7 @@ extends Node2D
 @export var officer_script: Node2D
 
 var officer_battle_ongoing: bool = false
+var officer_battle_complete: bool = false
 
 
 var curr_terminal_task: int = -1
@@ -79,55 +80,62 @@ func _officer_terminal_interacted():
 	else:
 		if terminal_tasks[curr_terminal_task]["required_item"] == null:
 			update_officer_task()
-		elif sector_main.main_script.player.curr_held_item:
-			if terminal_tasks[curr_terminal_task]["required_item"] == sector_main.main_script.player.curr_held_item.item_name:
+		elif sector_main.main_script.player.current_held_item:
+			if terminal_tasks[curr_terminal_task]["required_item"] == sector_main.main_script.player.current_held_item.item_name:
 				# Remove the item if the task uses the item
 				if terminal_tasks[curr_terminal_task]["use_item"]:
 					# Reset and disable the item
-					sector_main.main_script.player.curr_held_item.use_item()
+					sector_main.main_script.player.current_held_item.use_item()
 					
 					# Make the player drop the item
-					sector_main.main_script.player.curr_held_item = null
+					sector_main.main_script.player.current_held_item = null
 				
 				update_officer_task()
 
 func _officer_battle_timeout():
-	print("TIMEOUT")
-	# Disable the timer
-	_disable_timer()
-	
-	# Refill the water in the coolant room
-	sector_main.fill_water_layer(Vector2i(210, 11), Vector2i(19, 1))
-	sector_main.fill_water(Vector2i(210, 12), Vector2i(18, 1))
-	
-	# Reset the officer's interactions
-	curr_terminal_task = -1
-	
-	# Update the officer's task
-	update_officer_task()
-	
-	# Set the officer battle variable
-	officer_battle_ongoing = false
-	
-	# Reset the tasks
-	all_tasks_complete = {
-		"repair": false,
-		"coolant_loop_flushed": false,
-		"servers_rebooted": false,
-		"clock_rebooted": false
-	}
-	
-	# Kill the player
-	sector_main.main_script.player.death()
-	
-	# Close the doors
-	toggle_doors(false)
-	
-	# Slow down the tick speed of the timing mechanisms
-	get_node("../Timing Mechanisms").wait_time /= 0.75
-	
-	for item in items_node.get_children():
-		item.reset_item()
+	print("RESET")
+	if not officer_battle_complete:
+		# Kill the player
+		sector_main.main_script.player.death()
+		
+		# Reset the battle
+		reset_battle()
+		
+
+func reset_battle():
+	if not officer_battle_complete:
+		# Disable the timer
+		_disable_timer()
+		
+		# Refill the water in the coolant room
+		sector_main.fill_water_layer(Vector2i(210, 11), Vector2i(19, 1))
+		sector_main.fill_water(Vector2i(210, 12), Vector2i(18, 1))
+		
+		# Reset the officer's interactions
+		curr_terminal_task = -1
+		
+		# Update the officer's task
+		update_officer_task()
+		
+		# Set the officer battle variable
+		officer_battle_ongoing = false
+		
+		# Reset the tasks
+		all_tasks_complete = {
+			"repair": false,
+			"coolant_loop_flushed": false,
+			"servers_rebooted": false,
+			"clock_rebooted": false
+		}
+		
+		# Close the doors
+		toggle_doors(false)
+		
+		# Slow down the tick speed of the timing mechanisms
+		get_node("../Timing Mechanisms").wait_time /= 0.75
+		
+		for item in items_node.get_children():
+			item.reset_item()
 
 
 ## DOORS
@@ -157,16 +165,17 @@ func _on_complete_task(task_name: String) -> void:
 	check_tasks_complete()
 
 func update_officer_task() -> void:
-	if curr_terminal_task < len(terminal_tasks) - 1:
-		curr_terminal_task += 1
-	
-	officer_script.set_officer_task(terminal_tasks[curr_terminal_task]["prompt"])
-	
-	if curr_terminal_task == len(terminal_tasks) - 1:
-		all_tasks_complete["repair"] = true
-	
-	# Check if all tasks are complete
-	check_tasks_complete()
+	if not officer_battle_complete:
+		if curr_terminal_task < len(terminal_tasks) - 1:
+			curr_terminal_task += 1
+		
+		officer_script.set_officer_task(terminal_tasks[curr_terminal_task]["prompt"])
+		
+		if curr_terminal_task == len(terminal_tasks) - 1:
+			all_tasks_complete["repair"] = true
+		
+		# Check if all tasks are complete
+		check_tasks_complete()
 
 func check_tasks_complete() -> void:
 	print(all_tasks_complete)
@@ -191,6 +200,7 @@ func check_tasks_complete() -> void:
 		print(all_tasks_complete)
 		
 		officer_battle_ongoing = false
+		officer_battle_complete = true
 		
 		# Open all sector EXIT doors to allow for exit through the sector
 		get_node("../Doors/Engineering T1/Exit Door").toggle_door(true)

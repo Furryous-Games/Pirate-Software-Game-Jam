@@ -142,7 +142,8 @@ shader_parameter/is_active = 0.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_7ykc4")
-current_sector = 2
+current_sector = 4
+
 
 [node name="SectorMaps" type="Node2D" parent="."]
 
@@ -151,6 +152,7 @@ tile_set = SubResource("TileSet_yaw3g")
 
 [node name="Player" parent="." instance=ExtResource("2_pu3yx")]
 scale = Vector2(2, 2)
+collision_layer = 48
 
 [node name="Camera" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -183,6 +185,25 @@ label_settings = SubResource("LabelSettings_rt2n2")
 [node name="MinuteTimer" type="Timer" parent="UI"]
 wait_time = 60.0
 one_shot = true
+
+[node name="Effects" type="VBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Panel" type="Panel" parent="UI/Effects"]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/Effects"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_gubc5")
+theme_override_font_sizes/font_size = 8
+text = "Gravity Flip: 10.00 "
 
 [node name="ScreenShaders" type="CanvasLayer" parent="."]
 
