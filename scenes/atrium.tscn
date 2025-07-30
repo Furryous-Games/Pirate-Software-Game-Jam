@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=4 uid="uid://bpyud01wwa4qb"]
+[gd_scene load_steps=5 format=4 uid="uid://bpyud01wwa4qb"]
 
+[ext_resource type="Script" uid="uid://brjlnyoxe7qhq" path="res://scripts/atrium.gd" id="1_nyktb"]
 [ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="1_uq4k6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nyktb"]
@@ -109,6 +110,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_nyktb")
 
 [node name="Atrium" type="Node2D"]
+script = ExtResource("1_nyktb")
 
 [node name="Tilemaps" type="Node2D" parent="."]
 

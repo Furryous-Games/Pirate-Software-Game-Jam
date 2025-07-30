@@ -10,6 +10,7 @@ extends Node
 
 enum Sector {
 	TUTORIAL,
+	ATRIUM,
 	ENGINEERING,
 	LIFE_SUPPORT,
 	REACTOR,
@@ -17,6 +18,7 @@ enum Sector {
 }
 
 var sector_list = [&"Tutorial",
+	&"Atrium",
 	&"Engineering",
 	&"Life Support",
 	&"Reactor",
