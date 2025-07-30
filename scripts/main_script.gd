@@ -241,4 +241,4 @@ func _process(_delta: float) -> void:
 
 func _on_camera_transition_timeout() -> void:
 	pass
-	#camera_tween = null
+	camera_tween = null

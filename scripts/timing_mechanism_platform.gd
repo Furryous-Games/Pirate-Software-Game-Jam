@@ -1,5 +1,12 @@
 extends AnimatableBody2D
 
+enum PlatformType {
+	WALL,
+	PISTON,
+	PLATFORM,
+}
+@export var platform_type: PlatformType
+
 @export var max_distance: Vector2i
 @export var start_distance: Vector2i
 
@@ -48,7 +55,28 @@ func _ready() -> void:
 func expand_platform(new_size: Vector2i) -> void:
 	for x in range(new_size.x):
 		for y in range(new_size.y):
-			platform_sprite.set_cell(Vector2i(x, y), 1, Vector2i(14, 3))
+			match platform_type:
+				PlatformType.PISTON:
+					# Top row of pistons are piston heads
+					if y == 0:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(7, 4))
+					# Bottom row of pistons are piston bases
+					elif y == new_size.y - 1:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(7, 6))
+					# Everthing else is piston shafts
+					else:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(7, 5))
+						
+				PlatformType.PLATFORM:
+					platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(6, 1))
+					
+				_:
+					# Top row of walls are grassy
+					if y == 0:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(2, 0))
+					# Everything else are regular
+					else:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
 	
 	platform_collider.shape.size = new_size * 20
 	platform_collider.position = (new_size - Vector2i.ONE) * 10
