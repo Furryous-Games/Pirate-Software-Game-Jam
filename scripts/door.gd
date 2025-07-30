@@ -26,7 +26,7 @@ func _ready() -> void:
 	expand_door(door_size)
 	
 	# Update the position of the door
-	update_door_position()
+	update_door_position(true)
 
 
 func expand_door(new_size: Vector2i) -> void:
@@ -44,9 +44,11 @@ func timed_toggle(toggle_time: int, toggle_state = null):
 	# If there is a set toggle state, set the metadata for the timer to the opposite
 	if toggle_state:
 		door_hold_timer.set_meta("toggle_state", not toggle_state)
-	
-	# Toggle the door
-	toggle_door(toggle_state)
+		
+		# Toggle the door
+		toggle_door(toggle_state)
+	else:
+		door_hold_timer.set_meta("toggle_state", closed)
 	
 	# Set the wait timer and start the timer
 	door_hold_timer.wait_time = toggle_time
@@ -71,7 +73,7 @@ func toggle_door(toggle_state = null):
 		return
 	
 	# If the state has been defined
-	if toggle_state:
+	if toggle_state is bool:
 		closed = not toggle_state
 	else:
 		# Toggle the door to its opposite state
@@ -84,7 +86,7 @@ func toggle_door(toggle_state = null):
 	# Update the position of the door
 	update_door_position()
 
-func update_door_position():
+func update_door_position(instant_move: int = false):
 	var new_position = original_position
 	
 	# Get the position for the new door
@@ -94,5 +96,8 @@ func update_door_position():
 		new_position.x += 20 * ((door_size.x + door_shift) * int(closed))
 	
 	# Move the sprite
-	var tween = create_tween()
-	tween.tween_property($".", "position", new_position, 0.2)
+	if instant_move:
+		position = new_position
+	else:
+		var tween = create_tween()
+		tween.tween_property($".", "position", new_position, 0.2)

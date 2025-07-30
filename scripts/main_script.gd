@@ -15,19 +15,19 @@ signal room_change
 ## You can then go to Sector -> get_room_spawn_position() and set the room coordinates to the desired xy position
 
 enum Sector {
-	#TUTORIAL,
+	TUTORIAL,
 	ENGINEERING,
 	LIFE_SUPPORT,
 	REACTOR,
-	#ADMINISTRATIVE,
+	ADMINISTRATIVE,
 }
 @export var current_sector: Sector
 
-#const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
+const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
-#const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
+const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
 
 var current_room = Vector2i(0, 0)
 var is_timer_active := false
@@ -36,6 +36,8 @@ var tween_mirage: Tween
 
 var camera_tween: Tween
 var camera_pos: Vector2
+
+const camera_pan_time: float = 0
 
 @onready var sector_maps: Node2D = $SectorMaps
 @onready var player: CharacterBody2D = $Player
@@ -53,6 +55,8 @@ var camera_pos: Vector2
 
 func _ready() -> void:
 	load_sector(current_sector)
+	
+	camera_transition.wait_time = camera_pan_time + 0.0001
 
 
 func load_sector(get_sector: Sector) -> void:
@@ -64,12 +68,12 @@ func load_sector(get_sector: Sector) -> void:
 	var sector: Node2D
 	var room_coords := Vector2i.ZERO # For debugging
 	match get_sector:
-		#Sector.TUTORIAL: 
-			#load_sector = TUTORIAL_SECTOR.instantiate()
+		Sector.TUTORIAL: 
+			sector = TUTORIAL_SECTOR.instantiate()
+			room_coords = Vector2i(0, 0)
 			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
-
 			room_coords = Vector2i(6, 0)
 			
 		Sector.LIFE_SUPPORT: 
@@ -85,8 +89,9 @@ func load_sector(get_sector: Sector) -> void:
 			#room_coords = Vector2i(-2, -2) # Puzzle2a
 			room_coords = Vector2i(-1, -3) # Puzzle2d
 			
-		#Sector.ADMINISTRATIVE: 
-			#load_sector = ADMINISTRATIVE_SECTOR.instantiate()
+		Sector.ADMINISTRATIVE: 
+			sector = ADMINISTRATIVE_SECTOR.instantiate()
+			room_coords = Vector2i(0, -1)
 	
 	# Add sector scene as child of SectorMaps
 	sector_maps.add_child(sector) 
@@ -161,26 +166,33 @@ func _process(_delta: float) -> void:
 		if camera.to_local(player.position).x < 0:
 			current_room.x -= 1
 			camera_pos.x = camera.position.x - get_viewport().get_visible_rect().size.x
+			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:x", camera_pos.x, 0.3)
+			camera_tween.tween_property(camera, "position:x", camera_pos.x, camera_pan_time)
+		
 		# Player moves to the room to the right
 		elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
 			current_room.x += 1
 			camera_pos.x = camera.position.x + get_viewport().get_visible_rect().size.x
+			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:x", camera_pos.x, 0.3)
+			camera_tween.tween_property(camera, "position:x", camera_pos.x, camera_pan_time)
+		
 		# Player moves to the room to the top
 		if camera.to_local(player.position).y < 0:
 			current_room.y -= 1
 			camera_pos.y = camera.position.y - get_viewport().get_visible_rect().size.y
+			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:y", camera_pos.y, 0.3)
+			camera_tween.tween_property(camera, "position:y", camera_pos.y, camera_pan_time)
+		
 		# Player moves to the room to the bottom
 		elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
 			current_room.y += 1
 			camera_pos.y = camera.position.y + get_viewport().get_visible_rect().size.y
+			
 			camera_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position:y", camera_pos.y, 0.3)
+			camera_tween.tween_property(camera, "position:y", camera_pos.y, camera_pan_time)
 		
 		if camera_tween != null:
 			room_change.emit()
