@@ -18,6 +18,7 @@ var is_coyote_time_active := false
 var is_jump_canceled := false
 var can_dash := false
 var gravity_change: int = 1
+var gravity_invert_enabled: bool = true
 
 var current_terminals: Array = []
 var last_checked_position: Vector2
@@ -41,6 +42,10 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("restart"):
+		if main_script.current_sector == main_script.Sector.LIFE_SUPPORT and sector.get_subsector(main_script.current_room):
+			sector.get_node("Life Support Officer")._officer_battle_timeout()
+			gravity_invert_enabled = true
+			return
 		death()
 		return
 	
@@ -160,6 +165,7 @@ func _physics_process(delta: float) -> void:
 	if (
 			main_script.current_sector == main_script.Sector.LIFE_SUPPORT
 			and Input.is_action_just_pressed("invert_gravity")
+			and gravity_invert_enabled
 	):
 		gravity_invert()
 
@@ -188,17 +194,27 @@ func _process(_delta: float) -> void:
 
 func death(from_timer_timeout: bool = false) -> void:
 
-	curr_held_item = null
+	current_held_item = null
 	
 	match main_script.current_sector:
 		
 		main_script.Sector.LIFE_SUPPORT:
 			#check if player inverted
-			if rotation_degrees != 0:
-				rotation_degrees = 0
-		  	#ensure gravity resets
-			if gravity_change == -1:
-				gravity_invert()
+			
+			if from_timer_timeout:
+				if rotation_degrees != 0:
+					rotation_degrees = 0
+				if gravity_change == -1:
+					gravity_invert()
+				position = sector.get_room_spawn_position(Vector2i(5,0))
+				velocity = Vector2.ZERO
+				return
+			else:
+				if rotation_degrees != 0 and gravity_invert_enabled:
+					rotation_degrees = 0
+			  	#ensure gravity resets
+				if gravity_change == -1 and gravity_invert_enabled:
+					gravity_invert()
 			
 		main_script.Sector.REACTOR:
 			# Reset mechanisms
@@ -212,11 +228,8 @@ func death(from_timer_timeout: bool = false) -> void:
 				velocity = Vector2.ZERO
 				return
 	
-	# timeout death for other sectors
-	#elif from_timer_timeout:
-		#pass
-	
-	# spawn the player at the beginning of the room, and ensure player not upside down
+	# spawn the player at the sector specific spawn point, and ensure velocity is zero
+	print(main_script.current_room)
 	position = sector.get_room_spawn_position(main_script.current_room)
 	velocity = Vector2.ZERO
 	respawn_input_pause.start()
@@ -231,6 +244,11 @@ func gravity_invert() -> void:
 func recharge_dash() -> void:
 	can_dash = true
 
+func enable_disable_gravity() -> void:
+	if gravity_invert_enabled:
+		gravity_invert_enabled = false
+	else:
+		gravity_invert_enabled = true
 
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing

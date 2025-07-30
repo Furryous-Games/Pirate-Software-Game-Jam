@@ -79,15 +79,15 @@ func _officer_terminal_interacted():
 	else:
 		if terminal_tasks[curr_terminal_task]["required_item"] == null:
 			update_officer_task()
-		elif sector_main.main_script.player.curr_held_item:
-			if terminal_tasks[curr_terminal_task]["required_item"] == sector_main.main_script.player.curr_held_item.item_name:
+		elif sector_main.main_script.player.current_held_item:
+			if terminal_tasks[curr_terminal_task]["required_item"] == sector_main.main_script.player.current_held_item.item_name:
 				# Remove the item if the task uses the item
 				if terminal_tasks[curr_terminal_task]["use_item"]:
 					# Reset and disable the item
-					sector_main.main_script.player.curr_held_item.use_item()
+					sector_main.main_script.player.current_held_item.use_item()
 					
 					# Make the player drop the item
-					sector_main.main_script.player.curr_held_item = null
+					sector_main.main_script.player.current_held_item = null
 				
 				update_officer_task()
 
