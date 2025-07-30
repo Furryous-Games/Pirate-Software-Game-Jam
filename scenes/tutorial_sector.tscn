@@ -1,6 +1,5 @@
 [gd_scene load_steps=10 format=4 uid="uid://d15tnfciljnbi"]
 
-
 [ext_resource type="Script" uid="uid://2tj85xawinmx" path="res://scripts/tutorial_sector.gd" id="1_am6o8"]
 [ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://scenes/test_tileset.tres" id="2_am6o8"]
 [ext_resource type="TileSet" uid="uid://dpr4kk5yubu6n" path="res://scenes/ship_tileset.tres" id="2_nlaos"]
