@@ -86,6 +86,15 @@ func puzzle_two_exit() -> void:
 	get_node("../Doors/Engineering P2/Puzzle Door").toggle_door(true)
 	get_node("../Doors/Engineering P2/Exit Door").toggle_door(true)
 
+## Decontamination
+func decontamination_toggle() -> void:
+	print("DECON")
+	
+	get_node("../Doors/Engineering Decon/Room Lock").timed_toggle(1)
+	get_node("../Doors/Engineering B/Room Lock").timed_toggle(1)
+	
+	get_node("../Doors/Engineering Decon/Room Lock").toggle_door(false)
+	get_node("../Doors/Engineering B/Room Lock").toggle_door(false)
 
 func _test_terminal() -> void:
 	get_node("../Doors/TESTING/Door").toggle_door()

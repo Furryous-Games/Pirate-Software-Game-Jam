@@ -2,17 +2,17 @@
 
 [ext_resource type="Script" uid="uid://coblrw8vgppis" path="res://scripts/wall_terminal.gd" id="1_1quvr"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="2_1quvr"]
-[ext_resource type="Texture2D" uid="uid://dk3jb7um6sv6a" path="res://assets/sprites/buildingTileset.png" id="3_f8cx1"]
+[ext_resource type="Texture2D" uid="uid://cvk8qpeag4tk1" path="res://assets/sprites/Tilemap_Packed.png" id="3_1quvr"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_44g47"]
-atlas = ExtResource("3_f8cx1")
-region = Rect2(180, 20, 20, 20)
+[sub_resource type="AtlasTexture" id="AtlasTexture_0i264"]
+atlas = ExtResource("3_1quvr")
+region = Rect2(120, 80, 20, 20)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bdsxk"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_44g47")
+"texture": SubResource("AtlasTexture_0i264")
 }],
 "loop": true,
 "name": &"default",
@@ -50,6 +50,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Wall Terminal Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_bdsxk")
 
 [node name="Detection Size" type="CollisionShape2D" parent="."]
