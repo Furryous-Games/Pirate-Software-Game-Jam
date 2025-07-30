@@ -124,6 +124,8 @@ func check_tasks_complete() -> void:
 		print("ALL TASKS OK")
 		print(all_tasks_complete)
 		
+		sector_main.main_script.add_completed_sector()
+		
 		officer_battle_ongoing = false
 
 
