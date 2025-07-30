@@ -37,8 +37,8 @@ func _ready() -> void:
 	_on_timing_mechanism_tick()
 	
 	# Fill the water in the coolant room
-	fill_water_layer(Vector2i(210, 11), Vector2i(19, 1))
-	fill_water(Vector2i(210, 12), Vector2i(18, 1))
+	fill_water_layer(Vector2i(210, 11), Vector2i(10, 3))
+	fill_water(Vector2i(210, 12), Vector2i(10, 2))
 	
 	print(main_script)
 
@@ -106,6 +106,7 @@ func drain_water(layer_coordinate):
 func fill_water(layer_coordinate, atlas_coord):
 	# Only fills layers that are empty
 	if main_platforms.get_cell_atlas_coords(layer_coordinate) == Vector2i(-1, -1):
+		print("e")
 		# Fill the layer
 		fill_water_layer(layer_coordinate, atlas_coord)
 		
@@ -113,14 +114,14 @@ func fill_water(layer_coordinate, atlas_coord):
 		fill_water(layer_coordinate + Vector2i(0, 1), atlas_coord)
 func fill_water_layer(layer_coordinate, atlas_coord):
 	# Sets the host cell
-	death_layer.set_cell(layer_coordinate, 1, atlas_coord)
+	death_layer.set_cell(layer_coordinate, 0, atlas_coord)
 	
 	var check_pos = layer_coordinate - Vector2i(1, 0)
 	
 	# Sets to the left of the host cell
 	for i in range(100):
 		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
-			death_layer.set_cell(check_pos, 1, atlas_coord)
+			death_layer.set_cell(check_pos, 0, atlas_coord)
 			check_pos -= Vector2i(1, 0)
 		else:
 			break
@@ -130,7 +131,7 @@ func fill_water_layer(layer_coordinate, atlas_coord):
 	# Sets to the right of the host cell
 	for i in range(100):
 		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
-			death_layer.set_cell(check_pos, 1, atlas_coord)
+			death_layer.set_cell(check_pos, 0, atlas_coord)
 			check_pos += Vector2i(1, 0)
 		else:
 			break

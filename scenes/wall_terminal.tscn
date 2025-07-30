@@ -4,7 +4,6 @@
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="2_1quvr"]
 [ext_resource type="SpriteFrames" uid="uid://dqvtv2lwl7vh1" path="res://assets/sprites/wall_terminal.tres" id="3_1quvr"]
 
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ignkq"]
 size = Vector2(30, 30)
 

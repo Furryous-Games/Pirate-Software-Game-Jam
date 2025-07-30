@@ -1,14 +1,12 @@
 [gd_scene load_steps=10 format=4 uid="uid://d15tnfciljnbi"]
 
-
-[ext_resource type="Script" path="res://scripts/tutorial_sector.gd" id="1_am6o8"]
-
+[ext_resource type="Script" uid="uid://2tj85xawinmx" path="res://scripts/tutorial_sector.gd" id="1_am6o8"]
 [ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://scenes/test_tileset.tres" id="2_am6o8"]
 [ext_resource type="TileSet" uid="uid://c2xv0m8gwuaf8" path="res://scenes/ship_tileset.tres" id="2_nlaos"]
 [ext_resource type="PackedScene" uid="uid://d3jpuujkyi2tt" path="res://scenes/door.tscn" id="4_jl4lv"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="4_p51ot"]
 [ext_resource type="PackedScene" uid="uid://5p3nb0s7xyta" path="res://scenes/wall_terminal.tscn" id="4_vys6f"]
-[ext_resource type="Script" path="res://scripts/training_officer.gd" id="6_4twsi"]
+[ext_resource type="Script" uid="uid://bs7bffs466ic2" path="res://scripts/training_officer.gd" id="6_4twsi"]
 [ext_resource type="PackedScene" uid="uid://cl4h22vr4u083" path="res://scenes/officer_base.tscn" id="6_qf0dm"]
 [ext_resource type="PackedScene" uid="uid://ddjo3k33h3au1" path="res://scenes/movable_item.tscn" id="8_nlaos"]
 
