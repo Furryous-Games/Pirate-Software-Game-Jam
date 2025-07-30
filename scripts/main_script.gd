@@ -16,6 +16,7 @@ signal room_change
 
 enum Sector {
 	TUTORIAL,
+	ATRIUM,
 	ENGINEERING,
 	LIFE_SUPPORT,
 	REACTOR,
@@ -24,6 +25,7 @@ enum Sector {
 @export var current_sector: Sector = Sector.TUTORIAL
 
 const TUTORIAL_SECTOR = preload("res://scenes/tutorial_sector.tscn")
+const ATRIUM = preload("res://scenes/atrium.tscn")
 const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
@@ -66,13 +68,17 @@ func load_sector(get_sector: Sector) -> void:
 			sector = TUTORIAL_SECTOR.instantiate()
 			#room_coords = Vector2i(0, 0)
 			
+		Sector.ATRIUM:
+			sector = ATRIUM.instantiate()
+			#room_coords = Vector2i(0,0)
+			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
-			room_coords = Vector2i(6, 0)
+			#room_coords = Vector2i(0, 0)
 			
 		Sector.LIFE_SUPPORT: 
 			sector = LIFE_SUPPORT_SECTOR.instantiate()
-			room_coords = Vector2i(0, 0)
+			#room_coords = Vector2i(0, 0)
 			
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
@@ -97,6 +103,7 @@ func load_sector(get_sector: Sector) -> void:
 	
 	# Spawn player at designated position
 	# room_coords is for debugging. Default value for the funtion is empty (function defualt = (0, 0))
+	print(sector)
 	player.position = sector.get_room_spawn_position(room_coords)
 
 
