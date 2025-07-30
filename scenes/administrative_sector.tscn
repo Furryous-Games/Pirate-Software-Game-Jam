@@ -4,7 +4,7 @@
 [ext_resource type="TileSet" uid="uid://dpr4kk5yubu6n" path="res://scenes/ship_tileset.tres" id="2_47l5j"]
 [ext_resource type="TileSet" uid="uid://bu4gn6thqnrqb" path="res://scenes/test_tileset.tres" id="2_l1twq"]
 [ext_resource type="PackedScene" uid="uid://benq0bfympyo7" path="res://scenes/timing_mechanism_platform.tscn" id="4_hr1td"]
-[ext_resource type="Script" uid="uid://cbchq0iwh20di" path="res://scripts/admin_terminal_script_calls.gd" id="5_kmmxn"]
+[ext_resource type="Script" path="res://scripts/admin_terminal_script_calls.gd" id="5_kmmxn"]
 [ext_resource type="PackedScene" uid="uid://5p3nb0s7xyta" path="res://scenes/wall_terminal.tscn" id="6_47l5j"]
 [ext_resource type="PackedScene" uid="uid://d3jpuujkyi2tt" path="res://scenes/door.tscn" id="7_47l5j"]
 
