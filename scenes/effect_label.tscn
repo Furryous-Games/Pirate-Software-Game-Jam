@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://drr466c860mp7"]
+
+[ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="1_qiq26"]
+
+[node name="Gravity Flip" type="Label"]
+theme_override_fonts/font = ExtResource("1_qiq26")
+theme_override_font_sizes/font_size = 8
+text = "Effect: xx.xx "
+horizontal_alignment = 2
