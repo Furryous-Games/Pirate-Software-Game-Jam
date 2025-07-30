@@ -78,12 +78,25 @@ func _on_timing_mechanism_tick() -> void:
 	for mechanical_room in timing_mechanism_platforms.get_children():
 		for timing_platform in mechanical_room.get_children():
 			timing_platform._on_timing_mechanism_tick()
+
+
 func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
 	platform_layer.visible = enable
 	platform_layer.collision_enabled = enable
 
+
 ## LIFE SUPPORT FUNCTIONS
+
 
 ## REACTOR FUNCTIONS
 func signal_dash() -> void:
 	pass
+
+	# extend dash platforms
+	#for platform in subsector_platforms:
+		#platform.move(true)
+	#
+	#return_timer.start()
+	#launch_boost_timeframe.start()
+	#is_launch_active = true
+
