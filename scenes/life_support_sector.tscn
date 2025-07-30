@@ -10,7 +10,6 @@
 [ext_resource type="FontFile" uid="uid://dc4s3s34c371l" path="res://assets/fonts/PixelOperator8.ttf" id="8_yxgju"]
 [ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="9_a35i2"]
 
-
 [node name="life_support" type="Node2D"]
 script = ExtResource("1_yeqea")
 
@@ -134,7 +133,7 @@ text = "Servers ===>"
 
 [node name="Portal" parent="Portals" instance=ExtResource("9_a35i2")]
 position = Vector2(80, 260)
-target = 3
+target = 4
 
 [connection signal="terminal_interacted" from="Terminals/Life support P1/Wall Terminal 1" to="." method="p1_water_drain"]
 [connection signal="terminal_interacted" from="Terminals/Life support P1/Wall Terminal 2" to="." method="p1_door_toggle"]
