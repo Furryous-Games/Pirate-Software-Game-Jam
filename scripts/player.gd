@@ -42,25 +42,26 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("restart"):
-      
+	  
 		match main_script.current_sector:
 			main_script.Sector.ENGINEERING:
 				sector.reset_room()
-        death()
+				death()
 			
 			main_script.Sector.TUTORIAL:
 				sector.reset_room()
-        death()
-        
-      main_script.Sector.LIFE_SUPPORT and sector.get_subsector(main_script.current_room):
-        sector.get_node("Life Support Officer")._officer_battle_timeout()
-			  gravity_invert_enabled = true
+				death()
 		
-      main_script.Sector.REACTOR:
-        death(true)
-        
-       _:
-        death()
+			main_script.Sector.LIFE_SUPPORT:
+				if sector.get_subsector(main_script.current_room):
+					sector.get_node("Life Support Officer")._officer_battle_timeout()
+					gravity_invert_enabled = true
+		
+			main_script.Sector.REACTOR:
+				death(true)
+		
+			_:
+				death()
 	
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
