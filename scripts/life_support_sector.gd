@@ -9,7 +9,7 @@ var gravity_disabeld: bool = false
 
 @onready var main_script : Node2D = $"../../"
 @onready var main_platforms: TileMapLayer = $"Tilemaps/Main Platforms"
-@onready var water_layer = $"Tilemaps/Water Layer"
+@onready var water_layer: TileMapLayer = $"Tilemaps/Water Layer"
 
 
 func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
@@ -80,7 +80,7 @@ func clear_tiles(coord, atlas_coord, tile_map_layer) -> void:
 
 func p1_water_drain() -> void:
 	
-	var water_layer: TileMapLayer = get_node("Tilemaps/Water Layer")
+	#var water_layer: TileMapLayer = get_node("Tilemaps/Water Layer")
 	
 	clear_tiles(Vector2(110,17), Vector2i(18,1), water_layer)
 	

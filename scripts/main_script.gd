@@ -83,11 +83,8 @@ func load_sector(get_sector: Sector) -> void:
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()
 			self.room_change.connect(sector.get_new_room_data)
-			toggle_timer(true, 60, Color.WHITE, reactor_timer_timout)
+			toggle_timer(true, 60, Color.WHITE, func(): player.death(true))
 			toggle_mirage_shader(true)
-			#room_coords = Vector2i(0, -4) # Boss0
-			#room_coords = Vector2i(-2, -2) # Puzzle2a
-			room_coords = Vector2i(-1, -3) # Puzzle2d
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
@@ -134,8 +131,6 @@ func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.WHITE, 
 		if on_timeout != null:
 			minute_timer.connect("timeout", on_timeout)
 		
-		# TODO: Connect the timeout for the minute timer to disable the timer
-		
 		# Start the timer
 		minute_timer.start()
 		is_timer_active = true
@@ -153,10 +148,6 @@ func toggle_timer(on: bool, set_time: int = 60, set_color: Color = Color.WHITE, 
 func change_timer_color(new_color: Color) -> void:
 	minute_display.label_settings.font_color = new_color
 	minute_bar_bg_color.bg_color = new_color
-
-
-func reactor_timer_timout() -> void:
-	player.death(true)
 
 
 func _process(_delta: float) -> void:

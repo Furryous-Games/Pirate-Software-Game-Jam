@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-signal player_dash
-
 const RUN_SPEED = 120
 const ACCELERATION = 1000
 const DECELERATION = 1500
@@ -9,16 +7,18 @@ const DASH_VELOCITY = 450
 const JUMP_VELOCITY = -420
 const WALL_SLIDE_VELOCITY_CAP = 100
 const TERMINAL_VELOCITY_LIFE_SUPPORT = 400 # LIFE SUPPORT
-const TERMINAL_VELOCITY_REACTOR = Vector2(1000, 400)
-const LAUNCH_BOOST = Vector2i(400, 0.2) # REACTOR
+const TERMINAL_VELOCITY_REACTOR = Vector2(700, 400) # REACTOR
+const LAUNCH_BOOST = Vector2i(600, 0.2) # REACTOR
 
 var sector: Node2D
 
 var is_coyote_time_active := false
 var is_jump_canceled := false
-var can_dash := false
-var gravity_change: int = 1
+
+var can_dash := false # REACTOR
+var gravity_change: int = 1 # LIFE SUPPORT
 var gravity_invert_enabled: bool = true
+
 
 var current_terminals: Array = []
 var last_checked_position: Vector2
@@ -32,7 +32,7 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 @onready var internal_player_collider: ShapeCast2D = $"Internal Player Collider"
 @onready var water_collider: ShapeCast2D = $"Water Collider"
 @onready var wall_collider: ShapeCast2D = $WallCollider
-@onready var launch_collider: ShapeCast2D = $LaunchCollider
+@onready var launch_collider: ShapeCast2D = $LaunchCollider # REACTOR
 
 @onready var jump_buffer: Timer = $JumpBuffer
 @onready var coyote_time: Timer = $CoyoteTime
@@ -42,20 +42,25 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("restart"):
-		if main_script.current_sector == main_script.Sector.LIFE_SUPPORT and sector.get_subsector(main_script.current_room):
-			sector.get_node("Life Support Officer")._officer_battle_timeout()
-			gravity_invert_enabled = true
-			return
-		death()
-		
+      
 		match main_script.current_sector:
 			main_script.Sector.ENGINEERING:
 				sector.reset_room()
+        death()
 			
 			main_script.Sector.TUTORIAL:
 				sector.reset_room()
+        death()
+        
+      main_script.Sector.LIFE_SUPPORT and sector.get_subsector(main_script.current_room):
+        sector.get_node("Life Support Officer")._officer_battle_timeout()
+			  gravity_invert_enabled = true
 		
-		return
+      main_script.Sector.REACTOR:
+        death(true)
+        
+       _:
+        death()
 	
 	# Reduce jump height if input is released early
 	if Input.is_action_just_released("jump") and not is_jump_canceled:
@@ -155,15 +160,17 @@ func _physics_process(delta: float) -> void:
 				var wall_jump_boost: float = get_wall_normal().x * (2.5 if direction.x == get_wall_normal().x else 1.0)
 				velocity = Vector2(RUN_SPEED * wall_jump_boost, JUMP_VELOCITY * gravity_change)
 				is_jump_canceled = false
-	
+
 	# REACTOR: Dash action
 	if (
 			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
+  
 		velocity = round(Vector2.from_angle(direction.angle()) * DASH_VELOCITY) * Vector2(1, gravity_change) # Corrects diagonal dashing and inverted gravity dashing
-		player_dash.emit()
+		sector.signal_dash()
+
 		dash_time.start()
 		can_dash = false
 	
@@ -239,14 +246,20 @@ func death(from_timer_timeout: bool = false) -> void:
 			
 			# If death was caused by the minute timer's timeout, spawn the player at the subsector checkpoint
 			if from_timer_timeout:
-				main_script.toggle_mirage_shader(false, 0)
-				main_script.toggle_timer(true, 60, Color.WHITE, main_script.reactor_timer_timout)
+				# Toggle the timer shader if the curent subsector is overheating and is not an Officer subsector (initial entry permitted)
+				if (
+						not (sector.is_officer_active or sector.current_subsector == &"Officer1") 
+						and sector.subsector_terminal_data[sector.current_subsector].is_overheating
+				):
+					main_script.toggle_mirage_shader(false)
+					main_script.toggle_timer(true, 60, Color.WHITE, func(): death(true))
+				
 				position = sector.respawn_player_at_subsector()
 				velocity = Vector2.ZERO
 				return
 	
-	# spawn the player at the sector specific spawn point, and ensure velocity is zero
-	print(main_script.current_room)
+
+	# spawn the player at the beginning of the room, and ensure player not upside down
 	position = sector.get_room_spawn_position(main_script.current_room)
 	velocity = Vector2.ZERO
 	respawn_input_pause.start()
@@ -258,14 +271,13 @@ func gravity_invert() -> void:
 	rotate_player.tween_property(self, "rotation_degrees", 0 if gravity_change == -1 else 180, 0.2)
 	gravity_change *= -1
 
-func recharge_dash() -> void:
-	can_dash = true
 
 func enable_disable_gravity() -> void:
 	if gravity_invert_enabled:
 		gravity_invert_enabled = false
 	else:
 		gravity_invert_enabled = true
+
 
 func enable_closest_terminal() -> void:
 	# If there are no currently detected terminals, do nothing
@@ -321,7 +333,7 @@ func carry_new_item() -> void:
 		if current_held_item:
 			current_held_item.drop_item()
 		
-		print("HOLDING NEW ITEM")
+		#print("HOLDING NEW ITEM")
 		currently_selected_terminal.collider.disabled = true
 		currently_selected_terminal.area_check.monitoring = false
 		
