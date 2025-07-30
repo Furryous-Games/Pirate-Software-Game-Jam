@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d3jpuujkyi2tt" path="res://scenes/door.tscn" id="4_awjkw"]
 [ext_resource type="Script" uid="uid://dq24rps0u1drb" path="res://scripts/life_support_officer.gd" id="4_l16u5"]
 [ext_resource type="PackedScene" uid="uid://ddjo3k33h3au1" path="res://scenes/movable_item.tscn" id="6_5bq58"]
-[ext_resource type="FontFile" uid="uid://dc4s3s34c371l" path="res://assets/fonts/PixelOperator8.ttf" id="8_yxgju"]
+[ext_resource type="FontFile" uid="uid://dw8vbheox2fb0" path="res://assets/fonts/PixelOperator8.ttf" id="8_yxgju"]
 [ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="9_a35i2"]
 
 [node name="life_support" type="Node2D"]

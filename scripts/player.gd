@@ -11,6 +11,7 @@ const TERMINAL_VELOCITY_REACTOR = Vector2(700, 400) # REACTOR
 const LAUNCH_BOOST = Vector2i(600, 0.2) # REACTOR
 
 var sector: Node2D
+var is_input_paused := true
 
 var is_coyote_time_active := false
 var is_jump_canceled := false
@@ -41,6 +42,9 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 
 
 func _input(event: InputEvent) -> void:
+	if is_input_paused:
+		return
+	
 	if Input.is_action_just_pressed("restart"):
 	  
 		match main_script.current_sector:
@@ -87,7 +91,7 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	# Prevents input while the RespawnInputPause timer is active
-	if not respawn_input_pause.is_stopped():
+	if is_input_paused:
 		move_and_slide()
 		return
 	
@@ -265,6 +269,7 @@ func death(from_timer_timeout: bool = false) -> void:
 	# spawn the player at the beginning of the room, and ensure player not upside down
 	position = sector.get_room_spawn_position(main_script.current_room)
 	velocity = Vector2.ZERO
+	is_input_paused = true
 	respawn_input_pause.start()
 
 
@@ -341,3 +346,7 @@ func carry_new_item() -> void:
 		currently_selected_terminal.area_check.monitoring = false
 		
 		current_held_item = currently_selected_terminal
+
+
+func _on_respawn_input_pause_timeout() -> void:
+	is_input_paused = false
