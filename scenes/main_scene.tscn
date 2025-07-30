@@ -143,7 +143,11 @@ shader_parameter/is_active = 0.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_7ykc4")
+<<<<<<< Updated upstream
 current_sector = 2
+=======
+current_sector = 1
+>>>>>>> Stashed changes
 
 [node name="SectorMaps" type="Node2D" parent="."]
 

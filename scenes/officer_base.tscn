@@ -9,6 +9,9 @@
 [ext_resource type="FontFile" uid="uid://c2x2e1qqmwold" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_n5w78"]
 [ext_resource type="FontFile" uid="uid://dlhxb7aap6ty6" path="res://assets/fonts/PixelOperator8.ttf" id="2_rtf3f"]
 [ext_resource type="Texture2D" uid="uid://cvk8qpeag4tk1" path="res://assets/sprites/Tilemap_Packed.png" id="4_rtf3f"]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n5w78"]
