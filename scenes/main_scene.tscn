@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cyddofgvf7ot2"]
+[gd_scene load_steps=13 format=3 uid="uid://cyddofgvf7ot2"]
 
 [ext_resource type="Script" uid="uid://c1uh0ur1dwxgn" path="res://scripts/main_script.gd" id="1_7ykc4"]
-[ext_resource type="Texture2D" uid="uid://d27tsxum3uolh" path="res://assets/sprites/buildingTileset.png" id="2_gubc5"]
+[ext_resource type="Texture2D" uid="uid://dk3jb7um6sv6a" path="res://assets/sprites/buildingTileset.png" id="2_gubc5"]
 [ext_resource type="PackedScene" uid="uid://ke8ne88ddqf1" path="res://scenes/player.tscn" id="2_pu3yx"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="4_gubc5"]
 [ext_resource type="Shader" uid="uid://cuahv7mnr5q7i" path="res://scripts/reactor_sector/mirage.gdshader" id="4_pu3yx"]
+[ext_resource type="Script" uid="uid://dknosvp3e7fls" path="res://scripts/ability_hud.gd" id="5_rt2n2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6l7je"]
 texture = ExtResource("2_gubc5")
@@ -191,17 +192,12 @@ anchor_right = 1.0
 offset_left = -40.0
 offset_bottom = 40.0
 grow_horizontal = 0
+script = ExtResource("5_rt2n2")
 
-[node name="Panel" type="Panel" parent="UI/Effects"]
+[node name="Buffer Room" type="Panel" parent="UI/Effects"]
 self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/Effects"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_gubc5")
-theme_override_font_sizes/font_size = 8
-text = "Gravity Flip: 10.00 "
 
 [node name="ScreenShaders" type="CanvasLayer" parent="."]
 

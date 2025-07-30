@@ -165,6 +165,7 @@ func _physics_process(delta: float) -> void:
 	# REACTOR: Dash action
 	if (
 			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
+			and not (main_script.current_sector == main_script.Sector.ADMINISTRATIVE and sector.timed_dash_action.is_stopped())
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
@@ -240,6 +241,8 @@ func death(from_timer_timeout: bool = false) -> void:
 		  	#ensure gravity resets
 			if gravity_change == -1:
 				gravity_invert()
+			
+			sector.timed_gravity_flip.stop()
 			
 		main_script.Sector.REACTOR:
 			# Reset mechanisms
