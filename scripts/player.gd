@@ -39,8 +39,9 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 @onready var coyote_time: Timer = $CoyoteTime
 @onready var dash_time: Timer = $DashTime
 @onready var respawn_input_pause: Timer = $RespawnInputPause
-
 @onready var character_sprite: AnimatedSprite2D = $Sprite
+@onready var walking_sfx: AudioStreamPlayer2D = $"Walking SFX"
+@onready var jumping_sfx: AudioStreamPlayer2D = $"Jumping SFX"
 
 
 func _input(event: InputEvent) -> void:
@@ -82,7 +83,9 @@ func _input(event: InputEvent) -> void:
 		# If not falling
 		if sign(velocity.y * gravity_change) == -1:
 			velocity.y *= 0.50
-
+		
+		jumping_sfx.play()
+		
 		is_jump_canceled = true
 		return
 	
@@ -102,13 +105,15 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("move_left"):
 		character_sprite.play("running")
 		character_sprite.flip_h = true
+		if is_on_floor() or is_on_ceiling():
+			walking_sfx.play()
 		
 	if Input.is_action_just_pressed("move_right"):
 		character_sprite.play("running")
 		character_sprite.flip_h = false
-		
+		if is_on_floor() or is_on_ceiling():
+			walking_sfx.play()
 	
-
 func _physics_process(delta: float) -> void:
 	# Prevents input while the RespawnInputPause timer is active
 	if is_input_paused:
@@ -232,6 +237,7 @@ func _process(_delta: float) -> void:
 	if not (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")):
 		character_sprite.play("idle")
 		character_sprite.flip_h = false
+		walking_sfx.stop()
 
 
 func death(from_timer_timeout: bool = false) -> void:

@@ -28,7 +28,7 @@ var subsector_terminal_data := {
 @onready var doors: Node2D = $Doors
 @onready var open_officer1_doors := {&"Officer1a": $"Doors/Officer1a", &"Officer1b": $"Doors/Officer1b"}
 @onready var officer_base: Area2D = $ReactorOfficer
-@onready var portal: Area2D = $Portal
+@onready var portal: Area2D = $Portals/Portal
 
 
 func _ready() -> void:

@@ -7,6 +7,7 @@ extends Node
 @onready var portal_sprite: TileMapLayer = $"Portal Visual"
 @onready var door_collider: CollisionShape2D = $"Portal Collider"
 @onready var key_prompt: Label = $"Key Prompt"
+@onready var portal_sfx: AudioStreamPlayer2D = $"Portal SFX"
 
 enum Sector {
 	TUTORIAL,
