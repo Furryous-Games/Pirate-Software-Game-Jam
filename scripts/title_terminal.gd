@@ -49,7 +49,7 @@ var control_set := "dual"
 
 
 func _ready() -> void:
-	#set_input_map()
+	set_input_map()
 	system_text.text = ""
 	system_text.visible_characters = 0
 	output(get_output_text(Prompt.INTRO))
@@ -65,7 +65,8 @@ func get_output_text(prompt: Prompt) -> String:
 	var text: String
 	match prompt:
 		Prompt.INTRO: text = (
-		"RUNNING DIAGNOSTICS...\n
+		"[color=GREEN]Connecting to Administrator Officer...............[/color]
+		\nRUNNING DIAGNOSTICS...\n
 		SECTOR.Engineering: [color=RED]FATAL:
 				Officer unresponsive, sector funcitonality critical[/color]\n
 		SECTOR.Life_Support: [color=RED]FATAL:
@@ -154,8 +155,9 @@ func output(new_text: String, set_prompt: Prompt = Prompt.START, call_function =
 	
 	var text_length: int = len(filtered_text_length)
 	@warning_ignore("integer_division")
-	var text_speed: int = len(new_text) / (40 if terminal_prompt == Prompt.START else 120)
-	text_speed = clampi(text_speed, 1, 120)
+	var text_speed: int = len(new_text) / (40 if terminal_prompt == Prompt.START else 180)
+	if text_speed < 1:
+		text_speed = 1
 	
 	tween_text_visibility = create_tween()
 	tween_text_visibility.tween_property(system_text, "visible_characters", text_length, text_speed)
@@ -171,7 +173,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			"yes": 
 				output("", Prompt.START, (
 					func():
-						main_script.load_sector(main_script.Sector.REACTOR)
+						main_script.load_sector(main_script.Sector.TUTORIAL)
 						main_script.player.is_input_paused = false
 						self.queue_free()
 				))
@@ -182,7 +184,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			"/skip":
 				output("Skipping Sequence", Prompt.START, (
 					func():
-						main_script.load_sector(main_script.Sector.ADMINISTRATIVE)
+						main_script.load_sector(main_script.Sector.TUTORIAL)
 						main_script.player.is_input_paused = false
 						self.queue_free()
 				), true)
@@ -198,7 +200,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				
 	elif terminal_prompt == Prompt.OPTIONS:
 		if new_text == "return":
-			output("\n[color=DARKGRAY]awaiting input [ yes/no/options ][/color]", Prompt.START)
+			output("\n\n[color=DARKGRAY]awaiting input [ yes/no/options ][/color]", Prompt.START)
 		
 		# Mirage settings
 		elif new_text.containsn("mirage") or new_text.containsn("shader"):
@@ -224,20 +226,26 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				main_script.is_smooth_camera_on = false
 				output("\n[color=DARKGRAY]smooth camera = false[/color]", Prompt.OPTIONS)
 		
-		## Control settings
-		#elif new_text.containsn("controls"):
-			#if new_text.ends_with("layout_a"):
-				#controls = ControlLayout.LAYOUT_A
-				#set_input_map()
-			#elif new_text.ends_with("layout_b"):
-				#controls = ControlLayout.LAYOUT_B
-				#set_input_map()
-			#elif new_text.ends_with("dual"):
-				#controls = ControlLayout.DUAL
-				#set_input_map()
-			#else:
-				#output("[color=DARKGRAY]\ninvalid user input: '" + new_text + "'[/color]")
-				#player_input.edit()
+		# Control settings
+		elif new_text.containsn("controls"):
+			if new_text.ends_with("layout a"):
+				controls = ControlLayout.LAYOUT_A
+				control_set = "Layout A"
+				output("\n[color=DARKGRAY]controls = LAYOUT A[/color]", Prompt.OPTIONS)
+				set_input_map()
+			elif new_text.ends_with("layout b"):
+				controls = ControlLayout.LAYOUT_B
+				control_set = "Layout B"
+				output("\n[color=DARKGRAY]controls = LAYOUT B[/color]", Prompt.OPTIONS)
+				set_input_map()
+			elif new_text.ends_with("dual"):
+				controls = ControlLayout.DUAL
+				control_set = "Dual"
+				output("\n[color=DARKGRAY]controls = DUAL[/color]", Prompt.OPTIONS)
+				set_input_map()
+			else:
+				output("[color=DARKGRAY]\ninvalid user input: '" + new_text + "'[/color]")
+				player_input.edit()
 		
 		else: 
 			output("[color=DARKGRAY]\ninvalid user input: '" + new_text + "'[/color]")
@@ -246,13 +254,12 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	player_input.clear()
 	
 	
-#func set_input_map() -> void:
-	#var input := InputEventKey.new()
-	#for action in INPUT_ACTIONS:
-		## Clear input events for action
-		#InputMap.action_erase_events(action)
-		## Add event to action
-		#for key in LAYOUT_MAPPINGS[controls][action]:
-			#input.keycode = key
-			#InputMap.action_add_event(action, input)
-			#print(action + ": " + str(input))
+func set_input_map() -> void:
+	for action in INPUT_ACTIONS:
+		# Clear input events for action
+		InputMap.action_erase_events(action)
+		# Add event to action
+		for key in LAYOUT_MAPPINGS[controls][action]:
+			var input := InputEventKey.new()
+			input.keycode = key
+			InputMap.action_add_event(action, input)
