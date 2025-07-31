@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://5p3nb0s7xyta"]
+[gd_scene load_steps=6 format=3 uid="uid://5p3nb0s7xyta"]
 
 [ext_resource type="Script" uid="uid://coblrw8vgppis" path="res://scripts/wall_terminal.gd" id="1_1quvr"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="2_1quvr"]
+[ext_resource type="LabelSettings" uid="uid://ch018ut3wyn7q" path="res://assets/fonts/terminal_text.tres" id="3_0i264"]
 [ext_resource type="SpriteFrames" uid="uid://dqvtv2lwl7vh1" path="res://assets/sprites/wall_terminal.tres" id="3_1quvr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ignkq"]
@@ -30,6 +31,7 @@ grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_1quvr")
 theme_override_font_sizes/font_size = 8
 text = "Interact"
+label_settings = ExtResource("3_0i264")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
