@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://ke8ne88ddqf1"]
+[gd_scene load_steps=13 format=3 uid="uid://ke8ne88ddqf1"]
 
 [ext_resource type="Script" uid="uid://dtkmogktxrytf" path="res://scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="2_g2els"]
+[ext_resource type="AudioStream" uid="uid://ba6t4ocu14s1g" path="res://sounds/735518__artninja__series_of_custom_robot_footstep_sounds_01012024.wav" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://dyxpij2rwqjpl" path="res://sounds/362328__jofae__platform-jump.mp3" id="4_dqkch"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("2_g2els")
@@ -117,5 +119,13 @@ one_shot = true
 process_callback = 0
 wait_time = 0.2
 one_shot = true
+
+[node name="Walking SFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_qhqgy")
+bus = &"Footsteps"
+
+[node name="Jumping SFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_dqkch")
+bus = &"Jump"
 
 [connection signal="timeout" from="RespawnInputPause" to="." method="_on_respawn_input_pause_timeout"]

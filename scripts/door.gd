@@ -20,6 +20,7 @@ enum Door_Types {
 
 @onready var door_hold_timer: Timer = $"Door Hold Timer"
 
+@onready var door_sfx: AudioStreamPlayer2D = $"Door SFX"
 
 var original_position
 var has_interacted: bool = false
@@ -130,6 +131,9 @@ func toggle_door(toggle_state = null):
 	# Make note that the door has been interacted with if single interact is on
 	if single_interact:
 		has_interacted = true
+	
+	#play SFX
+	door_sfx.play()
 	
 	# Update the position of the door
 	update_door_position()

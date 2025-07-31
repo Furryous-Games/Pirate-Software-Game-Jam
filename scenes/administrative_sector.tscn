@@ -223,8 +223,8 @@ player_prompt = "Open Exit"
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="P1 Exit door" parent="Doors" instance=ExtResource("7_47l5j")]
-position = Vector2(0, -1230)
-door_size = Vector2i(2, 5)
+position = Vector2(30, -1230)
+door_size = Vector2i(1, 5)
 closed = true
 
 [node name="Portals" type="Node2D" parent="."]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://cyddofgvf7ot2"]
 
 [ext_resource type="Script" uid="uid://c1uh0ur1dwxgn" path="res://scripts/main_script.gd" id="1_7ykc4"]
-[ext_resource type="Texture2D" uid="uid://c23rqewontxn7" path="res://assets/sprites/buildingTileset.png" id="2_gubc5"]
+[ext_resource type="Texture2D" uid="uid://d27tsxum3uolh" path="res://assets/sprites/buildingTileset.png" id="2_gubc5"]
 [ext_resource type="PackedScene" uid="uid://ke8ne88ddqf1" path="res://scenes/player.tscn" id="2_pu3yx"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="4_gubc5"]
 [ext_resource type="Shader" uid="uid://cuahv7mnr5q7i" path="res://scripts/reactor_sector/mirage.gdshader" id="4_pu3yx"]

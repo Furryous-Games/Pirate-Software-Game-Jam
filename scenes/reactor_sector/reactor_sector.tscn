@@ -10,7 +10,6 @@
 [ext_resource type="LabelSettings" uid="uid://ch018ut3wyn7q" path="res://assets/fonts/terminal_text.tres" id="8_gyax7"]
 [ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="8_pfhl8"]
 
-
 [node name="ReactorSector" type="Node2D"]
 script = ExtResource("1_pkqih")
 
@@ -260,11 +259,12 @@ player_prompt = "OFFLINE"
 position = Vector2(290, -860)
 officer_name = "Reactor Officer"
 
-[node name="Portal" parent="." instance=ExtResource("8_pfhl8")]
+[node name="Portals" type="Node2D" parent="."]
+
+[node name="Portal" parent="Portals" instance=ExtResource("8_pfhl8")]
 position = Vector2(280, 260)
 locked = true
 target = 1
-
 
 [node name="Text" type="Control" parent="."]
 layout_mode = 3
@@ -282,7 +282,6 @@ text = "Dash: 'X'"
 label_settings = ExtResource("8_gyax7")
 horizontal_alignment = 1
 vertical_alignment = 1
-
 
 [node name="Tutorial" type="Label" parent="Text"]
 layout_mode = 0
