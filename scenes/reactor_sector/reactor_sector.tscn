@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://dypvtpctvas43"]
+[gd_scene load_steps=10 format=4 uid="uid://dypvtpctvas43"]
 
 [ext_resource type="Script" uid="uid://c5436ldwguqbw" path="res://scripts/reactor_sector/reactor_sector.gd" id="1_pkqih"]
 [ext_resource type="PackedScene" uid="uid://b6mrdx2sklm1e" path="res://scenes/reactor_sector/reactor_dash_platform.tscn" id="3_u3ho6"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://b3lbpif526eab" path="res://scenes/reactor_sector/reactor_door.tscn" id="7_3f7aj"]
 [ext_resource type="PackedScene" uid="uid://cl4h22vr4u083" path="res://scenes/officer_base.tscn" id="7_8trfw"]
 [ext_resource type="LabelSettings" uid="uid://ch018ut3wyn7q" path="res://assets/fonts/terminal_text.tres" id="8_gyax7"]
+[ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="8_pfhl8"]
+
 
 [node name="ReactorSector" type="Node2D"]
 script = ExtResource("1_pkqih")
@@ -258,7 +260,11 @@ player_prompt = "OFFLINE"
 position = Vector2(290, -860)
 officer_name = "Reactor Officer"
 
-[node name="Portals" type="Node2D" parent="."]
+[node name="Portal" parent="." instance=ExtResource("8_pfhl8")]
+position = Vector2(280, 260)
+locked = true
+target = 1
+
 
 [node name="Text" type="Control" parent="."]
 layout_mode = 3
@@ -277,7 +283,8 @@ label_settings = ExtResource("8_gyax7")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Tutorial\\" type="Label" parent="Text"]
+
+[node name="Tutorial" type="Label" parent="Text"]
 layout_mode = 0
 offset_left = -235.0
 offset_top = -143.0

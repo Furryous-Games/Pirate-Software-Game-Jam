@@ -39,8 +39,6 @@ func _ready() -> void:
 	# Fill the water in the coolant room
 	fill_water_layer(Vector2i(210, 11), Vector2i(10, 3))
 	fill_water(Vector2i(210, 12), Vector2i(10, 2))
-	
-	print(main_script)
 
 
 func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:

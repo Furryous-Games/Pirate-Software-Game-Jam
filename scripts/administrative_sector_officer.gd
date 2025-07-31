@@ -158,7 +158,6 @@ func _gravity_flip(wait_time: int = 10) -> void:
 	# Restart the timer
 	timed_gravity_flip.start()
 func _gravity_flip_timeout() -> void:
-	print("FLIP BACK")
 	if main_script.player.gravity_change == -1:
 		# Flip the gravity back
 		main_script.player.gravity_invert()
@@ -206,7 +205,6 @@ func _officer_terminal_interacted():
 				update_officer_task()
 
 func _officer_battle_timeout():
-	print("RESET")
 	if not officer_battle_complete:
 		# Kill the player
 		main_script.player.death()
@@ -262,7 +260,6 @@ func toggle_doors(enabled):
 
 ## TASKS
 func _on_complete_task(task_name: String) -> void:
-	print("TASK COMPLETE: ", task_name)
 	
 	# Make note that the task is complete
 	all_tasks_complete[task_name] = true
@@ -284,7 +281,6 @@ func update_officer_task() -> void:
 		check_tasks_complete()
 
 func check_tasks_complete() -> void:
-	print(all_tasks_complete)
 	
 	if officer_battle_ongoing == true:
 		for task in all_tasks_complete:
@@ -298,9 +294,6 @@ func check_tasks_complete() -> void:
 		
 		# Slow down the tick speed of the timing mechanisms
 		get_node("Timing Mechanisms").wait_time *= 0.75
-		
-		print("ALL TASKS OK")
-		print(all_tasks_complete)
 		
 		officer_battle_ongoing = false
 		officer_battle_complete = true

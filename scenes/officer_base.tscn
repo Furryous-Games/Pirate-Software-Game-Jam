@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://cl4h22vr4u083"]
 
 [ext_resource type="Script" uid="uid://bo6rn5dokashf" path="res://scripts/officer_base.gd" id="1_av75a"]
-[ext_resource type="FontFile" uid="uid://b0jc06qm0phj7" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_n5w78"]
-[ext_resource type="FontFile" uid="uid://ba2wwogvklypq" path="res://assets/fonts/PixelOperator8.ttf" id="2_rtf3f"]
+[ext_resource type="FontFile" uid="uid://w4mrn5jwyvik" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_n5w78"]
+[ext_resource type="FontFile" uid="uid://dw8vbheox2fb0" path="res://assets/fonts/PixelOperator8.ttf" id="2_rtf3f"]
 [ext_resource type="SpriteFrames" uid="uid://dqvtv2lwl7vh1" path="res://assets/sprites/wall_terminal.tres" id="4_rtf3f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ydjog"]

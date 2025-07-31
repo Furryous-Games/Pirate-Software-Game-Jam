@@ -5,6 +5,7 @@ enum Prompt {
 	START,
 	OPTIONS,
 	QUIT,
+	END,
 }
 
 enum ControlLayout {
@@ -48,7 +49,7 @@ var control_set := "dual"
 @onready var player_input: LineEdit = $ConsoleFrame/VBoxContainer/PlayerInput
 
 
-func _ready() -> void:
+func output_intro() -> void:
 	set_input_map()
 	system_text.text = ""
 	system_text.visible_characters = 0
@@ -65,7 +66,8 @@ func get_output_text(prompt: Prompt) -> String:
 	var text: String
 	match prompt:
 		Prompt.INTRO: text = (
-		"[color=GREEN]Connecting to Administrator Officer...............[/color]
+		"[color=YELLOW]THE XYLON ARC[/color]: The last hope for humanity, the [color=YELLOW]re-genesis[/color] of mankind
+		
 		\nRUNNING DIAGNOSTICS...\n
 		SECTOR.Engineering: [color=RED]FATAL:
 				Officer unresponsive, sector funcitonality critical[/color]\n
@@ -82,8 +84,9 @@ func get_output_text(prompt: Prompt) -> String:
 		R4: [color=GREEN]responsive[/color]
 		R5: [color=RED]unresponsive[/color]
 		...
+		\n[color=GREEN]Connecting to Administrator Officer......[/color]
 		\n// [color=YELLOW]R4[/color], you are the [color=YELLOW]only one[/color] who can restore the Sector Officers\n// Do you accept this undertaking?
-		\n[color=DARKGRAY]awaiting input [ yes/no/options ][/color]"
+		\n[color=DARKGRAY]> yes, no, options[/color]"
 			)
 		
 		Prompt.START: text = (
@@ -98,19 +101,23 @@ func get_output_text(prompt: Prompt) -> String:
 		[color=DEEPPINK]ACTIVATE TERMINALS[/color]: online
 		[color=DEEPPINK]DASH[/color]:  Functionality limited to REACTOR and ADMINISTRATION
 		[color=DEEPPINK]GRAVITY INVERT[/color]: Functionality limited to LIFE SUPPORT
-		\n//[color=YELLOW]You are humanity's last hope.[/color]\n//The Sector's conditions are critical; move through them with caution.\n//Navigate through each sector and repair th-ANJKFH&^567734y78o8TGyuf;nf;g\n
+		\n// [color=YELLOW]You are humanity's last hope.[/color]\n// The Sector's conditions are critical; move through them with caution.\n// Navigate through each sector and repair th-ANJKFH&^567734y78o8TGyuf;nf;g\n
 	[color=RED][ERROR]
 	DISCONNECTING FROM ADMINISTRATION...[/color]\n
+	
+	SECTOR.Administration: [color=RED]FATAL:
+			Officer unresponsive, sector functionality critical
+			XYLON destruction imminent
 		
 		\n[color=GREEN]connecting to R4...............[/color]"
 			)
 		
 		Prompt.OPTIONS: text = (
-		"\n\n[color=AQUA]OPTIONS[/color]
+		"[color=DARKCRAY]> options[/color]\n\n[color=AQUA]OPTIONS[/color]
 		[color=DEEPPINK]mirage shader[/color] = [color=AQUA]{is_shader_on}[/color]\n
 		[color=DEEPPINK]smooth camera transition[/color] = [color=AQUA]{is_smooth_camera_on}[/color]\n
 		[color=DEEPPINK]controls[/color] = [color=AQUA]'{controls}'[/color]:
-				[color=DARKGRAY]'Layout A' = (
+				[color=DARKGRAY][color=YELLOW]'Layout A'[/color] = (
 						MOVE = [color=AQUA]WASD/ARROW KEYS[/color] 
 						JUMP = [color=AQUA]W/UP/SPACE[/color]
 						INTERACT = [color=AQUA]E/ENTER[/color]
@@ -118,7 +125,7 @@ func get_output_text(prompt: Prompt) -> String:
 						INVERT GRAVITY = [color=AQUA]G[/color]
 						RESTART = [color=AQUA]R[/color]
 				)
-				'Layout B' = (
+				[color=YELLOW]'Layout B'[/color] = (
 						MOVE = [color=AQUA]ARROW KEYS[/color] 
 						JUMP = [color=AQUA]C[/color]
 						INTERACT = [color=AQUA]Z[/color]
@@ -126,9 +133,11 @@ func get_output_text(prompt: Prompt) -> String:
 						INVERT GRAVITY = [color=AQUA]X[/color]
 						RESTART = [color=AQUA]R[/color]
 				)
-				'Dual' = Layout A and B[/color]
+				[color=YELLOW]'Dual'[/color] = Layout A and B
+		\n> return, <setting> = <value>[/color]
 		"
 			)
+	
 	return text
 
 

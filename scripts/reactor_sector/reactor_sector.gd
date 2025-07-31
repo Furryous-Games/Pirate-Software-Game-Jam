@@ -28,10 +28,12 @@ var subsector_terminal_data := {
 @onready var doors: Node2D = $Doors
 @onready var open_officer1_doors := {&"Officer1a": $"Doors/Officer1a", &"Officer1b": $"Doors/Officer1b"}
 @onready var officer_base: Area2D = $ReactorOfficer
+@onready var portal: Area2D = $Portal
 
 
 func _ready() -> void:
 	get_new_room_data()
+	main_script.room_change.connect(get_new_room_data)
 
 
 func get_new_room_data() -> void:
@@ -200,6 +202,9 @@ func reactivate_cooling() -> void:
 	main_script.toggle_mirage_shader(false)
 	
 	doors.find_child(current_subsector).toggle_door()
+	
+	if current_subsector == &"Main":
+		portal.unlock_portal()
 
 
 func activate_officer_terminal() -> void:
