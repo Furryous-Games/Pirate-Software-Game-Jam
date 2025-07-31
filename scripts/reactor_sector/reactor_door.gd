@@ -1,10 +1,10 @@
 extends AnimatableBody2D
 
 @export var vertical_door: bool = true
-@export var door_atlas_tile := Vector2i(14, 3)
 @export var door_size = 4
 
 const TILE_SIZE: int = 20
+const DOOR_ATLAS_TILE = Vector2i(14, 3)
 
 var tween_door: Tween
 var is_door_closed := true
@@ -21,12 +21,12 @@ func _ready() -> void:
 func set_size() -> void:
 	if vertical_door:
 		for i in door_size:
-			door_sprite.set_cell(Vector2i(0, i), 1, door_atlas_tile)
+			door_sprite.set_cell(Vector2i(0, i), 1, DOOR_ATLAS_TILE)
 		door_collider.shape.size.y = door_size * TILE_SIZE
 		door_collider.position.y = (door_size - 1) * 10
 	else:
 		for i in door_size:
-			door_sprite.set_cell(Vector2i(i, 0), 1, door_atlas_tile)
+			door_sprite.set_cell(Vector2i(i, 0), 1, DOOR_ATLAS_TILE)
 		door_collider.shape.size.x = door_size * TILE_SIZE
 		door_collider.position.x = (door_size - 1) * 10
 

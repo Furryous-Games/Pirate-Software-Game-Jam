@@ -74,11 +74,13 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.ENGINEERING: 
 			sector = ENGINEERING_SECTOR.instantiate()
-			#room_coords = Vector2i(0, 0)
+			#Boss room coords
+			#room_coords = Vector2i(6, 0)
 			
 		Sector.LIFE_SUPPORT: 
 			sector = LIFE_SUPPORT_SECTOR.instantiate()
-			#room_coords = Vector2i(0, 0)
+			#Boss room coords
+			#room_coords = Vector2i(5, 0)
 			
 		Sector.REACTOR: 
 			sector = REACTOR_SECTOR.instantiate()

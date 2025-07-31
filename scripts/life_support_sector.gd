@@ -82,17 +82,17 @@ func p1_water_drain() -> void:
 	
 	#var water_layer: TileMapLayer = get_node("Tilemaps/Water Layer")
 	
-	clear_tiles(Vector2(110,17), Vector2i(18,1), water_layer)
+	clear_tiles(Vector2(110,17), Vector2i(10,2), water_layer)
 	
 	get_node("Doors/P1/Door 1").toggle_door(true)
 
 
-func p1_door() -> void:
+func p1_door_toggle() -> void:
 	
 	get_node("Doors/P1/Door 2").toggle_door(true)
 
 
-func p2_wall_terminal_3() -> void:
+func p2_wall_terminal_3_toggle() -> void:
 	
 	if terminal_4_toggled:
 		
@@ -101,7 +101,7 @@ func p2_wall_terminal_3() -> void:
 	terminal_3_toggled = true
 
 
-func p2_wall_terminal_4() -> void:
+func p2_wall_terminal_4_toggle() -> void:
 	
 	if terminal_3_toggled:
 	
@@ -175,14 +175,14 @@ func fill_water_bottom(layer_coordinate, atlas_coord):
 
 func fill_water_layer(layer_coordinate, atlas_coord):
 	# Sets the host cell
-	water_layer.set_cell(layer_coordinate, 1, atlas_coord)
+	water_layer.set_cell(layer_coordinate, 0, atlas_coord)
 
 	var check_pos = layer_coordinate - Vector2i(1, 0)
 
 	# Sets to the left of the host cell
 	for i in range(100):
 		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
-			water_layer.set_cell(check_pos, 1, atlas_coord)
+			water_layer.set_cell(check_pos, 0, atlas_coord)
 			check_pos -= Vector2i(1, 0)
 		else:
 			break
@@ -192,7 +192,7 @@ func fill_water_layer(layer_coordinate, atlas_coord):
 	# Sets to the right of the host cell
 	for i in range(100):
 		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
-			water_layer.set_cell(check_pos, 1, atlas_coord)
+			water_layer.set_cell(check_pos, 0, atlas_coord)
 			check_pos += Vector2i(1, 0)
 		else:
 			break
@@ -210,14 +210,14 @@ func fill_waterfall(layer_coordinate, atlas_coord):
 
 func fill_waterfall_layer(layer_coordinate, atlas_coord):
 	# Sets the host cell
-	water_layer.set_cell(layer_coordinate, 1, atlas_coord)
+	water_layer.set_cell(layer_coordinate, 0, atlas_coord)
 
 	var check_pos = layer_coordinate - Vector2i(1, 0)
 
 	# Sets to the left of the host cell
 	for i in 2:
 		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
-			water_layer.set_cell(check_pos, 1, atlas_coord)
+			water_layer.set_cell(check_pos, 0, atlas_coord)
 			check_pos -= Vector2i(1, 0)
 		else:
 			break
@@ -227,7 +227,7 @@ func fill_waterfall_layer(layer_coordinate, atlas_coord):
 	# Sets to the right of the host cell
 	for i in 3:
 		if main_platforms.get_cell_atlas_coords(check_pos) == Vector2i(-1, -1):
-			water_layer.set_cell(check_pos, 1, atlas_coord)
+			water_layer.set_cell(check_pos, 0, atlas_coord)
 			check_pos += Vector2i(1, 0)
 		else:
 			break

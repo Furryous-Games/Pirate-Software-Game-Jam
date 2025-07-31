@@ -214,7 +214,7 @@ func death(from_timer_timeout: bool = false) -> void:
 	
 	# Drop the current item
 	if current_held_item:
-		current_held_item.drop_item()
+		current_held_item.reset_item()
 
 	current_held_item = null
 	
@@ -254,6 +254,7 @@ func death(from_timer_timeout: bool = false) -> void:
 			# If death was caused by the minute timer's timeout, spawn the player at the subsector checkpoint
 			if from_timer_timeout:
 				# Toggle the timer shader if the curent subsector is overheating and is not an Officer subsector (initial entry permitted)
+				# BUG: Invalid access to property or key 'is_overheating' on a base object of type 'Dictionary'. ELEVATOR
 				if (
 						not (sector.is_officer_active or sector.current_subsector == &"Officer1") 
 						and sector.subsector_terminal_data[sector.current_subsector].is_overheating
