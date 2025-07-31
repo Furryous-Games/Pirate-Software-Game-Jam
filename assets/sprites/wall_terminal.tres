@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dsp8cgfcjkuei" path="res://assets/sprites/Tilemap_Packed.png" id="1_6bvsu"]
 
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_0i264"]
 atlas = ExtResource("1_6bvsu")
 region = Rect2(120, 80, 20, 20)

@@ -15,6 +15,7 @@ enum Sector {
 	LIFE_SUPPORT,
 	REACTOR,
 	ADMINISTRATIVE,
+	ADMINISTRATIVE_OFFICER
 }
 
 var sector_list = [&"Tutorial",
@@ -22,16 +23,23 @@ var sector_list = [&"Tutorial",
 	&"Engineering",
 	&"Life Support",
 	&"Reactor",
-	&"Administrative",]
+	&"Administrative",
+	&"ADMINISTRATIVE_OFFICER"]
 
 var open_text: String = "Enter"
 var locked_text: String = "Locked"
 
 func _ready() -> void:
 	if !locked:
-		key_prompt.text = "Enter " + sector_list[target]
+		key_prompt.text = "Enter"
 	else:
 		key_prompt.text = "Locked"
+
+
+func unlock_portal() -> void:
+	# Toggle the door to its opposite state
+	locked = false
+	key_prompt.text = "Enter"
 
 
 func interact_with_terminal() -> void:
