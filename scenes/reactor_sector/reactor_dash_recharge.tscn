@@ -1,7 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c3cqhbb84sclu"]
+[gd_scene load_steps=9 format=3 uid="uid://c3cqhbb84sclu"]
 
 [ext_resource type="Script" uid="uid://bt2kwlv0sl0rg" path="res://scripts/reactor_sector/reactor_dash_recharge.gd" id="1_gcnda"]
 [ext_resource type="Texture2D" uid="uid://dmhxcywtcc7hu" path="res://assets/sprites/Tilemap_Packed.png" id="2_tjiwm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tjiwm"]
+atlas = ExtResource("2_tjiwm")
+region = Rect2(160, 120, 20, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fgr7h"]
 atlas = ExtResource("2_tjiwm")
@@ -19,6 +23,14 @@ region = Rect2(200, 100, 20, 20)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_tjiwm")
+}],
+"loop": true,
+"name": &"Off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_fgr7h")
 }, {
 "duration": 1.0,
@@ -28,7 +40,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_spms3")
 }],
 "loop": true,
-"name": &"default",
+"name": &"On",
 "speed": 2.0
 }]
 
@@ -39,10 +51,10 @@ collision_layer = 32
 collision_mask = 32
 script = ExtResource("1_gcnda")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pp51o")
-autoplay = "default"
-frame_progress = 0.727331
+animation = &"Off"
+autoplay = "On"
 
 [node name="DetectionBox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_uuj0q")
