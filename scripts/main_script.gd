@@ -39,7 +39,9 @@ var completed_sectors: Array[Sector]
 var is_timer_active := false
 var is_mirage_shader_active := false
 var tween_mirage: Tween
+var mirage_lock := false
 
+var is_smooth_camera_on := true
 var camera_tween: Tween
 var camera_pos: Vector2
 
@@ -87,7 +89,7 @@ func load_sector(get_sector: Sector) -> void:
 			self.room_change.connect(sector.get_new_room_data)
 			toggle_timer(true, 60, Color.WHITE, func(): player.death(true))
 			toggle_mirage_shader(true)
-			#room_coords = Vector2i(1, -3)
+			#room_coords = Vector2i(-1, -3)
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
@@ -110,7 +112,7 @@ func load_sector(get_sector: Sector) -> void:
 
 
 func toggle_mirage_shader(on: bool = true) -> void:
-	if is_mirage_shader_active == on:
+	if is_mirage_shader_active == on or mirage_lock:
 		return
 	
 	is_mirage_shader_active = not is_mirage_shader_active
@@ -165,30 +167,12 @@ func add_completed_sector(sector: Sector = current_sector) -> void:
 
 func _process(_delta: float) -> void:
 	
-	## Original Camera
-	#if camera.to_local(player.position).x < 0:
-		#current_room.x -= 1
-		#camera.position.x -= get_viewport().get_visible_rect().size.x
-		#room_change.emit()
-	# # Player moves to the room to the right
-	#elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
-		#current_room.x += 1
-		#camera.position.x += get_viewport().get_visible_rect().size.x
-		#room_change.emit()
-	# # Player moves to the room to the top
-	#if camera.to_local(player.position).y < 0:
-		#current_room.y -= 1
-		#camera.position.y -= get_viewport().get_visible_rect().size.y
-		#room_change.emit()
-	# # Player moves to the room to the bottom
-	#elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
-		#current_room.y += 1
-		#camera.position.y += get_viewport().get_visible_rect().size.y
-		#room_change.emit()
-	
-	## Smooth Camera
-	# Move camera, don't check if camera is currently moving
-	if camera_tween == null:
+	if is_smooth_camera_on :
+		if camera_tween != null:
+			return
+		
+		## Smooth Camera
+		# Move camera, don't check if camera is currently moving
 		camera_pos = camera.position
 		
 		# Finds the new location for the camera
@@ -226,6 +210,27 @@ func _process(_delta: float) -> void:
 			camera_tween.finished.connect(func(): camera_tween = null)
 			room_change.emit()
 	
+	else:
+		## Original Camera
+		if camera.to_local(player.position).x < 0:
+			current_room.x -= 1
+			camera.position.x -= get_viewport().get_visible_rect().size.x
+			room_change.emit()
+		 # Player moves to the room to the right
+		elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
+			current_room.x += 1
+			camera.position.x += get_viewport().get_visible_rect().size.x
+			room_change.emit()
+		 # Player moves to the room to the top
+		if camera.to_local(player.position).y < 0:
+			current_room.y -= 1
+			camera.position.y -= get_viewport().get_visible_rect().size.y
+			room_change.emit()
+		 # Player moves to the room to the bottom
+		elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
+			current_room.y += 1
+			camera.position.y += get_viewport().get_visible_rect().size.y
+			room_change.emit()
 	
 	# Updates the timer display
 	if is_timer_active:

@@ -1,5 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c2xv0m8gwuaf8"]
 
+
 [ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="1_os3r4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aiiuv"]
@@ -92,27 +93,37 @@ texture_region_size = Vector2i(20, 20)
 7:3/0 = 0
 1:4/0 = 0
 1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+1:4/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 2:4/0 = 0
 2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+2:4/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 3:4/0 = 0
 3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+3:4/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 4:4/0 = 0
 4:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+4:4/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 5:4/0 = 0
 5:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+5:4/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 6:4/0 = 0
 7:4/0 = 0
 7:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 1:5/0 = 0
 1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+1:5/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 2:5/0 = 0
 2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+2:5/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 3:5/0 = 0
 3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+3:5/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 4:5/0 = 0
 4:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+4:5/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 5:5/0 = 0
 5:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+5:5/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 7:5/0 = 0
 7:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 7:6/0 = 0
@@ -145,6 +156,7 @@ texture_region_size = Vector2i(20, 20)
 7:2/0 = 0
 7:2/0/physics_layer_2/polygon_0/points = PackedVector2Array(-10, -10, 6, -10, 6, 10, -10, 10)
 6:5/0 = 0
+6:5/0/physics_layer_2/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 0:2/next_alternative_id = 2
 0:2/0 = 0
 0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
@@ -176,6 +188,7 @@ texture_region_size = Vector2i(20, 20)
 2:9/0 = 0
 1:9/0 = 0
 0:9/0 = 0
+
 
 [resource]
 tile_size = Vector2i(20, 20)
