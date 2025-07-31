@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://d27tsxum3uolh" path="res://assets/sprites/buildingTileset.png" id="1_4qsck"]
 
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6l7je"]
 texture = ExtResource("1_4qsck")
 texture_region_size = Vector2i(20, 20)
