@@ -91,7 +91,7 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
-			room_coords = Vector2i(-1, -4)
+			#room_coords = Vector2i(-1, -4)
 	
 	# Add sector scene as child of SectorMaps
 	sector_maps.add_child(sector) 
