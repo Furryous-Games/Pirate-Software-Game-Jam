@@ -9,6 +9,8 @@ extends CharacterBody2D
 @onready var collider: CollisionShape2D = $Collider
 @onready var area_check: Area2D = $"Area Check"
 
+@onready var item_sprite: AnimatedSprite2D = $"Item Sprite"
+
 var player: CharacterBody2D
 
 var original_pos: Vector2
@@ -21,6 +23,12 @@ func _ready() -> void:
 	item_descriptor_label.text = item_descriptor
 	
 	original_pos = position
+	
+	print("\n", item_name)
+	print(item_sprite.sprite_frames.get_animation_names())
+	
+	if item_name in item_sprite.sprite_frames.get_animation_names():
+		item_sprite.play(item_name)
 
 
 func _physics_process(delta: float) -> void:

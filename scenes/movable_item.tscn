@@ -1,26 +1,103 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddjo3k33h3au1"]
+[gd_scene load_steps=16 format=3 uid="uid://ddjo3k33h3au1"]
 
 [ext_resource type="Script" uid="uid://sd0n1c83bjm2" path="res://scripts/movable_item.gd" id="1_j5yde"]
-[ext_resource type="Texture2D" uid="uid://dlv5tllol780b" path="res://assets/sprites/CharacterModels.png" id="1_teq56"]
-[ext_resource type="FontFile" uid="uid://w4mrn5jwyvik" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_dxt5h"]
-[ext_resource type="FontFile" uid="uid://dw8vbheox2fb0" path="res://assets/fonts/PixelOperator8.ttf" id="3_omqbn"]
+[ext_resource type="FontFile" uid="uid://b0jc06qm0phj7" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_dxt5h"]
+[ext_resource type="FontFile" uid="uid://ba2wwogvklypq" path="res://assets/fonts/PixelOperator8.ttf" id="3_omqbn"]
+[ext_resource type="Texture2D" uid="uid://dsp8cgfcjkuei" path="res://assets/sprites/Tilemap_Packed.png" id="4_j5yde"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_855um"]
-atlas = ExtResource("1_teq56")
-region = Rect2(76, 76, 19, 19)
+[sub_resource type="AtlasTexture" id="AtlasTexture_dxt5h"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(240, 180, 20, 20)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_t2omv"]
-atlas = ExtResource("1_teq56")
-region = Rect2(95, 76, 19, 19)
+[sub_resource type="AtlasTexture" id="AtlasTexture_omqbn"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(280, 160, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6umqg"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(240, 180, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hbjcp"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(220, 180, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yattl"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(260, 160, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxojp"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(220, 160, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_07wfw"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(240, 160, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cc4m2"]
+atlas = ExtResource("4_j5yde")
+region = Rect2(240, 180, 20, 20)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vvwu7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_855um")
+"texture": SubResource("AtlasTexture_dxt5h")
+}],
+"loop": true,
+"name": &"Cable",
+"speed": 5.0
 }, {
+"frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_t2omv")
+"texture": SubResource("AtlasTexture_omqbn")
+}],
+"loop": true,
+"name": &"Card",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6umqg")
+}],
+"loop": true,
+"name": &"Coolant",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hbjcp")
+}],
+"loop": true,
+"name": &"Fuse",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yattl")
+}],
+"loop": true,
+"name": &"Power Cell",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nxojp")
+}],
+"loop": true,
+"name": &"Screwdriver",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_07wfw")
+}],
+"loop": true,
+"name": &"Wrench",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cc4m2")
 }],
 "loop": true,
 "name": &"default",
@@ -75,6 +152,7 @@ autowrap_mode = 2
 
 [node name="Item Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vvwu7")
+autoplay = "default"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_myjvc")

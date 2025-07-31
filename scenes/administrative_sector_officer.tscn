@@ -9,8 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://d3jpuujkyi2tt" path="res://scenes/door.tscn" id="5_l3noe"]
 [ext_resource type="PackedScene" uid="uid://ddjo3k33h3au1" path="res://scenes/movable_item.tscn" id="7_563bi"]
 
-[node name="Administrative Sector Officer" type="Node2D"]
+[node name="Administrative Sector Officer" type="Node2D" node_paths=PackedStringArray("door_node", "items_node", "officer_script")]
 script = ExtResource("1_rbito")
+door_node = NodePath("Doors")
+items_node = NodePath("Items")
+officer_script = NodePath("Officer")
 
 [node name="Officer" parent="." instance=ExtResource("2_6wulo")]
 position = Vector2(290, 190)
@@ -165,7 +168,7 @@ player_prompt = "Restart Cryostatis Program"
 
 [node name="Doors" type="Node2D" parent="."]
 
-[node name="P1 Exit door" parent="Doors" instance=ExtResource("5_l3noe")]
+[node name="Left Wing Door" parent="Doors" instance=ExtResource("5_l3noe")]
 position = Vector2(0, 150)
 door_size = Vector2i(2, 4)
 
@@ -194,9 +197,10 @@ one_shot = true
 wait_time = 60.0
 one_shot = true
 
-[connection signal="terminal_interacted" from="Terminals/Dash" to="." method="_start_p1_timer"]
+[connection signal="officer_interacted" from="Officer" to="." method="_officer_terminal_interacted"]
+[connection signal="terminal_interacted" from="Terminals/Dash" to="." method="dash_ability" binds= [60]]
 [connection signal="terminal_interacted" from="Terminals/Gravity" to="." method="_gravity_flip" binds= [5]]
-[connection signal="terminal_interacted" from="Terminals/Engineering Task" to="." method="_gravity_flip" binds= [5]]
-[connection signal="terminal_interacted" from="Terminals/Life Support Task" to="." method="_gravity_flip" binds= [5]]
+[connection signal="terminal_interacted" from="Terminals/Engineering Task" to="." method="_on_complete_task" binds= ["restart_droid_servers"]]
+[connection signal="terminal_interacted" from="Terminals/Life Support Task" to="." method="_on_complete_task" binds= ["restart_cryostatis_program"]]
 [connection signal="timeout" from="Timing Mechanisms" to="." method="_on_timing_mechanism_tick"]
 [connection signal="timeout" from="Timed Gravity Flip" to="." method="_gravity_flip_timeout"]
