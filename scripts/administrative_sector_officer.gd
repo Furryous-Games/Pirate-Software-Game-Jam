@@ -22,6 +22,9 @@ extends Node2D
 @onready var timed_gravity_flip: Timer = $"Timed Gravity Flip"
 @onready var timed_dash_action: Timer = $"Timed Dash Action"
 
+@onready var dash_platforms: Array[Node] = $DashPlatforms.get_children()
+@onready var return_timer: Timer = $ReturnTimer
+
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
 
@@ -62,7 +65,7 @@ var all_tasks_complete = {
 	"repair": false,
 	"restart_droid_servers": false,
 	"restart_cryostatis_program": false,
-	"REACTOR TASK HERE": false
+	"stabilize_reactor_cores": false
 }
 
 var officer_battle_ongoing = false
@@ -98,6 +101,11 @@ func _ready() -> void:
 	
 	# Tick the engineering mechanisms
 	_on_timing_mechanism_tick()
+	
+	return_timer.timeout.connect(
+			func(): for platform in dash_platforms:
+				platform.move(false)
+	)
 	
 	# Set the timers for the effects hud
 	effects_hud.make_new_ability("Gravity Flip", timed_gravity_flip)
@@ -157,7 +165,10 @@ func _gravity_flip_timeout() -> void:
 
 ## REACTOR FUNCTIONS
 func signal_dash() -> void:
-	pass
+	for platform in dash_platforms:
+		platform.move(true)
+	
+	return_timer.start()
 
 
 ## BOSS TERMINAL INTERACT
@@ -219,7 +230,7 @@ func reset_battle():
 			"repair": false,
 			"restart_droid_servers": false,
 			"restart_cryostatis_program": false,
-			"REACTOR TASK HERE": false
+			"stabilize_reactor_cores": false
 		}
 		
 		# Close the doors
@@ -235,8 +246,11 @@ func reset_battle():
 
 ## DOORS
 func toggle_doors(enabled):
+	for door in door_node.get_children():
+		door.toggle_door(enabled)
 	# Open the left wing
-	door_node.get_node("Left Wing Door").toggle_door(enabled)
+	#door_node.get_node("Left Wing Door").toggle_door(enabled)
+	
 
 
 ## TASKS
