@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=4 uid="uid://fle1vwd76jcd"]
 
 [ext_resource type="PackedScene" uid="uid://benq0bfympyo7" path="res://scenes/timing_mechanism_platform.tscn" id="1_fyrtp"]
-[ext_resource type="Script" uid="uid://c2e85x7t4kvus" path="res://scripts/administrative_sector_officer.gd" id="1_rbito"]
+[ext_resource type="Script" path="res://scripts/administrative_sector_officer.gd" id="1_rbito"]
 [ext_resource type="PackedScene" uid="uid://cl4h22vr4u083" path="res://scenes/officer_base.tscn" id="2_6wulo"]
 [ext_resource type="TileSet" uid="uid://c2xv0m8gwuaf8" path="res://scenes/ship_tileset.tres" id="2_rbito"]
 [ext_resource type="Script" uid="uid://cbchq0iwh20di" path="res://scripts/admin_terminal_script_calls.gd" id="3_563bi"]
@@ -129,6 +129,10 @@ door_size = Vector2i(2, 4)
 position = Vector2(580, 150)
 door_size = Vector2i(1, 4)
 
+[node name="Left Wing Door2" parent="Doors" instance=ExtResource("5_l3noe")]
+position = Vector2(0, 150)
+door_size = Vector2i(1, 4)
+
 [node name="Tilemaps" type="Node2D" parent="."]
 
 [node name="Main Platforms" type="TileMapLayer" parent="Tilemaps"]
@@ -208,16 +212,10 @@ player_prompt = "Restart Droid Servers"
 position = Vector2(-520, 400)
 player_prompt = "Restart Cryostatis Program"
 
-
 [node name="ReactorTask" parent="Terminals" instance=ExtResource("4_6wulo")]
 position = Vector2(1110, 205)
 
-[node name="Doors" type="Node2D" parent="."]
-
-[node name="Left Wing Door" parent="Doors" instance=ExtResource("5_l3noe")]
-position = Vector2(0, 150)
-door_size = Vector2i(1, 4)
-
+[node name="Doors2" type="Node2D" parent="."]
 
 [node name="Items" type="Node2D" parent="."]
 
@@ -244,9 +242,7 @@ one_shot = true
 wait_time = 60.0
 one_shot = true
 
-
 [node name="ReturnTimer" type="Timer" parent="."]
-
 
 [connection signal="officer_interacted" from="Officer" to="." method="_officer_terminal_interacted"]
 [connection signal="terminal_interacted" from="Terminals/Dash" to="." method="dash_ability" binds= [60]]

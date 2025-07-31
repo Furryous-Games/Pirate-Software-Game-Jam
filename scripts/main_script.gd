@@ -112,7 +112,6 @@ func load_sector(get_sector: Sector) -> void:
 	
 	# Spawn player at designated position
 	# room_coords is for debugging. Default value for the funtion is empty (function defualt = (0, 0))
-	print(sector)
 	player.position = sector.get_room_spawn_position(room_coords)
 
 
@@ -171,10 +170,7 @@ func add_completed_sector(sector: Sector = current_sector) -> void:
 
 
 func check_compleated_sector() -> bool:
-	if completed_sectors.size() >= 3:
-		return true
-	else:
-		return false
+	return completed_sectors.size() >= 3
 
 func _process(_delta: float) -> void:
 	
