@@ -21,7 +21,6 @@ enum Sector {
 	LIFE_SUPPORT,
 	REACTOR,
 	ADMINISTRATIVE,
-	ADMINISTRATIVE_OFFICER
 }
 @export var current_sector: Sector = Sector.TUTORIAL
 
@@ -31,7 +30,6 @@ const ENGINEERING_SECTOR = preload("res://scenes/engineering_sector.tscn")
 const LIFE_SUPPORT_SECTOR = preload("res://scenes/life_support_sector.tscn")
 const REACTOR_SECTOR = preload("res://scenes/reactor_sector/reactor_sector.tscn")
 const ADMINISTRATIVE_SECTOR = preload("res://scenes/administrative_sector.tscn")
-const ADMINISTATIVE_SECTOR_OFFICER = preload("res://scenes/administrative_sector_officer.tscn")
 
 const CAMERA_PAN_TIME = 0.3 # 0.3
 
@@ -94,10 +92,6 @@ func load_sector(get_sector: Sector) -> void:
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
 			#room_coords = Vector2i(-1, -4)
-
-		
-		Sector.ADMINISTRATIVE_OFFICER:
-			sector = ADMINISTATIVE_SECTOR_OFFICER.instantiate()
 	
 	# Add sector scene as child of SectorMaps
 	sector_maps.add_child(sector) 

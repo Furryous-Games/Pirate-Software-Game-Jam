@@ -100,7 +100,7 @@ func _physics_process(delta: float) -> void:
 	
 	# REACTOR: Reset dash
 	if (
-			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE, main_script.Sector.ADMINISTRATIVE_OFFICER]
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and is_on_ground
 			and not can_dash
 			and dash_time.is_stopped()
@@ -142,7 +142,7 @@ func _physics_process(delta: float) -> void:
 	
 	# REACTOR: Increase velocity.x when launching off platform; clamp velocity
 	if (
-			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE, main_script.Sector.ADMINISTRATIVE_OFFICER]
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and launch_collider.is_colliding()
 			and sector.is_launch_active
 	):
@@ -167,8 +167,8 @@ func _physics_process(delta: float) -> void:
 
 	# REACTOR: Dash action
 	if (
-			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE, main_script.Sector.ADMINISTRATIVE_OFFICER]
-			and not (main_script.current_sector in [main_script.Sector.ADMINISTRATIVE, main_script.Sector.ADMINISTRATIVE_OFFICER] and sector.timed_dash_action.is_stopped())
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
+			and not (main_script.current_sector == main_script.Sector.ADMINISTRATIVE and sector.timed_dash_action.is_stopped())
 			and Input.is_action_just_pressed("dash")
 			and can_dash
 	):
@@ -238,16 +238,6 @@ func death(from_timer_timeout: bool = false) -> void:
 					gravity_invert()
 		
 		main_script.Sector.ADMINISTRATIVE:
-			#check if player inverted
-			if rotation_degrees != 0:
-				rotation_degrees = 0
-		  	#ensure gravity resets
-			if gravity_change == -1:
-				gravity_invert()
-			
-			sector.timed_gravity_flip.stop()
-		
-		main_script.Sector.ADMINISTRATIVE_OFFICER:
 			#check if player inverted
 			if rotation_degrees != 0:
 				rotation_degrees = 0

@@ -24,7 +24,7 @@ tile_map_data = PackedByteArray("AAARAA0AAAAKAAMAAAASAA0AAAAKAAMAAAAWAA8AAAAKAAM
 tile_set = ExtResource("2_47l5j")
 
 [node name="Mechanism Tick 1" type="TileMapLayer" parent="Tilemaps"]
-tile_map_data = PackedByteArray("AAAZANb/AAAHAAAAAAAYANb/AAAGAAAAAAAaANb/AAAIAAAAAAA=")
+tile_map_data = PackedByteArray("AAAZANb/AQAAAAYAAAAYANb/AQAAAAYAAAAaANb/AQAAAAYAAAA=")
 tile_set = ExtResource("2_47l5j")
 
 [node name="Mechanism Tick 2" type="TileMapLayer" parent="Tilemaps"]
@@ -35,7 +35,7 @@ tile_set = ExtResource("2_47l5j")
 tile_set = ExtResource("2_47l5j")
 
 [node name="Mechanism Tick 4" type="TileMapLayer" parent="Tilemaps"]
-tile_map_data = PackedByteArray("AAAYANb/AAAGAAAAAAAZANb/AAAHAAAAAAAaANb/AAAIAAAAAAA=")
+tile_map_data = PackedByteArray("AAAYANb/AQAAAAYAAAAZANb/AQAAAAYAAAAaANb/AQAAAAYAAAA=")
 tile_set = ExtResource("2_47l5j")
 
 [node name="Mechanism Tick 5" type="TileMapLayer" parent="Tilemaps"]
@@ -46,7 +46,7 @@ tile_set = ExtResource("2_47l5j")
 tile_set = ExtResource("2_47l5j")
 
 [node name="Mechanism Tick 7" type="TileMapLayer" parent="Tilemaps"]
-tile_map_data = PackedByteArray("AAAYANb/AAAGAAAAAAAZANb/AAAHAAAAAAAaANb/AAAIAAAAAAA=")
+tile_map_data = PackedByteArray("AAAYANb/AQAAAAYAAAAZANb/AQAAAAYAAAAaANb/AQAAAAYAAAA=")
 tile_set = ExtResource("2_47l5j")
 
 [node name="Mechanism Tick 8" type="TileMapLayer" parent="Tilemaps"]
