@@ -93,14 +93,20 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			"no": 
 				output("So thus humanity meets it's extiction", (func(): get_tree().quit()), Prompt.QUIT, true)
 			"yes": 
+				tween_text_visibility.stop()
+				tween_text_visibility.custom_step(150)
+				
 				output(OUTPUT_TEXT.prompt_start, (
 					func():
-						main_script.load_sector(main_script.Sector.TUTORIAL)
+						main_script.load_sector(main_script.Sector.ADMINISTRATIVE)
 						main_script.player.is_input_paused = false
 						self.queue_free()
-				))	
+				))
 			"options": 
 				output(OUTPUT_TEXT.options, func():player_input.edit(), Prompt.OPTIONS)
+			"skip":
+				tween_text_visibility.stop()
+				tween_text_visibility.custom_step(100)
 			_: 
 				output("[color=DARKGRAY]\ninvalid user input: '" + new_text + "'[/color]")
 				player_input.edit()
@@ -108,5 +114,5 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	elif terminal_prompt == Prompt.OPTIONS:
 		if new_text.begins_with("mirage shader"):
 			output("\nmirage.material:shader_parameter/frequency")
-		
+	
 	player_input.clear()
