@@ -13,9 +13,9 @@ region = Rect2(240, 180, 20, 20)
 atlas = ExtResource("4_j5yde")
 region = Rect2(280, 160, 20, 20)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6umqg"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5yde"]
 atlas = ExtResource("4_j5yde")
-region = Rect2(240, 180, 20, 20)
+region = Rect2(260, 180, 20, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hbjcp"]
 atlas = ExtResource("4_j5yde")
@@ -25,9 +25,9 @@ region = Rect2(220, 180, 20, 20)
 atlas = ExtResource("4_j5yde")
 region = Rect2(260, 160, 20, 20)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nxojp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_6umqg"]
 atlas = ExtResource("4_j5yde")
-region = Rect2(220, 160, 20, 20)
+region = Rect2(280, 180, 20, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_07wfw"]
 atlas = ExtResource("4_j5yde")
@@ -57,7 +57,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_6umqg")
+"texture": SubResource("AtlasTexture_j5yde")
 }],
 "loop": true,
 "name": &"Coolant",
@@ -81,7 +81,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_nxojp")
+"texture": SubResource("AtlasTexture_6umqg")
 }],
 "loop": true,
 "name": &"Screwdriver",
@@ -152,6 +152,7 @@ autowrap_mode = 2
 
 [node name="Item Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vvwu7")
+animation = &"Screwdriver"
 autoplay = "default"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
