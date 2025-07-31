@@ -66,7 +66,11 @@ func _input(event: InputEvent) -> void:
 		
 			main_script.Sector.REACTOR:
 				death(true)
-		
+			
+			main_script.Sector.ADMINISTRATIVE_OFFICER:
+				sector.reset_battle()
+				death()
+			
 			_:
 				death()
 	
@@ -146,7 +150,7 @@ func _physics_process(delta: float) -> void:
 	
 	# REACTOR: Increase velocity.x when launching off platform; clamp velocity
 	if (
-			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE, main_script.Sector.ADMINISTRATIVE_OFFICER]
+			main_script.current_sector in [main_script.Sector.REACTOR, main_script.Sector.ADMINISTRATIVE]
 			and launch_collider.is_colliding()
 			and sector.is_launch_active
 	):

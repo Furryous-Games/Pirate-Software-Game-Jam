@@ -188,6 +188,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 					func():
 
 						main_script.load_sector(main_script.Sector.TUTORIAL)
+
 						main_script.player.is_input_paused = false
 						self.queue_free()
 				), true)
