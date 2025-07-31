@@ -198,7 +198,6 @@ func _officer_battle_timeout():
 		
 		# Reset the battle
 		reset_battle()
-		
 
 func reset_battle():
 	if not officer_battle_complete:

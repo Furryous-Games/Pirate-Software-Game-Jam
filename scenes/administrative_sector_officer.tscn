@@ -170,7 +170,7 @@ player_prompt = "Restart Cryostatis Program"
 
 [node name="Left Wing Door" parent="Doors" instance=ExtResource("5_l3noe")]
 position = Vector2(0, 150)
-door_size = Vector2i(2, 4)
+door_size = Vector2i(1, 4)
 
 [node name="Items" type="Node2D" parent="."]
 
