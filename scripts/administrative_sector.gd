@@ -12,6 +12,9 @@ extends Node2D
 @onready var timing_mechanism_tick_7: TileMapLayer = $"Tilemaps/Mechanism Tick 7"
 @onready var timing_mechanism_tick_8: TileMapLayer = $"Tilemaps/Mechanism Tick 8"
 @onready var timing_mechanism_tick_9: TileMapLayer = $"Tilemaps/Mechanism Tick 9"
+@onready var dash_platforms: Array[Node] = $"Dash Platforms".get_children()
+@onready var launch_boost_timeframe: Timer = $LaunchBoostTimeframe
+@onready var return_timer: Timer = $ReturnTimer
 
 @onready var timing_mechanism_platforms: Node2D = $"Timing Mechanism Platforms"
 
@@ -20,6 +23,7 @@ extends Node2D
 
 var all_timing_mechanism_platforms
 var curr_timing_mechanism_tick = -1
+var is_launch_active: = false
 
 func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 	var room_spawn: Vector2i
@@ -39,6 +43,8 @@ func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 		Vector2i(1, -4): room_spawn = Vector2i(380, -60)
 		# P2 Room
 		Vector2i(-1, -4): room_spawn = Vector2i(-50, -1060)
+		Vector2i(-2, -4): room_spawn = Vector2i(-50, -1060)
+		_: room_spawn = Vector2i(-50, -1060) #TODO Changge to spawn door
 	return room_spawn
 
 
@@ -94,9 +100,19 @@ func signal_dash() -> void:
 	pass
 
 	# extend dash platforms
-	#for platform in subsector_platforms:
-		#platform.move(true)
+	for platform in dash_platforms:
+		platform.move(true)
 	#
-	#return_timer.start()
-	#launch_boost_timeframe.start()
-	#is_launch_active = true
+	return_timer.start()
+	launch_boost_timeframe.start()
+	is_launch_active = true
+
+
+func _on_return_timer_timeout() -> void:
+	# return dash platforms to their initial position
+	for platform in dash_platforms:
+		platform.move(false)
+
+
+func _on_launch_boost_timeframe_timeout() -> void:
+	is_launch_active = false

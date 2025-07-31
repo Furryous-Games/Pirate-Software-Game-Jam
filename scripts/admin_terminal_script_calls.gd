@@ -20,6 +20,7 @@ func t_dash() -> void:
 func _gravity_flip(wait_time: int = 10) -> void:
 	# Flip the gravity if the timer is disabled
 	if timed_gravity_flip.is_stopped():
+		sector_main.main_script.player.velocity = Vector2i(0,0)
 		sector_main.main_script.player.gravity_invert()
 	
 	# Set the new wait time
