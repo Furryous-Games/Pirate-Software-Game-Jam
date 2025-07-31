@@ -66,6 +66,7 @@ var all_tasks_complete = {
 	"restart_droid_servers": false,
 	"restart_cryostatis_program": false,
 	"stabilize_reactor_cores": false
+
 }
 
 var officer_battle_ongoing = false
@@ -84,6 +85,7 @@ func get_room_spawn_position(room: Vector2i = Vector2i.ZERO) -> Vector2i:
 		# Right Wing
 		Vector2i(1, 0): room_spawn = Vector2i(290, 220)
 		Vector2i(1, 1): room_spawn = Vector2i(290, 220)
+
 	return room_spawn
 
 func _ready() -> void:
@@ -139,9 +141,10 @@ func _enable_timer(initial_value: int, function_on_timeout = null):
 func _disable_timer():
 	main_script.toggle_timer(false)
 
-## SPECIAL EFFECTS
+
 func dash_ability(wait_time: int) -> void:
 	timed_dash_action.wait_time = wait_time
+
 	timed_dash_action.start()
 
 func _gravity_flip(wait_time: int = 10) -> void:
@@ -162,6 +165,7 @@ func _gravity_flip_timeout() -> void:
 	
 	# Restart the timer
 	timed_gravity_flip.stop()
+  
 
 ## REACTOR FUNCTIONS
 func signal_dash() -> void:
@@ -250,7 +254,6 @@ func toggle_doors(enabled):
 		door.toggle_door(enabled)
 	# Open the left wing
 	#door_node.get_node("Left Wing Door").toggle_door(enabled)
-	
 
 
 ## TASKS

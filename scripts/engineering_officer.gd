@@ -202,6 +202,9 @@ func check_tasks_complete() -> void:
 		officer_battle_ongoing = false
 		officer_battle_complete = true
 		
+		# Add sector to completed sector list
+		sector_main.main_script.add_completed_sector()
+		
 		# Open all sector EXIT doors to allow for exit through the sector
 		get_node("../Doors/Engineering T1/Exit Door").toggle_door(true)
 		get_node("../Doors/Engineering T2/Exit Door").toggle_door(true)

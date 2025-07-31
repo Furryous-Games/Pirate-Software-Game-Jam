@@ -48,6 +48,10 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("restart"):
 	  
 		match main_script.current_sector:
+			main_script.Sector.ADMINISTRATIVE_OFFICER:
+				sector.reset_battle()
+				death()
+				
 			main_script.Sector.ENGINEERING:
 				sector.reset_room()
 				death()

@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://yvt2e3uixntc"]
+
+[ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="1_2ukev"]
+
+[resource]
+font = ExtResource("1_2ukev")
+font_size = 8
