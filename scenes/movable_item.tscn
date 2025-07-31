@@ -1,9 +1,9 @@
 [gd_scene load_steps=16 format=3 uid="uid://ddjo3k33h3au1"]
 
 [ext_resource type="Script" uid="uid://sd0n1c83bjm2" path="res://scripts/movable_item.gd" id="1_j5yde"]
-[ext_resource type="FontFile" uid="uid://b0jc06qm0phj7" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_dxt5h"]
-[ext_resource type="FontFile" uid="uid://ba2wwogvklypq" path="res://assets/fonts/PixelOperator8.ttf" id="3_omqbn"]
-[ext_resource type="Texture2D" uid="uid://dsp8cgfcjkuei" path="res://assets/sprites/Tilemap_Packed.png" id="4_j5yde"]
+[ext_resource type="FontFile" uid="uid://w4mrn5jwyvik" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="2_dxt5h"]
+[ext_resource type="FontFile" uid="uid://dw8vbheox2fb0" path="res://assets/fonts/PixelOperator8.ttf" id="3_omqbn"]
+[ext_resource type="Texture2D" uid="uid://dmhxcywtcc7hu" path="res://assets/sprites/Tilemap_Packed.png" id="4_j5yde"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dxt5h"]
 atlas = ExtResource("4_j5yde")
