@@ -8,6 +8,7 @@ resource_local_to_scene = true
 
 [node name="ReactorDoor" type="AnimatableBody2D"]
 script = ExtResource("1_0ih8n")
+vertical_door = null
 
 [node name="DoorSprite" type="TileMapLayer" parent="."]
 position = Vector2(-10, -10)
