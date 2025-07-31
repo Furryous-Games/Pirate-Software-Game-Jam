@@ -1,5 +1,11 @@
 extends AnimatableBody2D
 
+enum Door_Types {
+	DOOR,
+	FLOOR,
+}
+@export var door_type: Door_Types = Door_Types.DOOR
+
 @export var door_shift: int
 
 @export var door_size: Vector2i = Vector2i(1, 1)
@@ -32,7 +38,49 @@ func _ready() -> void:
 func expand_door(new_size: Vector2i) -> void:
 	for x in range(new_size.x):
 		for y in range(new_size.y):
-			door_sprite.set_cell(Vector2i(x, y), 1, Vector2i(14, 3))
+			match door_type:
+				Door_Types.DOOR:
+					door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(14, 3))
+				
+				Door_Types.FLOOR:
+					# Outside cells of tiles are grassy, everything else is black
+					if y == 0 and y == new_size.y - 1:
+						if x == 0 and x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(1, 6))
+						elif x == 0:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7), 3)
+						elif x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7), 1)
+						else:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 6), 1)
+					elif y == 0:
+						if x == 0 and x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7))
+						elif x == 0:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 1))
+						elif x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 0))
+						else:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(2, 0))
+					elif y == new_size.y - 1:
+						if x == 0 and x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7), 2)
+						elif x == 0:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 1), 1)
+						elif x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 0), 1)
+						else:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(2, 0), 1)
+					else:
+						if x == 0 and x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 6))
+						elif x == 0:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(4, 1))
+						elif x == new_size.x - 1:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(3, 1))
+						else:
+							door_sprite.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
+						
 	
 	door_collider.shape.size = new_size * 20
 	door_collider.position = (new_size - Vector2i.ONE) * 10

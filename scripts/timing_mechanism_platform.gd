@@ -79,12 +79,43 @@ func expand_platform(new_size: Vector2i) -> void:
 						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(7, 0))
 					
 				_:
-					# Top row of walls are grassy
-					if y == 0:
-						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(2, 0))
-					# Everything else are regular
+					# Outside cells of tiles are grassy, everything else is black
+					if y == 0 and y == new_size.y - 1:
+						if x == 0 and x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(1, 6))
+						elif x == 0:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7), 3)
+						elif x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7), 1)
+						else:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 6), 1)
+					elif y == 0:
+						if x == 0 and x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7))
+						elif x == 0:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 1))
+						elif x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 0))
+						else:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(2, 0))
+					elif y == new_size.y - 1:
+						if x == 0 and x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 7), 2)
+						elif x == 0:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 1), 1)
+						elif x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(5, 0), 1)
+						else:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(2, 0), 1)
 					else:
-						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
+						if x == 0 and x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(0, 6))
+						elif x == 0:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(4, 1))
+						elif x == new_size.x - 1:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(3, 1))
+						else:
+							platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
 	
 	platform_collider.shape.size = new_size * 20
 	platform_collider.position = (new_size - Vector2i.ONE) * 10

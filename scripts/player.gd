@@ -40,6 +40,8 @@ var held_item_pos: Vector2 = Vector2(0, -50)
 @onready var dash_time: Timer = $DashTime
 @onready var respawn_input_pause: Timer = $RespawnInputPause
 
+@onready var character_sprite: AnimatedSprite2D = $Sprite
+
 
 func _input(event: InputEvent) -> void:
 	if is_input_paused:
@@ -95,7 +97,17 @@ func _input(event: InputEvent) -> void:
 		elif current_held_item != null:
 			current_held_item.drop_item()
 			current_held_item = null
-
+	
+	# Updates the sprite
+	if Input.is_action_just_pressed("move_left"):
+		character_sprite.play("running")
+		character_sprite.flip_h = true
+		
+	if Input.is_action_just_pressed("move_right"):
+		character_sprite.play("running")
+		character_sprite.flip_h = false
+		
+	
 
 func _physics_process(delta: float) -> void:
 	# Prevents input while the RespawnInputPause timer is active
@@ -216,6 +228,10 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	if internal_player_collider.is_colliding():
 		death()
+	
+	if not (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right")):
+		character_sprite.play("idle")
+		character_sprite.flip_h = false
 
 
 func death(from_timer_timeout: bool = false) -> void:
