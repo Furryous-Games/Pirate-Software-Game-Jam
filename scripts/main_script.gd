@@ -95,8 +95,7 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
-
-			#room_coords = Vector2i(-1, -4)
+			#room_coords = Vector2i(-3, -7)
 		
 		Sector.ADMINISTRATIVE_OFFICER:
 			sector = ADMINISTATIVE_SECTOR_OFFICER.instantiate()
@@ -170,6 +169,12 @@ func add_completed_sector(sector: Sector = current_sector) -> void:
 	if !check_completed_sectors(sector):
 		completed_sectors.append(sector)
 
+
+func check_compleated_sector() -> bool:
+	if completed_sectors.size() >= 3:
+		return true
+	else:
+		return false
 
 func _process(_delta: float) -> void:
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://dypvtpctvas43"]
+[gd_scene load_steps=9 format=4 uid="uid://dypvtpctvas43"]
 
 [ext_resource type="Script" uid="uid://c5436ldwguqbw" path="res://scripts/reactor_sector/reactor_sector.gd" id="1_pkqih"]
 [ext_resource type="PackedScene" uid="uid://b6mrdx2sklm1e" path="res://scenes/reactor_sector/reactor_dash_platform.tscn" id="3_u3ho6"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c3cqhbb84sclu" path="res://scenes/reactor_sector/reactor_dash_recharge.tscn" id="5_tipgw"]
 [ext_resource type="PackedScene" uid="uid://b3lbpif526eab" path="res://scenes/reactor_sector/reactor_door.tscn" id="7_3f7aj"]
 [ext_resource type="PackedScene" uid="uid://cl4h22vr4u083" path="res://scenes/officer_base.tscn" id="7_8trfw"]
+[ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="8_gyax7"]
 
 [node name="ReactorSector" type="Node2D"]
 script = ExtResource("1_pkqih")
@@ -256,6 +257,12 @@ player_prompt = "OFFLINE"
 [node name="ReactorOfficer" parent="." instance=ExtResource("7_8trfw")]
 position = Vector2(290, -860)
 officer_name = "Reactor Officer"
+
+[node name="Portals" type="Node2D" parent="."]
+
+[node name="Portal" parent="Portals" instance=ExtResource("8_gyax7")]
+position = Vector2(280, 260)
+target = 1
 
 [connection signal="timeout" from="DashPlatforms/ReturnTimer" to="." method="_on_return_timer_timeout"]
 [connection signal="timeout" from="DashPlatforms/LaunchBoostTimeframe" to="." method="_on_launch_boost_timeframe_timeout"]
