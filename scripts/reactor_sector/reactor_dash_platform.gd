@@ -6,7 +6,7 @@ extends AnimatableBody2D
 @export var direction := Vector2i.ZERO ## Movement direction [br]Range: (-1, 1)
 
 const TILE_SIZE: int = 20
-const ATLAS_TILE = Vector2i(8, 3)
+const ATLAS_TILE = Vector2i(8, 8)
 
 var platform_positions := {&"initial": Vector2.ZERO, &"final": Vector2.ZERO}
 var tween_position: Tween
@@ -28,7 +28,7 @@ func _ready() -> void:
 func set_size(get_size: Vector2i) -> void:
 	for x in get_size.x:
 		for y in get_size.y:
-			platform_sprite.set_cell(Vector2i(x, y), 1, ATLAS_TILE)
+			platform_sprite.set_cell(Vector2i(x, y), 0, ATLAS_TILE)
 	
 	platform_collider.shape.size = get_size * TILE_SIZE
 	platform_collider.position = (get_size - Vector2i.ONE) * 10

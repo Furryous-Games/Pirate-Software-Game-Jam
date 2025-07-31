@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bm54hrnmy2mb1" path="res://scripts/door.gd" id="1_uvdjg"]
 [ext_resource type="TileSet" uid="uid://c2xv0m8gwuaf8" path="res://scenes/ship_tileset.tres" id="2_uvdjg"]
-[ext_resource type="AudioStream" uid="uid://csxeca4uka2ek" path="res://sounds/331213__yoyodaman234__elevator-door-open-4a.wav" id="3_83dcw"]
+[ext_resource type="AudioStream" uid="uid://dbsqybyffmx8s" path="res://sounds/331213__yoyodaman234__elevator-door-open-4a.wav" id="3_83dcw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_la1wf"]
 resource_local_to_scene = true

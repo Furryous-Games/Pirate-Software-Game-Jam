@@ -126,7 +126,6 @@ position = Vector2(0, 150)
 door_size = Vector2i(1, 4)
 closed = true
 
-
 [node name="RightWingDoor" parent="Doors" instance=ExtResource("5_l3noe")]
 position = Vector2(580, 150)
 door_size = Vector2i(1, 4)
@@ -214,7 +213,6 @@ player_prompt = "Restart Cryostatis Program"
 [node name="ReactorTask" parent="Terminals" instance=ExtResource("4_6wulo")]
 position = Vector2(1110, 205)
 player_prompt = "Stabalize Reactor Cores"
-
 
 [node name="Items" type="Node2D" parent="."]
 

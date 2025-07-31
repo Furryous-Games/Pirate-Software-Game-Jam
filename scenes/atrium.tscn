@@ -4,7 +4,7 @@
 [ext_resource type="TileSet" uid="uid://c2xv0m8gwuaf8" path="res://scenes/ship_tileset.tres" id="2_koq3u"]
 [ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="3_koq3u"]
 [ext_resource type="FontFile" uid="uid://ds4ncb8cbodts" path="res://assets/fonts/prstartk.ttf" id="4_p4tqb"]
-[ext_resource type="LabelSettings" uid="uid://yvt2e3uixntc" path="res://assets/fonts/label.tres" id="5_cddkd"]
+[ext_resource type="LabelSettings" path="res://assets/fonts/label.tres" id="5_cddkd"]
 
 [node name="Atrium" type="Node2D"]
 script = ExtResource("1_nyktb")

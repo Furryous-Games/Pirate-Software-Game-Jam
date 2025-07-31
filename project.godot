@@ -10,10 +10,12 @@ config_version=5
 
 [application]
 
-config/name="Game Jam - Only One"
+config/name="Xylon"
 run/main_scene="uid://cyddofgvf7ot2"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 run/max_fps=60
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="uid://bp5mb1wr40mn7"
 config/icon="res://icon.svg"
 
 [display]

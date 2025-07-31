@@ -259,11 +259,9 @@ player_prompt = "OFFLINE"
 position = Vector2(290, -860)
 officer_name = "Reactor Officer"
 
-
 [node name="Portals" type="Node2D" parent="."]
 
 [node name="Portal" parent="Portals" instance=ExtResource("8_pfhl8")]
-
 position = Vector2(280, 260)
 locked = true
 target = 1

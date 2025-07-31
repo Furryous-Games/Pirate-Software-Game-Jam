@@ -21,7 +21,7 @@ func _ready() -> void:
 func set_size() -> void:
 	if vertical_door:
 		for i in door_size:
-			door_sprite.set_cell(Vector2i(0, i), 1, DOOR_ATLAS_TILE)
+			door_sprite.set_cell(Vector2i(0, i), 0, DOOR_ATLAS_TILE)
 		door_collider.shape.size.y = door_size * TILE_SIZE
 		door_collider.position.y = (door_size - 1) * 10
 	else:

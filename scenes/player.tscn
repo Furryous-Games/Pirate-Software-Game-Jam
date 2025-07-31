@@ -1,9 +1,9 @@
 [gd_scene load_steps=13 format=3 uid="uid://ke8ne88ddqf1"]
 
 [ext_resource type="Script" uid="uid://dtkmogktxrytf" path="res://scripts/player.gd" id="1_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="2_g2els"]
-[ext_resource type="AudioStream" uid="uid://ba6t4ocu14s1g" path="res://sounds/735518__artninja__series_of_custom_robot_footstep_sounds_01012024.wav" id="3_qhqgy"]
-[ext_resource type="AudioStream" uid="uid://dyxpij2rwqjpl" path="res://sounds/362328__jofae__platform-jump.mp3" id="4_dqkch"]
+[ext_resource type="Texture2D" uid="uid://dmhxcywtcc7hu" path="res://assets/sprites/Tilemap_Packed.png" id="2_g2els"]
+[ext_resource type="AudioStream" uid="uid://cqagnma4rrmw5" path="res://sounds/735518__artninja__series_of_custom_robot_footstep_sounds_01012024.wav" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://b6qm4hj5pwpmf" path="res://sounds/362328__jofae__platform-jump.mp3" id="4_dqkch"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("2_g2els")

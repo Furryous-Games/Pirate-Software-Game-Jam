@@ -1,10 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://wnrxc4didqvg"]
 
 [ext_resource type="Script" uid="uid://dyhbsfvnf1dfw" path="res://scripts/portal.gd" id="1_1ffj6"]
-[ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="2_jr6l0"]
-[ext_resource type="FontFile" uid="uid://dc4s3s34c371l" path="res://assets/fonts/PixelOperator8.ttf" id="3_jr6l0"]
-[ext_resource type="AudioStream" uid="uid://4w1i3j3x0u00" path="res://sounds/15419__pagancow__dorm-door-opening.wav" id="4_d4jfq"]
-
+[ext_resource type="Texture2D" uid="uid://dmhxcywtcc7hu" path="res://assets/sprites/Tilemap_Packed.png" id="2_jr6l0"]
+[ext_resource type="FontFile" uid="uid://dw8vbheox2fb0" path="res://assets/fonts/PixelOperator8.ttf" id="3_jr6l0"]
+[ext_resource type="AudioStream" uid="uid://0rwj5h4gkoga" path="res://sounds/15419__pagancow__dorm-door-opening.wav" id="4_d4jfq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d4jfq"]
 texture = ExtResource("2_jr6l0")
