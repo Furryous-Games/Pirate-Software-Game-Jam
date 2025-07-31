@@ -1,7 +1,6 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c2xv0m8gwuaf8"]
 
-[ext_resource type="Texture2D" uid="uid://cvk8qpeag4tk1" path="res://assets/sprites/Tilemap_Packed.png" id="1_os3r4"]
-
+[ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="1_os3r4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aiiuv"]
 texture = ExtResource("1_os3r4")
@@ -161,6 +160,22 @@ texture_region_size = Vector2i(20, 20)
 8:5/animation_frame_1/duration = 1.0
 8:5/animation_frame_2/duration = 1.0
 8:5/0 = 0
+0:3/0 = 0
+0:4/0 = 0
+1:6/0 = 0
+0:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+2:7/0 = 0
+1:7/0 = 0
+0:7/0 = 0
+10:7/0 = 0
+10:8/0 = 0
+10:6/0 = 0
+12:9/0 = 0
+2:9/0 = 0
+1:9/0 = 0
+0:9/0 = 0
 
 [resource]
 tile_size = Vector2i(20, 20)
