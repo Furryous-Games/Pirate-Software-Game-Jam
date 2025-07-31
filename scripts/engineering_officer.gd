@@ -108,8 +108,8 @@ func reset_battle():
 		_disable_timer()
 		
 		# Refill the water in the coolant room
-		sector_main.fill_water_layer(Vector2i(210, 11), Vector2i(10, 2))
-		sector_main.fill_water(Vector2i(210, 12), Vector2i(10, 3))
+		sector_main.fill_water_layer(Vector2i(210, 11), Vector2i(10, 3))
+		sector_main.fill_water(Vector2i(210, 12), Vector2i(10, 2))
 		
 		# Reset the officer's interactions
 		curr_terminal_task = -1

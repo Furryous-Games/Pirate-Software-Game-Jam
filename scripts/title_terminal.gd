@@ -105,7 +105,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 						main_script.load_sector(main_script.Sector.REACTOR)
 						main_script.player.is_input_paused = false
 						self.queue_free()
-				))	
+				))
 			"options": 
 				output(OUTPUT_TEXT.options, func():player_input.edit(), Prompt.OPTIONS)
 			"skip":
@@ -122,5 +122,5 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 	elif terminal_prompt == Prompt.OPTIONS:
 		if new_text.begins_with("mirage shader"):
 			output("\nmirage.material:shader_parameter/frequency")
-		
+	
 	player_input.clear()

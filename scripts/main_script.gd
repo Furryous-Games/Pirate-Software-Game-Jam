@@ -91,7 +91,7 @@ func load_sector(get_sector: Sector) -> void:
 			
 		Sector.ADMINISTRATIVE: 
 			sector = ADMINISTRATIVE_SECTOR.instantiate()
-			#room_coords = Vector2i(0, -1)
+			room_coords = Vector2i(-1, -4)
 	
 	# Add sector scene as child of SectorMaps
 	sector_maps.add_child(sector) 
@@ -189,33 +189,40 @@ func _process(_delta: float) -> void:
 	## Smooth Camera
 	# Move camera, don't check if camera is currently moving
 	if camera_tween == null:
-		# Player moves to the room to the left
-		if camera.to_local(player.position).x < 0:
-			current_room.x -= 1
-			camera_pos.x = camera.position.x - get_viewport().get_visible_rect().size.x
-			camera_tween = create_tween()
+		camera_pos = camera.position
 		
-		# Player moves to the room to the right
-		elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
-			current_room.x += 1
-			camera_pos.x = camera.position.x + get_viewport().get_visible_rect().size.x
-			camera_tween = create_tween()
+		# Finds the new location for the camera
+		for i in 100:
+			# Player moves to the room to the left
+			if camera.to_local(player.position).x < 0:
+				current_room.x -= 1
+				camera.position.x -= get_viewport().get_visible_rect().size.x
+			
+			# Player moves to the room to the right
+			elif camera.to_local(player.position).x > get_viewport().get_visible_rect().size.x:
+				current_room.x += 1
+				camera.position.x += get_viewport().get_visible_rect().size.x
+			
+			# Player moves to the room to the top
+			if camera.to_local(player.position).y < 0:
+				current_room.y -= 1
+				camera.position.y -= get_viewport().get_visible_rect().size.y
 		
-		# Player moves to the room to the top
-		if camera.to_local(player.position).y < 0:
-			current_room.y -= 1
-			camera_pos.y = camera.position.y - get_viewport().get_visible_rect().size.y
-			camera_tween = create_tween()
+			# Player moves to the room to the bottom
+			elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
+				current_room.y += 1
+				camera.position.y += get_viewport().get_visible_rect().size.y
 		
-		# Player moves to the room to the bottom
-		elif camera.to_local(player.position).y > get_viewport().get_visible_rect().size.y:
-			current_room.y += 1
-			camera_pos.y = camera.position.y + get_viewport().get_visible_rect().size.y
+		# A change has occured to the camera position
+		if camera_pos != camera.position:
+			var new_camera_pos = camera.position
+			camera.position = camera_pos
+			
 			camera_tween = create_tween()
-		
-		if camera_tween != null:
+			
+			# Move the camera
 			camera_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-			camera_tween.tween_property(camera, "position", camera_pos, CAMERA_PAN_TIME)
+			camera_tween.tween_property(camera, "position", new_camera_pos, CAMERA_PAN_TIME)
 			camera_tween.finished.connect(func(): camera_tween = null)
 			room_change.emit()
 	
