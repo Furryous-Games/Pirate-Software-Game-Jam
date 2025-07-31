@@ -129,12 +129,11 @@ expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rt2n2"]
+bg_color = Color(1, 1, 1, 1)
 corner_detail = 1
 
-[sub_resource type="LabelSettings" id="LabelSettings_rt2n2"]
+[sub_resource type="LabelSettings" id="LabelSettings_c16ls"]
 font = ExtResource("4_gubc5")
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gubc5"]
 shader = ExtResource("4_pu3yx")
@@ -176,7 +175,7 @@ offset_top = 30.0
 offset_right = 330.0
 offset_bottom = 46.0
 text = "60.00"
-label_settings = SubResource("LabelSettings_rt2n2")
+label_settings = SubResource("LabelSettings_c16ls")
 
 [node name="MinuteTimer" type="Timer" parent="UI"]
 wait_time = 60.0

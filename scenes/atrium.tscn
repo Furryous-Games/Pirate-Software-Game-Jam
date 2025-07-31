@@ -1,9 +1,8 @@
 [gd_scene load_steps=6 format=4 uid="uid://bpyud01wwa4qb"]
 
 [ext_resource type="Script" uid="uid://brjlnyoxe7qhq" path="res://scripts/atrium.gd" id="1_nyktb"]
-[ext_resource type="Texture2D" uid="uid://btuvnqsvqrdx6" path="res://assets/sprites/Tilemap_Packed.png" id="1_uq4k6"]
+[ext_resource type="Texture2D" uid="uid://dmhxcywtcc7hu" path="res://assets/sprites/Tilemap_Packed.png" id="1_uq4k6"]
 [ext_resource type="PackedScene" uid="uid://wnrxc4didqvg" path="res://scenes/portal.tscn" id="3_koq3u"]
-
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nyktb"]
 texture = ExtResource("1_uq4k6")
