@@ -1,6 +1,5 @@
 [gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c2xv0m8gwuaf8"]
 
-
 [ext_resource type="Texture2D" uid="uid://dmhxcywtcc7hu" path="res://assets/sprites/Tilemap_Packed.png" id="1_os3r4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aiiuv"]
@@ -23,8 +22,6 @@ texture_region_size = Vector2i(20, 20)
 7:0/0 = 0
 7:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 7:0/0/physics_layer_1/polygon_0/one_way = true
-
-
 1:1/0 = 0
 1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
 1:1/0/physics_layer_4/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
