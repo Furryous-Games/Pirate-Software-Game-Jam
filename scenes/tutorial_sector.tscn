@@ -36,6 +36,7 @@ position = Vector2(298, 310)
 
 [node name="Cell Elevator" parent="Door" instance=ExtResource("4_jl4lv")]
 position = Vector2(52, -60)
+door_type = 1
 door_size = Vector2i(1, 3)
 closed = true
 

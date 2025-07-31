@@ -220,6 +220,10 @@ func reset_battle():
 		# Disable the timer
 		_disable_timer()
 		
+		# Disable Effects
+		timed_gravity_flip.stop()
+		timed_dash_action.stop()
+		
 		# Reset the officer's interactions
 		curr_terminal_task = -1
 		
@@ -290,22 +294,13 @@ func check_tasks_complete() -> void:
 		# Disable the timer
 		_disable_timer()
 		
-		# Open the room lock
-		door_node.get_node("Room Lock").toggle_door(true)
-		
 		officer_script.set_officer_task("<OPERATING NORMALLY>")
 		
 		# Slow down the tick speed of the timing mechanisms
-		get_node("../Timing Mechanisms").wait_time /= 0.75
+		get_node("Timing Mechanisms").wait_time *= 0.75
 		
 		print("ALL TASKS OK")
 		print(all_tasks_complete)
 		
 		officer_battle_ongoing = false
 		officer_battle_complete = true
-		
-		# Open all sector EXIT doors to allow for exit through the sector
-		get_node("../Doors/Engineering T1/Exit Door").toggle_door(true)
-		get_node("../Doors/Engineering T2/Exit Door").toggle_door(true)
-		get_node("../Doors/Engineering P1/Exit Door").toggle_door(true)
-		get_node("../Doors/Engineering P2/Exit Door").toggle_door(true)
