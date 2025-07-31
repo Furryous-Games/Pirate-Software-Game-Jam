@@ -4,7 +4,6 @@ extends Node2D
 
 @onready var timed_gravity_flip: Timer = $"../Timed Gravity Flip"
 
-
 ## TIMER TOGGLING FUNCTIONS
 func _enable_timer(initial_value: int, function_on_timeout = null):
 	sector_main.main_script.toggle_timer(true, initial_value, Color.WHITE, function_on_timeout)
@@ -28,7 +27,6 @@ func _gravity_flip(wait_time: int = 10) -> void:
 	
 	# Restart the timer
 	timed_gravity_flip.start()
-
 func _gravity_flip_timeout() -> void:
 	print("FLIP BACK")
 	if sector_main.main_script.player.gravity_change == -1:
