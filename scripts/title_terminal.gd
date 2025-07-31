@@ -93,6 +93,8 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 			"no": 
 				output("So thus humanity meets it's extiction", (func(): get_tree().quit()), Prompt.QUIT, true)
 			"yes": 
+				tween_text_visibility.stop()
+				tween_text_visibility.custom_step(100)
 				output(OUTPUT_TEXT.prompt_start, (
 					func():
 						main_script.load_sector(main_script.Sector.TUTORIAL)
@@ -101,6 +103,9 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				))	
 			"options": 
 				output(OUTPUT_TEXT.options, func():player_input.edit(), Prompt.OPTIONS)
+			"skip":
+				tween_text_visibility.stop()
+				tween_text_visibility.custom_step(100)
 			_: 
 				output("[color=DARKGRAY]\ninvalid user input: '" + new_text + "'[/color]")
 				player_input.edit()
