@@ -82,9 +82,9 @@ func _on_complete_task(task_name: String) -> void:
 				door_node.get_node("Operator/Door 4").toggle_door(false)
 				door_node.get_node("Operator/Door 5").toggle_door(true)
 				door_node.get_node("Operator/Door 6").toggle_door(true)
-				sector_main.fill_waterfall(Vector2i(159, 33), Vector2i(18,1))
+				sector_main.fill_waterfall(Vector2i(159, 33), Vector2i(10,2))
 				sector_main.drain_water(Vector2i(146, 18))
-				sector_main.fill_water_bottom(Vector2i(156, 48), Vector2i(18,1))
+				sector_main.fill_water_bottom(Vector2i(156, 48), Vector2i(10,2))
 				server_room_toggle = true
 				update_officer_task()
 		
@@ -190,7 +190,7 @@ func _officer_battle_timeout():
 	
 	# Fill up the tub, boy
 	sector_main.drain_water(Vector2i(159, 33), false)
-	sector_main.fill_water_top(Vector2i(165, 18), Vector2i(18,1))
+	sector_main.fill_water_top(Vector2i(165, 18), Vector2i(10,2))
 	
 	# Reset tasks
 	curr_terminal_task = -1

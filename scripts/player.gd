@@ -214,7 +214,7 @@ func death(from_timer_timeout: bool = false) -> void:
 	
 	# Drop the current item
 	if current_held_item:
-		current_held_item.drop_item()
+		current_held_item.reset_item()
 
 	current_held_item = null
 	
