@@ -68,7 +68,15 @@ func expand_platform(new_size: Vector2i) -> void:
 						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(7, 5))
 						
 				PlatformType.PLATFORM:
-					platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(6, 1))
+					# Left side of platforms are left platforms
+					if x == 0:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(6, 0))
+					# Right side of platforms are left platforms
+					elif x == new_size.x - 1:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(8, 0))
+					# Everthing else is platform centers
+					else:
+						platform_sprite.set_cell(Vector2i(x, y), 0, Vector2i(7, 0))
 					
 				_:
 					# Top row of walls are grassy
