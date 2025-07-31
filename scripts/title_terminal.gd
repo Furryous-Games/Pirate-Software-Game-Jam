@@ -174,7 +174,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				output("", Prompt.START, (
 					func():
 
-						main_script.load_sector(main_script.Sector.TUTORIAL)
+						main_script.load_sector(main_script.Sector.ADMINISTRATIVE_OFFICER)
 
 						main_script.player.is_input_paused = false
 						self.queue_free()
@@ -187,7 +187,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				output("Skipping Sequence", Prompt.START, (
 					func():
 
-						main_script.load_sector(main_script.Sector.TUTORIAL)
+						main_script.load_sector(main_script.Sector.ADMINISTRATIVE_OFFICER)
 
 						main_script.player.is_input_paused = false
 						self.queue_free()
