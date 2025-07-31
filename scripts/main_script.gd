@@ -49,6 +49,7 @@ var camera_pos: Vector2
 
 
 func _ready() -> void:
+
 	terminal_console.output_intro()
 
 
@@ -94,10 +95,7 @@ func load_sector(get_sector: Sector) -> void:
 		sector.get_new_room_data()
 	
 	# Spawn player at designated position
-	# room_coords is for debugging. Default value for the funtion is empty (function defualt = (0, 0))
-
 	player.position = sector.get_room_spawn_position()
-
 
 
 func toggle_mirage_shader(on: bool = true) -> void:
@@ -159,7 +157,6 @@ func check_compleated_sector() -> bool:
 
 
 func _process(_delta: float) -> void:
-	
 	if is_smooth_camera_on :
 		if camera_tween != null:
 			return

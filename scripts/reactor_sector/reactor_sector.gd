@@ -31,6 +31,7 @@ var subsector_terminal_data := {
 @onready var portal: Area2D = $Portals/Portal
 
 
+
 func _ready() -> void:
 	get_new_room_data()
 	main_script.room_change.connect(get_new_room_data)

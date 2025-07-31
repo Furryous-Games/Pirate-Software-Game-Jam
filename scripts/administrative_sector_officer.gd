@@ -131,13 +131,18 @@ func _on_timing_mechanism_tick() -> void:
 	# Tick all timing mechanism platforms
 	for timing_platform in timing_mechanism_platforms.get_children():
 		timing_platform._on_timing_mechanism_tick()
+
+
 func enable_platform_layer(platform_layer: TileMapLayer, enable: bool):
 	platform_layer.visible = enable
 	platform_layer.collision_enabled = enable
 
+
 ## TIMER TOGGLING FUNCTIONS
 func _enable_timer(initial_value: int, function_on_timeout = null):
 	main_script.toggle_timer(true, initial_value, Color.WHITE, function_on_timeout)
+
+
 func _disable_timer():
 	main_script.toggle_timer(false)
 
@@ -146,6 +151,7 @@ func dash_ability(wait_time: int) -> void:
 	timed_dash_action.wait_time = wait_time
 
 	timed_dash_action.start()
+
 
 func _gravity_flip(wait_time: int = 10) -> void:
 	# Flip the gravity if the timer is disabled
@@ -157,6 +163,8 @@ func _gravity_flip(wait_time: int = 10) -> void:
 	
 	# Restart the timer
 	timed_gravity_flip.start()
+
+
 func _gravity_flip_timeout() -> void:
 	if main_script.player.gravity_change == -1:
 		# Flip the gravity back
@@ -203,6 +211,7 @@ func _officer_terminal_interacted():
 					main_script.player.current_held_item = null
 				
 				update_officer_task()
+
 
 func _officer_battle_timeout():
 	if not officer_battle_complete:
@@ -267,6 +276,7 @@ func _on_complete_task(task_name: String) -> void:
 	# Check if all tasks are complete
 	check_tasks_complete()
 
+
 func update_officer_task() -> void:
 	if not officer_battle_complete:
 		if curr_terminal_task < len(terminal_tasks) - 1:
@@ -279,6 +289,7 @@ func update_officer_task() -> void:
 		
 		# Check if all tasks are complete
 		check_tasks_complete()
+
 
 func check_tasks_complete() -> void:
 	
@@ -297,3 +308,6 @@ func check_tasks_complete() -> void:
 		
 		officer_battle_ongoing = false
 		officer_battle_complete = true
+
+		
+		main_script.terminal_console.end_sequence()

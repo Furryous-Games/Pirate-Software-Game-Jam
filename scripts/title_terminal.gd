@@ -57,6 +57,9 @@ func output_intro() -> void:
 
 
 func _input(_event: InputEvent) -> void:
+	if terminal_prompt == Prompt.END:
+		return
+	
 	if Input.is_key_pressed(KEY_SLASH):
 		player_input.edit()
 		tween_text_visibility.kill()
@@ -66,7 +69,7 @@ func get_output_text(prompt: Prompt) -> String:
 	var text: String
 	match prompt:
 		Prompt.INTRO: text = (
-		"[color=YELLOW]THE XYLON ARC[/color]: The last hope for humanity, the [color=YELLOW]re-genesis[/color] of mankind
+		"[color=YELLOW]THE XYLON ARK[/color]: The last hope for humanity, the [color=YELLOW]re-genesis[/color] of mankind
 		
 		\nRUNNING DIAGNOSTICS...\n
 		SECTOR.Engineering: [color=RED]FATAL:
@@ -86,7 +89,8 @@ func get_output_text(prompt: Prompt) -> String:
 		...
 		\n[color=GREEN]Connecting to Administrator Officer......[/color]
 		\n// [color=YELLOW]R4[/color], you are the [color=YELLOW]only one[/color] who can restore the Sector Officers\n// Do you accept this undertaking?
-		\n[color=DARKGRAY]> yes, no, options[/color]"
+
+		\n[color=DARKGRAY]* yes, no, options[/color]"
 			)
 		
 		Prompt.START: text = (
@@ -113,7 +117,10 @@ func get_output_text(prompt: Prompt) -> String:
 			)
 		
 		Prompt.OPTIONS: text = (
-		"[color=DARKCRAY]> options[/color]\n\n[color=AQUA]OPTIONS[/color]
+
+		"\n[color=DARKGRAY]> options[/color]\n
+		\n[color=AQUA]OPTIONS[/color]
+
 		[color=DEEPPINK]mirage shader[/color] = [color=AQUA]{is_shader_on}[/color]\n
 		[color=DEEPPINK]smooth camera transition[/color] = [color=AQUA]{is_smooth_camera_on}[/color]\n
 		[color=DEEPPINK]controls[/color] = [color=AQUA]'{controls}'[/color]:
@@ -134,9 +141,18 @@ func get_output_text(prompt: Prompt) -> String:
 						RESTART = [color=AQUA]R[/color]
 				)
 				[color=YELLOW]'Dual'[/color] = Layout A and B
-		\n> return, <setting> = <value>[/color]
+
+		\n* return, <setting> = <value>[/color]
 		"
 			)
+	
+		Prompt.END: text = (
+		"[color=GREEN]Connecting to Administrator Officer......[/color]
+		\n// Well done
+		\n// Because of you the [color=YELLOW]xylon[/color] survived, and the last remnants of humanity may servive another day
+		\n// You service will never be forgotten\n
+		\n[color=DARKGRAY]* end[/color]"
+		)
 	
 	return text
 
@@ -164,7 +180,7 @@ func output(new_text: String, set_prompt: Prompt = Prompt.START, call_function =
 	
 	var text_length: int = len(filtered_text_length)
 	@warning_ignore("integer_division")
-	var text_speed: int = len(new_text) / (40 if terminal_prompt == Prompt.START else 180)
+	var text_speed: int = len(new_text) / (40 if terminal_prompt in [Prompt.START, Prompt.END] else 180)
 	if text_speed < 1:
 		text_speed = 1
 	
@@ -199,7 +215,8 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 						main_script.load_sector(main_script.Sector.ATRIUM)
 
 						main_script.player.is_input_paused = false
-						self.queue_free()
+						visible = false
+						terminal_prompt = Prompt.END
 				), true)
 			
 			"/stop":
@@ -213,7 +230,7 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 				
 	elif terminal_prompt == Prompt.OPTIONS:
 		if new_text == "return":
-			output("\n\n[color=DARKGRAY]awaiting input [ yes/no/options ][/color]", Prompt.START)
+			output("\n\n[color=DARKGRAY* yes, no, options[/color]", Prompt.START)
 		
 		# Mirage settings
 		elif new_text.containsn("mirage") or new_text.containsn("shader"):
@@ -263,7 +280,11 @@ func _on_player_input_text_submitted(new_text: String) -> void:
 		else: 
 			output("[color=DARKGRAY]\ninvalid user input: '" + new_text + "'[/color]")
 			player_input.edit()
-				
+	
+	elif terminal_prompt == Prompt.END:
+		if new_text == "end":
+			output("\n\nfarewell", Prompt.END, (func(): get_tree().quit()))
+	
 	player_input.clear()
 	
 	
@@ -276,3 +297,8 @@ func set_input_map() -> void:
 			var input := InputEventKey.new()
 			input.keycode = key
 			InputMap.action_add_event(action, input)
+
+
+func end_sequence() -> void:
+	visible = true
+	output(get_output_text(Prompt.END), Prompt.END, func(): player_input.edit(), true)

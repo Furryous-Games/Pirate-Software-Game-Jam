@@ -237,6 +237,7 @@ texture_region_size = Vector2i(20, 20)
 11:4/0 = 0
 11:5/0 = 0
 
+
 [resource]
 tile_size = Vector2i(20, 20)
 physics_layer_0/collision_layer = 1

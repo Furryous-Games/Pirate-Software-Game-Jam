@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://dc4s3s34c371l" path="res://assets/fonts/PixelOperator8.ttf" id="3_jr6l0"]
 [ext_resource type="AudioStream" uid="uid://4w1i3j3x0u00" path="res://sounds/15419__pagancow__dorm-door-opening.wav" id="4_d4jfq"]
 
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d4jfq"]
 texture = ExtResource("2_jr6l0")
 texture_region_size = Vector2i(20, 20)
